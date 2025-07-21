@@ -1,9 +1,9 @@
 import { Text, View, StyleSheet } from "react-native";
 
-export default function MainLayout() {
+export default function ProfileScreen() {
   return (
     <View style={styles.container}>
-      <Text>Página Login</Text>
+      <Text>Página Profile</Text>
     </View>
   );
 }
