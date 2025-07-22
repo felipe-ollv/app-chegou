@@ -65,6 +65,29 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 8,
     marginBottom: 8
+  },
+  name: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  bio: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  infoContainer: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  infoText: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 5,
+  },
+  logoutButton: {
+    backgroundColor: '#4682B4',
   }
 });
 

@@ -1,36 +1,32 @@
-import { Text, View, StyleSheet, TextInput, Pressable } from "react-native";
+import { Text, View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
-import colors from "@/constants/Colors";
+import colors from "../../constants/colors";
+import HeaderComponent from "../components/header/component";
 
 export default function LoginScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.logoText}>
-          Chegou<Text style={{ color: colors.green }}>App!</Text>
-        </Text>
-        <Text style={styles.slogan}>Descomplicando suas encomendas!</Text>
-      </View>
+      <HeaderComponent logoText='Chegou' slogan='Descomplicando suas encomendas!'/>
 
       <View style={styles.form}>
         <View>
           <Text style={styles.label}>Telefone</Text>
           <TextInput
-            placeholder="Digite seu telefone..."
+            placeholder="Seu telefone..."
             style={styles.input}
           />
         </View>
         <View>
           <Text style={styles.label}>Senha</Text>
           <TextInput
-            placeholder="Digite sua senha..."
+            placeholder="Sua senha..."
             secureTextEntry
             style={styles.input}
           />
         </View>
-        <Pressable style={styles.button}>
+        <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Acessar</Text>
-        </Pressable>
+        </TouchableOpacity>
         <Link href='./(auth)/signup/page' style={styles.link}>
           <Text>Ainda não tem uma conta? Cadastre-se!</Text>
         </Link>

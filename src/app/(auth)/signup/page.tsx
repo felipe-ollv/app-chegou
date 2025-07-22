@@ -1,25 +1,13 @@
 
-import { Text, View, TextInput, Pressable } from "react-native";
-import colors from "@/constants/Colors";
-import { styles } from "./styles";
-import { Ionicons } from '@expo/vector-icons';
-import { router } from "expo-router";
+import { Text, View, TextInput, TouchableOpacity } from "react-native";
+import styles  from "./styles";
+import { Link  } from "expo-router";
+import HeaderComponent from '../../../components/header/component';
 
 export default function SignUpScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Pressable
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={colors.white}/>
-        </Pressable>
-        <Text style={styles.logoText}>
-          Chegou<Text style={{ color: colors.green }}>App!</Text>
-        </Text>
-        <Text style={styles.slogan}>Criando sua conta!</Text>
-      </View>
+      <HeaderComponent logoText='Chegou' slogan='Criando sua conta!'/>
 
       <View style={styles.form}>
         <View>
@@ -65,12 +53,12 @@ export default function SignUpScreen() {
             style={styles.input}
           />
         </View>
-        <Pressable style={styles.button}>
+        <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Criar conta</Text>
-        </Pressable>
-        {/* <Link href='/(auth)/signup/page'>
-          <Text>Ainda não tem uma conta? Cadastre-se!</Text>
-        </Link> */}
+        </TouchableOpacity>
+        <Link href='(panel)/profile/page'>
+          <Text>Só para ir para a tela de profile</Text>
+        </Link>
       </View>
     </View>
   );
