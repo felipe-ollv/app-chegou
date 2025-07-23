@@ -19,6 +19,10 @@ export default function MainLayout() {
         name="(panel)/showcase/page"
         options={{ headerShown: false}}
       />
+      <Stack.Screen
+        name="(panel)/notification/page"
+        options={{ headerShown: false}}
+      />
     </Stack>
   );
 }

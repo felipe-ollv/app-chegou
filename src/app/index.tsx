@@ -14,6 +14,7 @@ export default function LoginScreen() {
           <TextInput
             placeholder="Seu telefone..."
             style={styles.input}
+            keyboardType='numeric'
           />
         </View>
         <View>

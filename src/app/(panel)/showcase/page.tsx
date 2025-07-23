@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import styles from './styles';
 import HeaderComponent from '../../../components/header/component';
+import { Link } from 'expo-router';
 
 export default function ShowCaseScreen() {
   return (
@@ -13,9 +14,9 @@ export default function ShowCaseScreen() {
             {/* <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>Editar perfil</Text>
             </TouchableOpacity> */}
-            {/* <Link href='(panel)/profile/page'>
-              <Text>Só para ir para a tela de profile</Text>
-            </Link> */}
+            <Link href='(panel)/notification/page'>
+              <Text>Só para ir para a tela de avisos</Text>
+            </Link>
           </View>
         </View>
   )
