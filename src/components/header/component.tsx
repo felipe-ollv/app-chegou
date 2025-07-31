@@ -10,8 +10,9 @@ type HeaderComponentProps = {
 }
 
 export default function HeaderComponent({logoText, slogan}: HeaderComponentProps) {
-    return (
-			<View style={styles.header}>
+	return (
+		<View style={styles.header}>
+			<View style={{ flexDirection:"row", justifyContent: "space-between", alignItems: "center" }}>
 				<Pressable
 					style={styles.backButton}
 					onPress={() => router.back()}
@@ -21,7 +22,11 @@ export default function HeaderComponent({logoText, slogan}: HeaderComponentProps
 				<Text style={styles.logoText}>
 					{logoText}<Text style={{ color: colors.green }}>App!</Text>
 				</Text>
-				<Text style={styles.slogan}>{slogan}</Text>
 			</View>
-    )
+			<Text style={styles.logoText}>
+				{/* {logoText}<Text style={{ color: colors.green }}>App!</Text> */}
+			</Text>
+			<Text style={styles.slogan}>{slogan}</Text>
+		</View>
+	)
 }

@@ -1,5 +1,5 @@
+import colors from "../../constants/colors";
 import { StyleSheet } from "react-native";
-import colors from "../../../../constants/colors";
 
 const styles = StyleSheet.create({
   container: {
@@ -28,9 +28,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    paddingTop: 2,
+    paddingTop: 24,
     paddingLeft: 14,
-    paddingRight: 14,
+    paddingRight: 14
   }, 
   label: {
     color: colors.zinc,
@@ -59,35 +59,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold'
   },
-  backButton: {
-    backgroundColor: 'rgba(255,255,255, 0.55)',
-    alignSelf: 'flex-start',
-    padding: 8,
-    borderRadius: 8,
-    marginBottom: 8
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  bio: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  infoContainer: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  infoText: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 5,
-  },
-  logoutButton: {
-    backgroundColor: '#4682B4',
+  link: {
+    marginTop: 16,
+    textAlign: 'center'
   }
 });
 

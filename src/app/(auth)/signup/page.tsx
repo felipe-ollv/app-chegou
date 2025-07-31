@@ -1,18 +1,82 @@
-
-import { Text, View, TextInput, TouchableOpacity, ScrollView, Platform } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Platform,
+  Alert,
+} from "react-native";
+import { useRouter } from "expo-router";
+import axios from 'axios';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import styles  from "./styles";
-import { Link  } from "expo-router";
-import HeaderComponent from '../../../components/header/component';
-import { SetStateAction, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import SelectDropdown from "react-native-select-dropdown";
+import { Link } from "expo-router";
+
+import formatPhoneNumber from '../../utils/formatPhoneNumber';
+
+import styles from "./styles";
+import HeaderComponent from "../../../components/header/component";
+
+type FormData = {
+  name: string;
+  // lastName: string;
+  condominium: string;
+  apartment: string;
+  apartment_block: string;
+  
+  phone_number: string;
+  type_profile: string;
+  status: string;
+  password: string;
+};
+
+const profileList = [
+  "INQUILINO",
+  "ADM",
+  "PROPRIETARIO(A)",
+  "SINDICO"
+]
 
 export default function SignUpScreen() {
+  const router = useRouter();
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+  const [condominiumList, setCondominiumList] = useState([]);
 
-  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    setShowPicker(Platform.OS === 'ios');
-    console.log('date', selectedDate)
+  useEffect(() => {
+    findCondominium();
+  }, [])
+
+  const findCondominium = async () => {
+    const conds: any = await axios.get('http://localhost:3006/api/condominium/find-all');
+    console.log('CONDOMINIOS', conds.data)
+    setCondominiumList(conds.data);
+  }
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    defaultValues: {
+      name: "",
+      // lastName: "",
+      apartment: "",
+      apartment_block: "",
+      condominium: "",
+      phone_number: "",
+      type_profile: "",
+      status: "",
+      password: "",
+    },
+  });
+
+  const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    setShowPicker(Platform.OS === "ios");
     if (selectedDate) {
       setDate(selectedDate);
     }
@@ -22,80 +86,279 @@ export default function SignUpScreen() {
     setShowPicker(!showPicker);
   };
 
-  return (
-    <ScrollView>
-      <View style={styles.container}>
-        <HeaderComponent logoText='Chegou' slogan='Criando sua conta!'/>
+  const onSubmit = async (form: FormData) => {
+    try {
+      const { data } = await axios.post("http://localhost:3006/api/user/register-user", {
+        ...form,
+        birthdate: date.toISOString().split("T")[0],
+        status: 'ACTIVE'
+      });
 
-        <View style={styles.form}>
+      Alert.alert("Sucesso", data.message,[
+        {
+          text: 'OK',
+          onPress: () => {
+            reset();
+            router.push('/');
+          }
+        }
+      ],
+      { cancelable: false}
+    );
+    } catch (err: any) {
+      console.error(err.response?.data || err.message);
+      Alert.alert("Erro", err.response?.data?.message || "Erro ao cadastrar");
+    }
+  };
+
+  return (
+
+      <View style={styles.container}>
+        <HeaderComponent logoText="Chegou" slogan="Criando sua conta!" />
+
+        <ScrollView>
+          <View style={styles.form}>
           <View>
             <Text style={styles.label}>Nome</Text>
-            <TextInput
-              placeholder="Seu nome..."
-              style={styles.input}
-            />
-          </View>
-          <View>
-            <Text style={styles.label}>Sobrenome</Text>
-            <TextInput
-              placeholder="Sobrenome..."
-              style={styles.input}
-            />
-          </View>
-          <View>
-            <Text style={styles.label}>Condomínio</Text>
-            <TextInput
-              placeholder="Seu Condomínio..."
-              style={styles.input}
-            />
-          </View>
-          <View>
-            <Text style={styles.label}>Data de Nascimento</Text>
-              <TouchableOpacity onPress={showDatePicker}>
+            <Controller
+              control={control}
+              name="name"
+              rules={{ required: "Nome é obrigatório" }}
+              render={({ field: { onChange, value, onBlur } }) => (
                 <TextInput
                   style={styles.input}
-                  placeholder="Seu Aniversário..."
-                  editable={false}  
-                  pointerEvents="none"
-                  value={date.toLocaleString()}
-                />
-              </TouchableOpacity>
-
-              {showPicker && (
-                <DateTimePicker
-                  value={date}
-                  mode="date"
-                  display="spinner"
-                  locale="pt-BR"
-                  maximumDate={new Date()}
-                  onChange={onChange}
+                  placeholder="Seu nome..."
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
                 />
               )}
+            />
+            {errors.name && (
+              <Text style={{ color: "red", marginBottom: 12 }}>{errors.name.message}</Text>
+            )}
           </View>
+
+          <View>
+            <Text style={styles.label}>Condomínio</Text>
+            <Controller
+              control={control}
+              name="condominium"
+              rules={{ required: "Condomínio é obrigatório" }}
+              render={({ field: { onChange, value } }) => (
+                <SelectDropdown
+                  data={condominiumList}
+                  onSelect={(selectedItem) => {
+                    onChange(selectedItem.uuid_condominium);
+                  }}
+                  defaultValue={value}
+                  renderButton={(selectedItem) => (
+                    <View style={styles.input}>
+                      <Text style={{ color: selectedItem ? "#000" : "#999" }}>
+                        {selectedItem?.condominium_name ?? "Selecione seu condomínio"}
+                      </Text>
+                    </View>
+                  )}
+                  renderItem={(item, index, isSelected) => (
+                    <View
+                      style={{
+                        padding: 10,
+                        backgroundColor: isSelected ? "#edf4ff" : "#fff",
+                      }}
+                    >
+                      <Text style={{ color: "#333" }}>{item.condominium_name}</Text>
+                    </View>
+                  )}
+                  dropdownStyle={{
+                    borderRadius: 8,
+                  }}
+                />
+              )}
+            />
+            {errors.condominium && (
+              <Text style={{ color: "red", marginBottom: 12 }}>{errors.condominium.message}</Text>
+            )}
+          </View>
+
+          <View>
+            <Text style={styles.label}>Apartamento</Text>
+            <Controller
+              control={control}
+              name="apartment"
+              rules={{ required: "Apartamento é obrigatório" }}
+              render={({ field: { onChange, value, onBlur } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Seu apartamento..."
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                />
+              )}
+            />
+            {errors.apartment && (
+              <Text style={{ color: "red", marginBottom: 12 }}>{errors.apartment.message}</Text>
+            )}
+          </View>
+
+          <View>
+            <Text style={styles.label}>Bloco/Torre</Text>
+            <Controller
+              control={control}
+              name="apartment_block"
+              rules={{ required: "bloco/Torre é obrigatório" }}
+              render={({ field: { onChange, value, onBlur } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Seu bloco/Torre..."
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                />
+              )}
+            />
+            {errors.name && (
+              <Text style={{ color: "red", marginBottom: 12 }}>{errors.name.message}</Text>
+            )}
+          </View>
+
+          <View>
+            <Text style={styles.label}>Perfil</Text>
+            <Controller
+              control={control}
+              name="type_profile"
+              rules={{ required: "Perfil é obrigatório" }}
+              render={({ field: { onChange, value } }) => (
+                <SelectDropdown
+                  data={profileList}
+                  onSelect={(selectedItem) => {
+                    onChange(selectedItem);
+                  }}
+                  defaultValue={value}
+                  renderButton={(selectedItem) => (
+                    <View style={styles.input}>
+                      <Text style={{ color: selectedItem ? "#000" : "#999" }}>
+                        {selectedItem ?? "Selecione seu perfil"}
+                      </Text>
+                    </View>
+                  )}
+                  renderItem={(item, index, isSelected) => (
+                    <View
+                      style={{
+                        padding: 10,
+                        backgroundColor: isSelected ? "#edf4ff" : "#fff",
+                      }}
+                    >
+                      <Text style={{ color: "#333" }}>{item}</Text>
+                    </View>
+                  )}
+                  dropdownStyle={{
+                    borderRadius: 8,
+                  }}
+                />
+              )}
+            />
+            {errors.type_profile && (
+              <Text style={{ color: "red", marginBottom: 12 }}>{errors.type_profile.message}</Text>
+            )}
+          </View>
+
+          <View>
+            <Text style={styles.label}>Data de Nascimento</Text>
+            <TouchableOpacity onPress={showDatePicker}>
+              <TextInput
+                style={styles.input}
+                placeholder="Seu Aniversário..."
+                editable={false}
+                pointerEvents="none"
+                value={date.toLocaleDateString("pt-BR")}
+              />
+            </TouchableOpacity>
+            {showPicker && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="spinner"
+                locale="pt-BR"
+                maximumDate={new Date()}
+                onChange={onChangeDate}
+              />
+            )}
+          </View>
+
           <View>
             <Text style={styles.label}>Telefone</Text>
-            <TextInput
-              placeholder="Digite seu telefone..."
-              style={styles.input}
-              keyboardType="numeric"
+            <Controller
+              control={control}
+              name="phone_number"
+              rules={{
+                required: "Telefone é obrigatório",
+                minLength: {
+                  value: 8,
+                  message: "Telefone inválido (mín. 10 dígitos)",
+                },
+                pattern: {
+                  value: /^\(\d{2}\) \d{4,5}-\d{4}$/,
+                  message: 'Formato: (99) 99999-9999'
+                },
+              }}
+              render={({ field: { onChange, value, onBlur } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Digite seu telefone..."
+                  keyboardType="numeric"
+                  value={formatPhoneNumber(value)}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                />
+              )}
             />
+            {errors.phone_number && (
+              <Text style={{ color: "red", marginBottom: 12 }}>{errors.phone_number.message}</Text>
+            )}
           </View>
-          <View>
+
+          <View style={{ marginBottom: 12}}>
             <Text style={styles.label}>Senha</Text>
-            <TextInput
-              placeholder="Digite sua senha..."
-              secureTextEntry
-              style={styles.input}
+            <Controller
+              control={control}
+              name="password"
+              rules={{
+                required: "Senha obrigatória",
+                minLength: {
+                  value: 6,
+                  message: "Senha deve ter pelo menos 6 caracteres",
+                },
+              }}
+              render={({ field: { onChange, value, onBlur } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Digite sua senha..."
+                  secureTextEntry
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                />
+              )}
             />
+            {errors.password && (
+              <Text style={{ color: "red", marginBottom: 12 }}>{errors.password.message}</Text>
+            )}
           </View>
-          <TouchableOpacity style={styles.button}>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleSubmit(onSubmit)}
+            activeOpacity={0.9}
+          >
             <Text style={styles.buttonText}>Criar conta</Text>
           </TouchableOpacity>
-          <Link href='(panel)/profile/page'>
-            <Text>Só para ir para a tela de profile</Text>
+
+          <Link href="(panel)/profile/page">
+            <Text style={{ marginTop: 20 }}>Ir para perfil</Text>
           </Link>
         </View>
+        </ScrollView>
       </View>
-    </ScrollView>
   );
 }

@@ -34,13 +34,14 @@ const styles = StyleSheet.create({
   }, 
   label: {
     color: colors.zinc,
-    marginBottom: 4
+    marginBottom: 4,
+    marginTop: 10
   },
   input: {
     borderWidth: 1,
     borderColor: colors.gray,
     borderRadius: 8,
-    marginBottom: 16,
+    // marginBottom: 16,
     paddingHorizontal: 8,
     paddingTop: 14,
     paddingBottom: 14
