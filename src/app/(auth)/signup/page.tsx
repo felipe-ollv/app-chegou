@@ -7,6 +7,7 @@ import {
   ScrollView,
   Platform,
   Alert,
+  KeyboardAvoidingView
 } from "react-native";
 import { useRouter } from "expo-router";
 import axios from 'axios';
@@ -116,14 +117,23 @@ export default function SignUpScreen() {
       <View style={styles.container}>
         <HeaderComponent logoText="Chegou" slogan="Criando sua conta!" />
 
-        <ScrollView>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 24}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <ScrollView 
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+          >
           <View style={styles.form}>
           <View>
             <Text style={styles.label}>Nome</Text>
             <Controller
               control={control}
               name="name"
-              rules={{ required: "Nome é obrigatório" }}
+              rules={{ required: "Nome obrigatório" }}
               render={({ field: { onChange, value, onBlur } }) => (
                 <TextInput
                   style={styles.input}
@@ -144,7 +154,7 @@ export default function SignUpScreen() {
             <Controller
               control={control}
               name="condominium"
-              rules={{ required: "Condomínio é obrigatório" }}
+              rules={{ required: "Condomínio obrigatório" }}
               render={({ field: { onChange, value } }) => (
                 <SelectDropdown
                   data={condominiumList}
@@ -185,7 +195,7 @@ export default function SignUpScreen() {
             <Controller
               control={control}
               name="apartment"
-              rules={{ required: "Apartamento é obrigatório" }}
+              rules={{ required: "Apartamento obrigatório" }}
               render={({ field: { onChange, value, onBlur } }) => (
                 <TextInput
                   style={styles.input}
@@ -206,7 +216,7 @@ export default function SignUpScreen() {
             <Controller
               control={control}
               name="apartment_block"
-              rules={{ required: "bloco/Torre é obrigatório" }}
+              rules={{ required: "Bloco/Torre obrigatório" }}
               render={({ field: { onChange, value, onBlur } }) => (
                 <TextInput
                   style={styles.input}
@@ -227,7 +237,7 @@ export default function SignUpScreen() {
             <Controller
               control={control}
               name="type_profile"
-              rules={{ required: "Perfil é obrigatório" }}
+              rules={{ required: "Perfil obrigatório" }}
               render={({ field: { onChange, value } }) => (
                 <SelectDropdown
                   data={profileList}
@@ -292,7 +302,7 @@ export default function SignUpScreen() {
               control={control}
               name="phone_number"
               rules={{
-                required: "Telefone é obrigatório",
+                required: "Telefone obrigatório",
                 minLength: {
                   value: 8,
                   message: "Telefone inválido (mín. 10 dígitos)",
@@ -354,11 +364,12 @@ export default function SignUpScreen() {
             <Text style={styles.buttonText}>Criar conta</Text>
           </TouchableOpacity>
 
-          <Link href="(panel)/profile/page">
+          <Link href="(tabs)/profile/page">
             <Text style={{ marginTop: 20 }}>Ir para perfil</Text>
           </Link>
         </View>
         </ScrollView>
+        </KeyboardAvoidingView>
       </View>
   );
 }

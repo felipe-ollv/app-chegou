@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import colors from "../../../../constants/colors";
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 34,
@@ -23,14 +23,20 @@ const styles = StyleSheet.create({
     color: colors.white,
     marginBottom: 34
   },
+  profileImageCss: {
+    width: 200,
+    height: 200,
+    borderRadius: 75,
+    marginBottom: 20,
+  },
   form: {
     flex: 1,
     backgroundColor: colors.white,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    paddingTop: 2,
+    paddingTop: 24,
     paddingLeft: 14,
-    paddingRight: 14,
+    paddingRight: 14
   }, 
   label: {
     color: colors.zinc,
@@ -76,19 +82,5 @@ const styles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
     marginBottom: 20,
-  },
-  infoContainer: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  infoText: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 5,
-  },
-  logoutButton: {
-    backgroundColor: '#4682B4',
   }
 });
-
-export default styles;

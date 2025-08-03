@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
   slogan: {
     fontSize: 28,
     color: colors.white,
-    marginBottom: 34
+    marginTop: 10,
+    marginBottom: 20
   },
   backButton: {
     backgroundColor: 'rgba(255,255,255, 0.55)',

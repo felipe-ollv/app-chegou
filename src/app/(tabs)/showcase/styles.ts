@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import colors from "../../../../constants/colors";
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 34,
@@ -28,9 +28,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    paddingTop: 24,
+    paddingTop: 2,
     paddingLeft: 14,
-    paddingRight: 14
+    paddingRight: 14,
   }, 
   label: {
     color: colors.zinc,
@@ -90,5 +90,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#4682B4',
   }
 });
-
-export default styles;
