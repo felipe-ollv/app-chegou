@@ -5,7 +5,8 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 24,
     paddingLeft: 14,
-    paddingRight: 14
+    paddingRight: 14,
+    marginBottom: 26
   }, 
   logoText: {
     fontSize: 28,

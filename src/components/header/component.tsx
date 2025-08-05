@@ -26,7 +26,7 @@ export default function HeaderComponent({logoText, slogan}: HeaderComponentProps
 			{/* <Text style={styles.logoText}> */}
 				{/* {logoText}<Text style={{ color: colors.green }}>App!</Text> */}
 			{/* </Text> */}
-			<Text style={styles.slogan}>{slogan}</Text>
+			{/* <Text style={styles.slogan}>{slogan}</Text> */}
 		</View>
 	)
 }

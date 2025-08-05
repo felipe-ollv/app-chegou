@@ -45,7 +45,7 @@ export default function LoginScreen() {
         ]); 
         setLoading(false);
       } else {
-        router.push("/(panel)/showcase/page");
+        router.push("/showcase/page");
         setLoading(false);
       }
       }, 2000)
