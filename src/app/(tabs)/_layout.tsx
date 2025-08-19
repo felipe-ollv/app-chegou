@@ -1,6 +1,5 @@
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import colors from "../../../constants/colors";
 
 export default function TabsLayout() {
   return (

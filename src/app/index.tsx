@@ -5,6 +5,7 @@ import axios from "axios";
 import styles from "./styles";
 import HeaderComponent from "../components/header/component";
 import LoadingComponent from '../components/loading/component';
+import { saveToken } from "./(auth)/midleware/authStorage";
 
 function formatPhoneNumber(value: any) {
   return value
@@ -20,7 +21,6 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-
   const handleLogin = async () => {
     if (!phone || !password) {
       Alert.alert("Erro", "Preencha telefone e senha");
@@ -34,7 +34,8 @@ export default function LoginScreen() {
         password: password
       });
 
-      console.log('res', res.data);
+      const secret = res.data as string;
+      await saveToken(secret);
 
       setTimeout(() => {
         if (res.data.code === 'NOK') {
@@ -44,7 +45,7 @@ export default function LoginScreen() {
           }
         ]); 
         setLoading(false);
-      } else {
+      } else if(secret) {
         router.push("/showcase/page");
         setLoading(false);
       }

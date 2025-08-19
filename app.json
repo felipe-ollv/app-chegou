@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "chegou-app",
-    "slug": "chegou-app",
+    "name": "",
+    "slug": "",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,17 +9,17 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash-icon.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0c0c1b"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/splash.png",
+        "backgroundColor": "#0c0c1b"
       },
       "edgeToEdgeEnabled": true
     },
