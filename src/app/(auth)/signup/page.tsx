@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 import { useRouter } from "expo-router";
-import axios from 'axios';
+import api from '../../interceptor/axios-config';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useForm, Controller } from "react-hook-form";
 import SelectDropdown from "react-native-select-dropdown";
@@ -48,14 +48,15 @@ export default function SignUpScreen() {
   const [condominiumList, setCondominiumList] = useState([]);
 
   useEffect(() => {
+    
+    const findCondominium = async () => {
+      const conds: any = await api.get('/condominium/find-all');
+      console.log('CONDOMINIOS', conds.data)
+      setCondominiumList(conds.data);
+    }
+
     findCondominium();
   }, [])
-
-  const findCondominium = async () => {
-    const conds: any = await axios.get('http://localhost:3006/api/condominium/find-all');
-    console.log('CONDOMINIOS', conds.data)
-    setCondominiumList(conds.data);
-  }
 
   const {
     control,
@@ -89,7 +90,7 @@ export default function SignUpScreen() {
 
   const onSubmit = async (form: FormData) => {
     try {
-      const { data } = await axios.post("http://localhost:3006/api/user/register-user", {
+      const { data } = await api.post("/user/register-user", {
         ...form,
         birthdate: date.toISOString().split("T")[0],
         status: 'ACTIVE'

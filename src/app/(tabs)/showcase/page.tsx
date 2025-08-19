@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import axios from 'axios';
+import api from '../../interceptor/axios-config';
 import { View, Text, TouchableOpacity, ScrollView, Pressable, Modal, TextInput } from "react-native";
 import HeaderComponent from '../../../components/header/component';
 import InfoCardComponent from "../../../components/card/component";
@@ -28,7 +28,7 @@ export default function ShowcaseScreen() {
     console.log('TOKEN', t)
 
     const fetchPackageList = async () => {
-      const res: any = await axios.get('http://localhost:3006/api/received-package/find-received-package/2ec65ee0-708e-499c-8268-ef1679cccea5')
+      const res: any = await api.get('/received-package/find-received-package/2ec65ee0-708e-499c-8268-ef1679cccea5')
       console.log('RES', res.data);
       setCardsData(res.data);
     }
@@ -61,7 +61,7 @@ export default function ShowcaseScreen() {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      const inform: any = await axios.post('http://localhost:3006/api/received-package/create-received-package', data);
+      const inform: any = await api.post('/received-package/create-received-package', data);
       console.log("resp:", inform.data);
       closeRegisterModal();
     } catch (e) {

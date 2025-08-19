@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, View, TextInput, TouchableOpacity, Alert } from "react-native";
 import { Link, useRouter } from "expo-router";
-import axios from "axios";
+import api, { setToken } from './interceptor/axios-config';
 import styles from "./styles";
 import HeaderComponent from "../components/header/component";
 import LoadingComponent from '../components/loading/component';
@@ -29,13 +29,14 @@ export default function LoginScreen() {
     try {
       setLoading(true);
       let res: any
-        res = await axios.post("http://localhost:3006/api/login/user", {
+        res = await api.post("/login/user", {
         phone_number: phone,
         password: password
       });
 
       const secret = res.data as string;
       await saveToken(secret);
+      setToken(secret);
 
       setTimeout(() => {
         if (res.data.code === 'NOK') {
