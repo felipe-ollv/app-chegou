@@ -7,7 +7,7 @@ import InfoCardComponent from "../../../components/card/component";
 import formatDateTime from '../../utils/formatDateTime';
 
 import colors from "@/constants/colors";
-import { styles } from "./styles";
+import { showcaseStyles } from "./styles";
 import { getItem } from "expo-secure-store";
 import { Controller, useForm } from "react-hook-form";
 
@@ -70,9 +70,9 @@ export default function ShowcaseScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={showcaseStyles.container}>
       <HeaderComponent logoText="Chegou" slogan="" />
-      <View style={styles.form}>
+      <View style={showcaseStyles.form}>
         <View
           style={{
             flexDirection: "row",

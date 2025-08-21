@@ -20,7 +20,6 @@ api.interceptors.request.use(
     const publicPaths = ['/login/user', '/condominium/find-all', '/user/register-user', '/health'];
     
     const isPublic = publicPaths.some(path => config.url?.startsWith(path));
-    console.log(isPublic)
 
     if (!isPublic && token) {
       config.headers.Authorization = `Bearer ${token}`;

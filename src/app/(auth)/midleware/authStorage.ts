@@ -2,14 +2,20 @@ import * as SecureStore from 'expo-secure-store';
 
 const SECRET = 'secret';
 
-export async function saveToken(data: string) {
-    await SecureStore.setItemAsync(SECRET, data);
+class ActionStorage {
+    static async saveToken(data: string) {
+        await SecureStore.setItemAsync(SECRET, data);
+    }
+
+    static async getToken() {
+        return await SecureStore.getItemAsync(SECRET);
+    }
+
+    static async deleteToken() {
+        await SecureStore.deleteItemAsync(SECRET);
+    }
 }
 
-export async function getToken() {
-    return await SecureStore.getItemAsync(SECRET);
-}
+export default ActionStorage;
 
-export async function deleteToken() {
-    await SecureStore.deleteItemAsync(SECRET);
-}
+

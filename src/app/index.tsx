@@ -5,7 +5,7 @@ import api, { setToken } from './interceptor/axios-config';
 import styles from "./styles";
 import HeaderComponent from "../components/header/component";
 import LoadingComponent from '../components/loading/component';
-import { saveToken } from "./(auth)/midleware/authStorage";
+import ActionStorage from "./(auth)/midleware/authStorage";
 
 function formatPhoneNumber(value: any) {
   return value
@@ -35,7 +35,7 @@ export default function LoginScreen() {
       });
 
       const secret = res.data as string;
-      await saveToken(secret);
+      await ActionStorage.saveToken(secret);
       setToken(secret);
 
       setTimeout(() => {
