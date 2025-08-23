@@ -18,14 +18,18 @@ type RegisterForm = {
   notes: string;
 };
 
+const listPackage = {
+  sameUser: [],
+  differentUser: []
+}
+
 export default function ShowcaseScreen() {
   const [receivedView, setLadoSelecionado] = useState(true);
   const [registerVisible, setRegisterVisible] = useState(false);
-  const [cardsData, setCardsData] = useState<any[]>([]);
+  const [cardsData, setCardsData] = useState(listPackage);
 
   useEffect(() => {
     const t = getItem('secret');
-    console.log('TOKEN', t)
 
     const fetchPackageList = async () => {
       const res: any = await api.get('/received-package/find-received-package/2ec65ee0-708e-499c-8268-ef1679cccea5')
@@ -86,61 +90,107 @@ export default function ShowcaseScreen() {
             paddingBottom: 8,
           }}
         >
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              alignItems: "center",
-              backgroundColor: receivedView ? colors.green : "#e0e0e0",
-              borderRadius: 8,
-              paddingVertical: 3,
-              marginRight: 2,
-            }}
-            onPress={() => setLadoSelecionado(!receivedView)}
-          >
-            <Text
+  
+          { cardsData.sameUser[0].ordinance === null ?
+            <><TouchableOpacity
               style={{
-                color: receivedView ? "#fff" : "#222",
-                fontWeight: 500,
-                fontSize: 16,
+                flex: 1,
+                alignItems: "center",
+                backgroundColor: receivedView ? colors.green : "#e0e0e0",
+                borderRadius: 8,
+                paddingVertical: 3,
+                marginRight: 2,
               }}
+              onPress={() => setLadoSelecionado(!receivedView)}
             >
-              Recebi
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  color: receivedView ? "#fff" : "#222",
+                  fontWeight: 500,
+                  fontSize: 16,
+                }}
+              >
+                Retirar
+              </Text>
+            </TouchableOpacity><TouchableOpacity
+              style={{
+                flex: 1,
+                alignItems: "center",
+                backgroundColor: !receivedView ? colors.green : "#e0e0e0",
+                borderRadius: 8,
+                paddingVertical: 3,
+                marginLeft: 2,
+              }}
+              onPress={() => setLadoSelecionado(!receivedView)}
+            >
+                <Text
+                  style={{
+                    color: !receivedView ? "#fff" : "#222",
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  Entregar
+                </Text>
+              </TouchableOpacity></>
+          : 
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                alignItems: "center",
+                backgroundColor: !receivedView ? colors.green : "#e0e0e0",
+                borderRadius: 8,
+                paddingVertical: 3,
+                marginLeft: 2,
+              }}
+              onPress={() => setLadoSelecionado(!receivedView)}
+            >
+              <Text
+                style={{
+                  color: !receivedView ? "#fff" : "#222",
+                  fontWeight: 500,
+                  fontSize: 16,
+                }}
+              >
+                Entregar
+              </Text>
+            </TouchableOpacity>
+          }
 
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              alignItems: "center",
-              backgroundColor: !receivedView ? colors.green : "#e0e0e0",
-              borderRadius: 8,
-              paddingVertical: 3,
-              marginLeft: 2,
-            }}
-            onPress={() => setLadoSelecionado(!receivedView)}
-          >
-            <Text
-              style={{
-                color: !receivedView ? "#fff" : "#222",
-                fontWeight: 500,
-                fontSize: 16,
-              }}
-            >
-              Receberam
-            </Text>
-          </TouchableOpacity>
         </View>
 
         <ScrollView style={{ flex: 1, width: '100%', paddingHorizontal: 1 }}>
-          {cardsData.map((item) => (
-            <InfoCardComponent
-              key={item.uuid_package}
-              title={`${item.condominium_name} ${item.apartment_block} ${item.apartment}`}
-              receivedBy={`${item.name}`}
-              receivedDate={formatDateTime(item.created_at)}
-              extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"}
-            />
-          ))}
+          { receivedView ?
+            cardsData.sameUser.length > 0 ?
+            cardsData.sameUser.map((item: any) => (
+              <InfoCardComponent
+                key={item.uuid_package}
+                title={`${item.condominium_name} ${item.apartment_block} ${item.apartment}`}
+                receivedBy={`${item.name}`}
+                receivedDate={formatDateTime(item.created_at)}
+                extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"}
+              />
+            ))
+            :
+            <View style={{ flexDirection: 'row', marginTop: 10, alignItems: "center", justifyContent: "center" }}>
+              <Text>Nenhuma encomenda registrada!</Text>
+            </View>
+            :
+            cardsData.differentUser.length > 0 ?
+            cardsData.differentUser.map((item: any) => (
+              <InfoCardComponent
+                key={item.uuid_package}
+                title={`${item.condominium_name} ${item.apartment_block} ${item.apartment}`}
+                receivedBy={`${item.name}`}
+                receivedDate={formatDateTime(item.created_at)}
+                extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"}
+              />
+            ))
+            :
+            <View style={{ flexDirection: 'row', marginTop: 10, alignItems: "center", justifyContent: "center" }}>
+              <Text>Nenhuma encomenda registrada!</Text>
+            </View>
+          }
         </ScrollView>
 
       </View>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Text, View, TextInput, TouchableOpacity, Alert } from "react-native";
 import { Link, useRouter } from "expo-router";
 import api, { setToken } from './interceptor/axios-config';
-import styles from "./styles";
+import { styles } from "./styles";
 import HeaderComponent from "../components/header/component";
 import LoadingComponent from '../components/loading/component';
 import ActionStorage from "./(auth)/midleware/authStorage";

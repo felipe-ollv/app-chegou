@@ -364,10 +364,6 @@ export default function SignUpScreen() {
           >
             <Text style={styles.buttonText}>Criar conta</Text>
           </TouchableOpacity>
-
-          <Link href="(tabs)/profile/page">
-            <Text style={{ marginTop: 20 }}>Ir para perfil</Text>
-          </Link>
         </View>
         </ScrollView>
         </KeyboardAvoidingView>
