@@ -19,12 +19,20 @@ type RegisterForm = {
 };
 
 const listPackage = {
-  sameUser: [],
-  differentUser: []
+  sameUser: [
+    {
+      ordinance: false
+    }
+  ],
+  differentUser: [
+    {
+      ordinance: true
+    }
+  ]
 }
 
 export default function ShowcaseScreen() {
-  const [receivedView, setLadoSelecionado] = useState(true);
+  const [receivedView, setLadoSelecionado] = useState(0);
   const [registerVisible, setRegisterVisible] = useState(false);
   const [cardsData, setCardsData] = useState(listPackage);
 
@@ -84,48 +92,48 @@ export default function ShowcaseScreen() {
             alignItems: "center",
             width: "100%",
             marginTop: 16,
-            marginBottom: receivedView ? 5 : 10,
             borderBottomWidth: 2,
             borderBottomColor: colors.green,
             paddingBottom: 8,
           }}
         >
   
-          { cardsData.sameUser[0].ordinance === null ?
+          { !cardsData.sameUser[0].ordinance ?
             <><TouchableOpacity
               style={{
                 flex: 1,
                 alignItems: "center",
-                backgroundColor: receivedView ? colors.green : "#e0e0e0",
+                backgroundColor: receivedView === 0 ? colors.green : "#e0e0e0",
                 borderRadius: 8,
                 paddingVertical: 3,
                 marginRight: 2,
               }}
-              onPress={() => setLadoSelecionado(!receivedView)}
+              onPress={() => setLadoSelecionado(0)}
             >
               <Text
                 style={{
-                  color: receivedView ? "#fff" : "#222",
+                  color: receivedView === 0 ? "#fff" : "#222",
                   fontWeight: 500,
                   fontSize: 16,
                 }}
               >
                 Retirar
               </Text>
-            </TouchableOpacity><TouchableOpacity
+            </TouchableOpacity>
+            <TouchableOpacity
               style={{
                 flex: 1,
                 alignItems: "center",
-                backgroundColor: !receivedView ? colors.green : "#e0e0e0",
+                backgroundColor: receivedView === 1 ? colors.green : "#e0e0e0",
                 borderRadius: 8,
                 paddingVertical: 3,
                 marginLeft: 2,
               }}
-              onPress={() => setLadoSelecionado(!receivedView)}
+              onPress={() => setLadoSelecionado(1)}
             >
                 <Text
                   style={{
-                    color: !receivedView ? "#fff" : "#222",
+                    color: receivedView === 1 ? "#fff" : "#222",
                     fontWeight: 500,
                     fontSize: 16,
                   }}
@@ -138,16 +146,16 @@ export default function ShowcaseScreen() {
               style={{
                 flex: 1,
                 alignItems: "center",
-                backgroundColor: !receivedView ? colors.green : "#e0e0e0",
+                backgroundColor: receivedView === 1 ? colors.green : "#e0e0e0",
                 borderRadius: 8,
                 paddingVertical: 3,
                 marginLeft: 2,
               }}
-              onPress={() => setLadoSelecionado(!receivedView)}
+              onPress={() => setLadoSelecionado(1)}
             >
               <Text
                 style={{
-                  color: !receivedView ? "#fff" : "#222",
+                  color: receivedView === 1 ? "#fff" : "#222",
                   fontWeight: 500,
                   fontSize: 16,
                 }}
@@ -160,7 +168,7 @@ export default function ShowcaseScreen() {
         </View>
 
         <ScrollView style={{ flex: 1, width: '100%', paddingHorizontal: 1 }}>
-          { receivedView ?
+          { receivedView === 0?
             cardsData.sameUser.length > 0 ?
             cardsData.sameUser.map((item: any) => (
               <InfoCardComponent
