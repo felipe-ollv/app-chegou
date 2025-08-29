@@ -10,43 +10,38 @@ import colors from "@/constants/colors";
 import { showcaseStyles } from "./styles";
 import { getItem } from "expo-secure-store";
 import { Controller, useForm } from "react-hook-form";
+import { useUser } from "../../context/user.context";
 
 type RegisterForm = {
   recipient: string;
   block: string;
   apartment: string;
   notes: string;
+  received: string;
 };
 
 const listPackage = {
-  sameUser: [
-    {
-      ordinance: false
-    }
-  ],
-  differentUser: [
-    {
-      ordinance: true
-    }
-  ]
+  sameUser: [],
+  differentUser: [],
+  ordinance: false
 }
 
 export default function ShowcaseScreen() {
   const [receivedView, setLadoSelecionado] = useState(0);
   const [registerVisible, setRegisterVisible] = useState(false);
   const [cardsData, setCardsData] = useState(listPackage);
+  const { userData, setUserData } = useUser();
 
   useEffect(() => {
-    const t = getItem('secret');
+    console.log('USER DATA', userData)
 
     const fetchPackageList = async () => {
-      const res: any = await api.get('/received-package/find-received-package/2ec65ee0-708e-499c-8268-ef1679cccea5')
-      console.log('RES', res.data);
+      const res: any = await api.get(`/received-package/find-received-package/${userData.ps}`)
       setCardsData(res.data);
     }
 
     fetchPackageList();
-  }, []);
+  }, [userData]);
 
   const {
     control,
@@ -73,6 +68,8 @@ export default function ShowcaseScreen() {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
+      console.log('submit', data)
+      data.received = userData.ps;
       const inform: any = await api.post('/received-package/create-received-package', data);
       console.log("resp:", inform.data);
       closeRegisterModal();
@@ -98,7 +95,7 @@ export default function ShowcaseScreen() {
           }}
         >
   
-          { !cardsData.sameUser[0].ordinance ?
+          { !cardsData.ordinance ?
             <><TouchableOpacity
               style={{
                 flex: 1,

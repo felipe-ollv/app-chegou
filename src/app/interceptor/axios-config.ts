@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import { getItem } from "expo-secure-store";
 
 const api = axios.create({
@@ -6,15 +7,24 @@ const api = axios.create({
 });
 
 let token: string | null = null;
+let setUserDataGlobal: (data: any) => void;
 
 export const setToken = (newToken: string | null) => {
   token = newToken;
+};
+
+export const setUserDataSetter = (setter: (data: any) => void) => {
+  setUserDataGlobal = setter;
 };
 
 api.interceptors.request.use(
   async (config) => {
     if (!token) {
       token = await getItem('secret');
+        if (token) {
+          const decoded = jwtDecode(token);
+          setUserDataGlobal(decoded);
+        }
     }
 
     const publicPaths = ['/login/user', '/condominium/find-all', '/user/register-user', '/health'];

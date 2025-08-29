@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, TextInput, TouchableOpacity, Alert } from "react-native";
 import { Link, useRouter } from "expo-router";
 import api, { setToken } from './interceptor/axios-config';
@@ -6,6 +6,8 @@ import { styles } from "./styles";
 import HeaderComponent from "../components/header/component";
 import LoadingComponent from '../components/loading/component';
 import ActionStorage from "./(auth)/midleware/authStorage";
+import { jwtDecode } from "jwt-decode";
+import { useUser } from "./context/user.context";
 
 function formatPhoneNumber(value: any) {
   return value
@@ -20,6 +22,13 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { userData, setUserData } = useUser();
+
+  useEffect(() => {
+    if(userData) {
+      router.push("/showcase/page");
+    }
+  }, [userData]);
 
   const handleLogin = async () => {
     if (!phone || !password) {
@@ -38,7 +47,11 @@ export default function LoginScreen() {
       await ActionStorage.saveToken(secret);
       setToken(secret);
 
-      setTimeout(() => {
+      if (secret) {
+        const decoded = jwtDecode(secret);
+        setUserData(decoded);
+      }
+
         if (res.data.code === 'NOK') {
         Alert.alert('Atenção!', `${res.data.message}`, [
           {
@@ -50,7 +63,6 @@ export default function LoginScreen() {
         router.push("/showcase/page");
         setLoading(false);
       }
-      }, 2000)
     } catch (err) {
       Alert.alert(
         "Erro",
@@ -99,3 +111,4 @@ export default function LoginScreen() {
     </View>
   );
 }
+

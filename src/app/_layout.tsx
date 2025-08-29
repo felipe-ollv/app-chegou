@@ -1,4 +1,5 @@
 import { Stack, Slot } from "expo-router";
+import { UserProvider } from "./context/user.context";
 
 export default function MainLayout() {
 
@@ -12,5 +13,7 @@ export default function MainLayout() {
     );
   }
 
-  return <Slot />
+  return  <UserProvider>
+            <Slot />
+          </UserProvider>
 }

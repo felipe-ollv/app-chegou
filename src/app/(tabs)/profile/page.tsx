@@ -21,6 +21,8 @@ export default function ProfileScreen() {
         </View>
 
         <Text style={profileStyles.bio}>Amaná B 107</Text>
+        <Text style={profileStyles.bio}>(11) 97764-8119</Text>
+        <Text style={profileStyles.bio}>Morador</Text>
 
         <TouchableOpacity style={profileStyles.button}>
           <Text style={profileStyles.buttonText}>Editar Perfil</Text>

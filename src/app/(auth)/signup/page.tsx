@@ -35,9 +35,9 @@ type FormData = {
 };
 
 const profileList = [
-  "INQUILINO",
+  "MORADOR",
   "ADM",
-  "PROPRIETARIO(A)",
+  "FUNCIONARIO",
   "SINDICO"
 ]
 

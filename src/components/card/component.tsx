@@ -5,7 +5,7 @@ import { View, Text, StyleSheet } from 'react-native';
 export default function InfoCardComponent({ title, receivedBy, receivedDate, extra }) {
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>Retirar: {title}</Text>
+      <Text style={styles.title}>Local: {title}</Text>
       <Text style={styles.desc}>
         <Text style={{ fontWeight: 600}}>Recebido por:</Text> {receivedBy}</Text>
       <Text style={styles.desc}>
