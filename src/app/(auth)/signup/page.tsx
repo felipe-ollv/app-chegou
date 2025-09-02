@@ -14,7 +14,6 @@ import api from '../../interceptor/axios-config';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useForm, Controller } from "react-hook-form";
 import SelectDropdown from "react-native-select-dropdown";
-import { Link } from "expo-router";
 
 import formatPhoneNumber from '../../utils/formatPhoneNumber';
 

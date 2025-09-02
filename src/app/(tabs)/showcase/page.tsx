@@ -4,11 +4,11 @@ import api from '../../interceptor/axios-config';
 import { View, Text, TouchableOpacity, ScrollView, Pressable, Modal, TextInput } from "react-native";
 import HeaderComponent from '../../../components/header/component';
 import InfoCardComponent from "../../../components/card/component";
+import LoadingComponent from '../../../components/loading/component';
 import formatDateTime from '../../utils/formatDateTime';
 
 import colors from "@/constants/colors";
 import { showcaseStyles } from "./styles";
-import { getItem } from "expo-secure-store";
 import { Controller, useForm } from "react-hook-form";
 import { useUser } from "../../context/user.context";
 
@@ -27,21 +27,21 @@ const listPackage = {
 }
 
 export default function ShowcaseScreen() {
+  const [loading, setLoading] = useState(true);
   const [receivedView, setLadoSelecionado] = useState(0);
   const [registerVisible, setRegisterVisible] = useState(false);
   const [cardsData, setCardsData] = useState(listPackage);
-  const { userData, setUserData } = useUser();
+  const { userData } = useUser();
 
   useEffect(() => {
-    console.log('USER DATA', userData)
-
-    const fetchPackageList = async () => {
-      const res: any = await api.get(`/received-package/find-received-package/${userData.ps}`)
-      setCardsData(res.data);
-    }
-
     fetchPackageList();
   }, [userData]);
+
+  const fetchPackageList = async () => {
+    const res: any = await api.get(`/received-package/find-received-package/${userData.ps}`)
+    setCardsData(res.data);
+    setLoading(false);
+  }
 
   const {
     control,
@@ -68,12 +68,15 @@ export default function ShowcaseScreen() {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      console.log('submit', data)
       data.received = userData.ps;
+      setLoading(true);
       const inform: any = await api.post('/received-package/create-received-package', data);
       console.log("resp:", inform.data);
+      if (inform.data.length > 0) fetchPackageList()
+      setLoading(false);
       closeRegisterModal();
     } catch (e) {
+      setLoading(false);
       console.log("Erro ao registrar:", e);
     }
   };
@@ -81,53 +84,79 @@ export default function ShowcaseScreen() {
   return (
     <View style={showcaseStyles.container}>
       <HeaderComponent logoText="Chegou" slogan="" />
-      <View style={showcaseStyles.form}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-            alignItems: "center",
-            width: "100%",
-            marginTop: 16,
-            borderBottomWidth: 2,
-            borderBottomColor: colors.green,
-            paddingBottom: 8,
-          }}
-        >
-  
-          { !cardsData.ordinance ?
-            <><TouchableOpacity
-              style={{
-                flex: 1,
-                alignItems: "center",
-                backgroundColor: receivedView === 0 ? colors.green : "#e0e0e0",
-                borderRadius: 8,
-                paddingVertical: 3,
-                marginRight: 2,
-              }}
-              onPress={() => setLadoSelecionado(0)}
-            >
-              <Text
+
+      {loading ?
+        <LoadingComponent />
+        :
+        <><View style={showcaseStyles.form}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              alignItems: "center",
+              width: "100%",
+              marginTop: 16,
+              borderBottomWidth: 2,
+              borderBottomColor: colors.green,
+              paddingBottom: 8,
+            }}
+          >
+
+            {!cardsData.ordinance ?
+              <><TouchableOpacity
                 style={{
-                  color: receivedView === 0 ? "#fff" : "#222",
-                  fontWeight: 500,
-                  fontSize: 16,
+                  flex: 1,
+                  alignItems: "center",
+                  backgroundColor: receivedView === 0 ? colors.green : "#e0e0e0",
+                  borderRadius: 8,
+                  paddingVertical: 3,
+                  marginRight: 2,
                 }}
+                onPress={() => setLadoSelecionado(0)}
               >
-                Retirar
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                alignItems: "center",
-                backgroundColor: receivedView === 1 ? colors.green : "#e0e0e0",
-                borderRadius: 8,
-                paddingVertical: 3,
-                marginLeft: 2,
-              }}
-              onPress={() => setLadoSelecionado(1)}
-            >
+                <Text
+                  style={{
+                    color: receivedView === 0 ? "#fff" : "#222",
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  Retirar
+                </Text>
+              </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    backgroundColor: receivedView === 1 ? colors.green : "#e0e0e0",
+                    borderRadius: 8,
+                    paddingVertical: 3,
+                    marginLeft: 2,
+                  }}
+                  onPress={() => setLadoSelecionado(1)}
+                >
+                  <Text
+                    style={{
+                      color: receivedView === 1 ? "#fff" : "#222",
+                      fontWeight: 500,
+                      fontSize: 16,
+                    }}
+                  >
+                    Entregar
+                  </Text>
+                </TouchableOpacity></>
+              :
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  backgroundColor: receivedView === 1 ? colors.green : "#e0e0e0",
+                  borderRadius: 8,
+                  paddingVertical: 3,
+                  marginLeft: 2,
+                }}
+                onPress={() => setLadoSelecionado(1)}
+              >
                 <Text
                   style={{
                     color: receivedView === 1 ? "#fff" : "#222",
@@ -137,303 +166,266 @@ export default function ShowcaseScreen() {
                 >
                   Entregar
                 </Text>
-              </TouchableOpacity></>
-          : 
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                alignItems: "center",
-                backgroundColor: receivedView === 1 ? colors.green : "#e0e0e0",
-                borderRadius: 8,
-                paddingVertical: 3,
-                marginLeft: 2,
-              }}
-              onPress={() => setLadoSelecionado(1)}
-            >
-              <Text
-                style={{
-                  color: receivedView === 1 ? "#fff" : "#222",
-                  fontWeight: 500,
-                  fontSize: 16,
-                }}
-              >
-                Entregar
-              </Text>
-            </TouchableOpacity>
-          }
+              </TouchableOpacity>}
 
-        </View>
+          </View>
 
-        <ScrollView style={{ flex: 1, width: '100%', paddingHorizontal: 1 }}>
-          { receivedView === 0?
-            cardsData.sameUser.length > 0 ?
-            cardsData.sameUser.map((item: any) => (
-              <InfoCardComponent
-                key={item.uuid_package}
-                title={`${item.condominium_name} ${item.apartment_block} ${item.apartment}`}
-                receivedBy={`${item.name}`}
-                receivedDate={formatDateTime(item.created_at)}
-                extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"}
-              />
-            ))
-            :
-            <View style={{ flexDirection: 'row', marginTop: 10, alignItems: "center", justifyContent: "center" }}>
-              <Text>Nenhuma encomenda registrada!</Text>
-            </View>
-            :
-            cardsData.differentUser.length > 0 ?
-            cardsData.differentUser.map((item: any) => (
-              <InfoCardComponent
-                key={item.uuid_package}
-                title={`${item.condominium_name} ${item.apartment_block} ${item.apartment}`}
-                receivedBy={`${item.name}`}
-                receivedDate={formatDateTime(item.created_at)}
-                extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"}
-              />
-            ))
-            :
-            <View style={{ flexDirection: 'row', marginTop: 10, alignItems: "center", justifyContent: "center" }}>
-              <Text>Nenhuma encomenda registrada!</Text>
-            </View>
-          }
-        </ScrollView>
+          <ScrollView style={{ flex: 1, width: '100%', paddingHorizontal: 1 }}>
+            {receivedView === 0 ?
+              cardsData.sameUser.length > 0 ?
+                cardsData.sameUser.map((item: any) => (
+                  <InfoCardComponent
+                    key={item.uuid_package}
+                    title={`${item.condominium_name} ${item.apartment_block} ${item.apartment}`}
+                    receivedBy={`${item.name}`}
+                    receivedDate={formatDateTime(item.created_at)}
+                    extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"} />
+                ))
+                :
+                <View style={{ flexDirection: 'row', marginTop: 10, alignItems: "center", justifyContent: "center" }}>
+                  <Text>Nenhuma encomenda registrada!</Text>
+                </View>
+              :
+              cardsData.differentUser.length > 0 ?
+                cardsData.differentUser.map((item: any) => (
+                  <InfoCardComponent
+                    key={item.uuid_package}
+                    title={`${item.condominium_name} ${item.apartment_block} ${item.apartment}`}
+                    receivedBy={`${item.name}`}
+                    receivedDate={formatDateTime(item.created_at)}
+                    extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"} />
+                ))
+                :
+                <View style={{ flexDirection: 'row', marginTop: 10, alignItems: "center", justifyContent: "center" }}>
+                  <Text>Nenhuma encomenda registrada!</Text>
+                </View>}
+          </ScrollView>
 
-      </View>
-      <TouchableOpacity
-        onPress={openRegisterModal}
-        style={{
-          position: "absolute",
-          right: 20,
-          bottom: 20,
-          width: 56,
-          height: 56,
-          borderRadius: 28,
-          backgroundColor: colors.green,
-          alignItems: "center",
-          justifyContent: "center",
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 6,
-        }}
-      >
-        <AntDesign name="plus" size={24} color="#fff" />
-      </TouchableOpacity>
-
-      <Modal
-        visible={registerVisible}
-        animationType="slide"
-        transparent
-        onRequestClose={closeRegisterModal}
-      >
-        <Pressable
-          onPress={closeRegisterModal}
+        </View><TouchableOpacity
+          onPress={openRegisterModal}
           style={{
-            flex: 1,
-            backgroundColor: "rgba(0,0,0,0.35)",
-            justifyContent: "flex-end",
+            position: "absolute",
+            right: 20,
+            bottom: 20,
+            width: 56,
+            height: 56,
+            borderRadius: 28,
+            backgroundColor: colors.green,
+            alignItems: "center",
+            justifyContent: "center",
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 6,
           }}
         >
-          <Pressable
-            onPress={() => { }}
-            style={{
-              backgroundColor: "#fff",
-              borderTopLeftRadius: 16,
-              borderTopRightRadius: 16,
-              paddingHorizontal: 16,
-              paddingTop: 12,
-              paddingBottom: 24,
-              maxHeight: "85%",
-            }}
+            <AntDesign name="plus" size={24} color="#fff" />
+          </TouchableOpacity><Modal
+            visible={registerVisible}
+            animationType="slide"
+            transparent
+            onRequestClose={closeRegisterModal}
           >
-            <View style={{ alignItems: "center", marginBottom: 8 }}>
-              <View
-                style={{
-                  width: 40,
-                  height: 4,
-                  borderRadius: 2,
-                  backgroundColor: "#D0D5DD",
-                }}
-              />
-            </View>
-
-            <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 12 }}>
-              Registrar recebimento
-            </Text>
-
-            <ScrollView
-              style={{ maxHeight: "80%" }}
-              keyboardShouldPersistTaps="handled"
-              contentContainerStyle={{ paddingBottom: 8 }}
-            >
-              <View style={{ gap: 12 }}>
-                <View>
-                  <Text style={{ fontSize: 14, marginBottom: 6 }}>Destinatário</Text>
-                  <Controller
-                    control={control}
-                    name="recipient"
-                    rules={{ required: "Destinatário" }}
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        placeholder="Nome de quem fez a compra"
-                        style={{
-                          borderWidth: 1,
-                          borderColor: errors.recipient ? "#ef4444" : "#E5E7EB",
-                          borderRadius: 8,
-                          paddingHorizontal: 12,
-                          height: 44,
-                        }}
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        autoCapitalize="words"
-                      />
-                    )}
-                  />
-                  {errors.recipient && (
-                    <Text style={{ color: "red", marginTop: 6 }}>
-                      {errors.recipient.message}
-                    </Text>
-                  )}
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, marginBottom: 6 }}>Torre/Bloco</Text>
-                  <Controller
-                    control={control}
-                    name="block"
-                    rules={{ required: "Torre/Bloco" }}
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        placeholder="Torre/Bloco"
-                        style={{
-                          borderWidth: 1,
-                          borderColor: errors.block ? "#ef4444" : "#E5E7EB",
-                          borderRadius: 8,
-                          paddingHorizontal: 12,
-                          height: 44,
-                        }}
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        autoCapitalize="characters"
-                      />
-                    )}
-                  />
-                  {errors.block && (
-                    <Text style={{ color: "red", marginTop: 6 }}>
-                      {errors.block.message}
-                    </Text>
-                  )}
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, marginBottom: 6 }}>Apartamento</Text>
-                  <Controller
-                    control={control}
-                    name="apartment"
-                    rules={{
-                      required: "Apartamento",
-                      minLength: { value: 1, message: "Informe o apartamento" },
-                    }}
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        placeholder="Número do apartamento"
-                        style={{
-                          borderWidth: 1,
-                          borderColor: errors.apartment ? "#ef4444" : "#E5E7EB",
-                          borderRadius: 8,
-                          paddingHorizontal: 12,
-                          height: 44,
-                        }}
-                        value={value}
-                        onChangeText={(t) => onChange(t)}
-                        onBlur={onBlur}
-                        keyboardType="numeric"
-                      />
-                    )}
-                  />
-                  {errors.apartment && (
-                    <Text style={{ color: "red", marginTop: 6 }}>
-                      {errors.apartment.message}
-                    </Text>
-                  )}
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, marginBottom: 6 }}>Observações</Text>
-                  <Controller
-                    control={control}
-                    name="notes"
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        placeholder="Ex: Retirar até as 21h"
-                        multiline
-                        style={{
-                          borderWidth: 1,
-                          borderColor: "#E5E7EB",
-                          borderRadius: 8,
-                          paddingHorizontal: 12,
-                          paddingTop: 10,
-                          minHeight: 80,
-                          textAlignVertical: "top",
-                        }}
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                      />
-                    )}
-                  />
-                </View>
-              </View>
-            </ScrollView>
-
-            <View
+            <Pressable
+              onPress={closeRegisterModal}
               style={{
-                flexDirection: "row",
+                flex: 1,
+                backgroundColor: "rgba(0,0,0,0.35)",
                 justifyContent: "flex-end",
-                gap: 12,
-                marginTop: 16,
               }}
             >
-              <TouchableOpacity
-                onPress={closeRegisterModal}
-                disabled={isSubmitting}
+              <Pressable
+                onPress={() => { }}
                 style={{
-                  paddingHorizontal: 14,
-                  height: 44,
-                  borderRadius: 8,
-                  borderWidth: 1,
-                  borderColor: "#E5E7EB",
-                  alignItems: "center",
-                  justifyContent: "center",
                   backgroundColor: "#fff",
-                  opacity: isSubmitting ? 0.6 : 1,
-                }}
-              >
-                <Text style={{ color: "#111" }}>Cancelar</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={handleSubmit(onSubmit)}
-                disabled={isSubmitting}
-                style={{
+                  borderTopLeftRadius: 16,
+                  borderTopRightRadius: 16,
                   paddingHorizontal: 16,
-                  height: 44,
-                  borderRadius: 8,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: colors.green,
-                  opacity: isSubmitting ? 0.6 : 1,
+                  paddingTop: 12,
+                  paddingBottom: 24,
+                  maxHeight: "85%",
                 }}
               >
-                <Text style={{ color: "#fff", fontWeight: "600" }}>Confirmar</Text>
-              </TouchableOpacity>
-            </View>
-          </Pressable>
-        </Pressable>
-      </Modal>
+                <View style={{ alignItems: "center", marginBottom: 8 }}>
+                  <View
+                    style={{
+                      width: 40,
+                      height: 4,
+                      borderRadius: 2,
+                      backgroundColor: "#D0D5DD",
+                    }} />
+                </View>
+
+                <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 12 }}>
+                  Registrar recebimento
+                </Text>
+
+                <ScrollView
+                  style={{ maxHeight: "80%" }}
+                  keyboardShouldPersistTaps="handled"
+                  contentContainerStyle={{ paddingBottom: 8 }}
+                >
+                  <View style={{ gap: 12 }}>
+                    <View>
+                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Destinatário</Text>
+                      <Controller
+                        control={control}
+                        name="recipient"
+                        rules={{ required: "Destinatário" }}
+                        render={({ field: { onChange, value, onBlur } }) => (
+                          <TextInput
+                            placeholder="Nome de quem fez a compra"
+                            style={{
+                              borderWidth: 1,
+                              borderColor: errors.recipient ? "#ef4444" : "#E5E7EB",
+                              borderRadius: 8,
+                              paddingHorizontal: 12,
+                              height: 44,
+                            }}
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            autoCapitalize="words" />
+                        )} />
+                      {errors.recipient && (
+                        <Text style={{ color: "red", marginTop: 6 }}>
+                          {errors.recipient.message}
+                        </Text>
+                      )}
+                    </View>
+
+                    <View>
+                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Torre/Bloco</Text>
+                      <Controller
+                        control={control}
+                        name="block"
+                        rules={{ required: "Torre/Bloco" }}
+                        render={({ field: { onChange, value, onBlur } }) => (
+                          <TextInput
+                            placeholder="Torre/Bloco"
+                            style={{
+                              borderWidth: 1,
+                              borderColor: errors.block ? "#ef4444" : "#E5E7EB",
+                              borderRadius: 8,
+                              paddingHorizontal: 12,
+                              height: 44,
+                            }}
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            autoCapitalize="characters" />
+                        )} />
+                      {errors.block && (
+                        <Text style={{ color: "red", marginTop: 6 }}>
+                          {errors.block.message}
+                        </Text>
+                      )}
+                    </View>
+
+                    <View>
+                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Apartamento</Text>
+                      <Controller
+                        control={control}
+                        name="apartment"
+                        rules={{
+                          required: "Apartamento",
+                          minLength: { value: 1, message: "Informe o apartamento" },
+                        }}
+                        render={({ field: { onChange, value, onBlur } }) => (
+                          <TextInput
+                            placeholder="Número do apartamento"
+                            style={{
+                              borderWidth: 1,
+                              borderColor: errors.apartment ? "#ef4444" : "#E5E7EB",
+                              borderRadius: 8,
+                              paddingHorizontal: 12,
+                              height: 44,
+                            }}
+                            value={value}
+                            onChangeText={(t) => onChange(t)}
+                            onBlur={onBlur}
+                            keyboardType="numeric" />
+                        )} />
+                      {errors.apartment && (
+                        <Text style={{ color: "red", marginTop: 6 }}>
+                          {errors.apartment.message}
+                        </Text>
+                      )}
+                    </View>
+
+                    <View>
+                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Observações</Text>
+                      <Controller
+                        control={control}
+                        name="notes"
+                        render={({ field: { onChange, value, onBlur } }) => (
+                          <TextInput
+                            placeholder="Ex: Retirar até as 21h"
+                            multiline
+                            style={{
+                              borderWidth: 1,
+                              borderColor: "#E5E7EB",
+                              borderRadius: 8,
+                              paddingHorizontal: 12,
+                              paddingTop: 10,
+                              minHeight: 80,
+                              textAlignVertical: "top",
+                            }}
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={onBlur} />
+                        )} />
+                    </View>
+                  </View>
+                </ScrollView>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    gap: 12,
+                    marginTop: 16,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={closeRegisterModal}
+                    disabled={isSubmitting}
+                    style={{
+                      paddingHorizontal: 14,
+                      height: 44,
+                      borderRadius: 8,
+                      borderWidth: 1,
+                      borderColor: "#E5E7EB",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "#fff",
+                      opacity: isSubmitting ? 0.6 : 1,
+                    }}
+                  >
+                    <Text style={{ color: "#111" }}>Cancelar</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={handleSubmit(onSubmit)}
+                    disabled={isSubmitting}
+                    style={{
+                      paddingHorizontal: 16,
+                      height: 44,
+                      borderRadius: 8,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: colors.green,
+                      opacity: isSubmitting ? 0.6 : 1,
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontWeight: "600" }}>Confirmar</Text>
+                  </TouchableOpacity>
+                </View>
+              </Pressable>
+            </Pressable>
+          </Modal></>
+      }
     </View>
   );
 }

@@ -25,20 +25,20 @@ export default function LoginScreen() {
   const { userData, setUserData } = useUser();
 
   useEffect(() => {
-    if(userData) {
+    if (userData) {
       router.push("/showcase/page");
     }
   }, [userData]);
 
   const handleLogin = async () => {
     if (!phone || !password) {
-      Alert.alert("Erro", "Preencha telefone e senha");
+      Alert.alert("Atenção!", "Preencha telefone e senha");
       return;
     }
     try {
       setLoading(true);
       let res: any
-        res = await api.post("/login/user", {
+      res = await api.post("/login/user", {
         phone_number: phone,
         password: password
       });
@@ -52,17 +52,18 @@ export default function LoginScreen() {
         setUserData(decoded);
       }
 
-        if (res.data.code === 'NOK') {
+      if (res.data.code === 'NOK') {
         Alert.alert('Atenção!', `${res.data.message}`, [
           {
             text: "OK",
           }
-        ]); 
+        ]);
         setLoading(false);
-      } else if(secret) {
+      } else if (secret) {
         router.push("/showcase/page");
         setLoading(false);
       }
+
     } catch (err) {
       Alert.alert(
         "Erro",
@@ -74,39 +75,39 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <HeaderComponent logoText='Chegou' slogan='Descomplicando encomendas!'/>
+      <HeaderComponent logoText='Chegou' slogan='Descomplicando encomendas!' />
 
-      { 
+      {
         loading ? <LoadingComponent /> :
-        <View style={styles.form}>
-          <View>
-            <Text style={styles.label}>Telefone</Text>
-            <TextInput
-              placeholder="Seu telefone..."
-              style={styles.input}
-              keyboardType='numeric'
-              value={phone}
-              onChangeText={t => setPhone(formatPhoneNumber(t))}
-              maxLength={15}
-            />
+          <View style={styles.form}>
+            <View>
+              <Text style={styles.label}>Telefone</Text>
+              <TextInput
+                placeholder="Seu telefone..."
+                style={styles.input}
+                keyboardType='numeric'
+                value={phone}
+                onChangeText={t => setPhone(formatPhoneNumber(t))}
+                maxLength={15}
+              />
+            </View>
+            <View>
+              <Text style={styles.label}>Senha</Text>
+              <TextInput
+                placeholder="Sua senha..."
+                secureTextEntry
+                style={styles.input}
+                value={password}
+                onChangeText={setPassword}
+              />
+            </View>
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+              <Text style={styles.buttonText}>Acessar</Text>
+            </TouchableOpacity>
+            <Link href='./(auth)/signup/page' style={styles.link}>
+              <Text>Ainda não tem uma conta? Cadastre-se!</Text>
+            </Link>
           </View>
-          <View>
-            <Text style={styles.label}>Senha</Text>
-            <TextInput
-              placeholder="Sua senha..."
-              secureTextEntry
-              style={styles.input}
-              value={password}
-              onChangeText={setPassword}
-            />
-          </View>
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Acessar</Text>
-          </TouchableOpacity>
-          <Link href='./(auth)/signup/page' style={styles.link}>
-            <Text>Ainda não tem uma conta? Cadastre-se!</Text>
-          </Link>
-        </View>
       }
     </View>
   );
