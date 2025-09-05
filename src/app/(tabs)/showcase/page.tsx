@@ -176,9 +176,9 @@ export default function ShowcaseScreen() {
                 cardsData.sameUser.map((item: any) => (
                   <InfoCardComponent
                     key={item.uuid_package}
-                    title={`${item.condominium_name} ${item.apartment_block} ${item.apartment}`}
-                    receivedBy={`${item.name}`}
-                    receivedDate={formatDateTime(item.created_at)}
+                    title={`Condomínio: ${item.condominium_name} ${item.apartment_block} ${item.apartment}`}
+                    receivedBy={`Recebido por: ${item.name}`}
+                    receivedDate={`Dia: ${formatDateTime(item.created_at)}`}
                     extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"} />
                 ))
                 :

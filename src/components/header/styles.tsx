@@ -3,13 +3,13 @@ import colors from "../../../constants/colors";
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: 24,
+    paddingTop: 18,
     paddingLeft: 14,
     paddingRight: 14,
-    marginBottom: 26
+    marginBottom: 8
   }, 
   logoText: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
     color: colors.white,
     marginBottom: 8

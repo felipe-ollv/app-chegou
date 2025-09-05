@@ -24,9 +24,10 @@ export const profileStyles = StyleSheet.create({
     marginBottom: 34
   },
   profileImageCss: {
-    width: 200,
-    height: 200,
-    borderRadius: 75,
+    width: '100%',
+    height: 250,
+    borderTopStartRadius: 16,
+    borderTopEndRadius: 16,
     marginBottom: 20,
   },
   form: {
@@ -34,7 +35,7 @@ export const profileStyles = StyleSheet.create({
     backgroundColor: colors.white,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    paddingTop: 24,
+    paddingTop: 14,
     paddingLeft: 14,
     paddingRight: 14
   }, 
@@ -58,7 +59,8 @@ export const profileStyles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%'
+    width: '100%',
+    marginTop: 46
   },
   buttonText: {
     color: colors.white,
@@ -74,13 +76,20 @@ export const profileStyles = StyleSheet.create({
   },
   name: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: 500,
     marginBottom: 10,
   },
   bio: {
     fontSize: 16,
-    color: '#666',
+    color: '#222',
     textAlign: 'center',
     marginBottom: 20,
+  },
+  condo: {
+    fontSize: 20,
+    fontWeight: 500,
+    color: '#222',
+    textAlign: 'center',
+    marginBottom: 10,
   }
 });

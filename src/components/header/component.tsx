@@ -13,12 +13,12 @@ export default function HeaderComponent({logoText, slogan}: HeaderComponentProps
 	return (
 		<View style={styles.header}>
 			<View style={{ flexDirection:"row", justifyContent: "space-between", alignItems: "center" }}>
-				<Pressable
+				{/* <Pressable
 					style={styles.backButton}
 					onPress={() => router.back()}
 				>
 					<Ionicons name="arrow-back" size={24} color={colors.white}/>
-				</Pressable>
+				</Pressable> */}
 				<Text style={styles.logoText}>
 					{logoText}<Text style={{ color: colors.green }}>App!</Text>
 				</Text>
