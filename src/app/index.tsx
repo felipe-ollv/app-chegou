@@ -66,11 +66,14 @@ export default function LoginScreen() {
 
     } catch (err) {
       Alert.alert(
-        "Erro",
-        err.response?.data?.message || "Falha ao fazer login"
+         "Falha ao fazer login"
       );
       setLoading(false);
     }
+  };
+
+  const handleNavigate = () => {
+    router.push('./(auth)/signup/page');
   };
 
   return (
@@ -104,9 +107,12 @@ export default function LoginScreen() {
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
               <Text style={styles.buttonText}>Acessar</Text>
             </TouchableOpacity>
-            <Link href='./(auth)/signup/page' style={styles.link}>
-              <Text>Ainda não tem uma conta? Cadastre-se!</Text>
-            </Link>
+              <Text 
+                style={styles.link}
+                onPress={handleNavigate}
+              >
+                Ainda não tem uma conta? Cadastre-se!
+              </Text>
           </View>
       }
     </View>

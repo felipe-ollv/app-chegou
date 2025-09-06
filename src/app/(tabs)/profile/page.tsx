@@ -8,12 +8,12 @@ import { useUser } from '../../context/user.context';
 import colors from '@/constants/colors';
 import { Controller, useForm } from 'react-hook-form';
 
-type RegisterForm = {
+type userProfileForm = {
   name: string;
   block: string;
   apartment: string;
   phone: string;
-  received: string;
+  uuid: string;
 };
 
 export default function ProfileScreen() {
@@ -46,12 +46,13 @@ export default function ProfileScreen() {
       handleSubmit,
       formState: { errors, isSubmitting },
       reset,
-    } = useForm<RegisterForm>({
+    } = useForm<userProfileForm>({
       defaultValues: {
         name: userProfile[0].name,
         block: userProfile[0].apartment_block,
         apartment: userProfile[0].apartment.toString(),
         phone: userProfile[0].phone_number,
+        uuid: userData.ps
       },
     });
 
@@ -61,6 +62,7 @@ export default function ProfileScreen() {
       block: userProfile[0].apartment_block ?? "",
       apartment: userProfile[0].apartment?.toString() ?? "",
       phone: userProfile[0].phone_number ?? "",
+      uuid: userData.ps
     });
     setRegisterVisible(true);
   };
@@ -70,13 +72,12 @@ export default function ProfileScreen() {
     reset();
   };
 
-  const onSubmit = async (data: RegisterForm) => {
+  const onSubmit = async (data: userProfileForm) => {
     console.log('dados update', data);
     try {
-      data.received = userData.ps;
+      const res = await api.post('/user-profile/refresh-user-profile', data);
       setLoading(true);
-      const inform: any = await api.post('', data);
-      console.log("resp:", inform.data);
+      console.log("resp:", res.data);
       setLoading(false);
       closeRegisterModal();
     } catch (e) {
@@ -84,6 +85,17 @@ export default function ProfileScreen() {
       console.log("Erro ao atualizar perfil:", e);
     }
   };
+
+const handleProfileType = (data: string): string => {
+  const map: Record<string, string> = {
+    RESIDENT: 'MORADOR',
+    ADMIN: 'ADMINISTRAÇÃO',
+    EMPLOYEE: 'FUNCIONÁRIO',
+    TRUSTEE: 'SÍNDICO',
+  };
+
+  return map[data]
+};
 
   return (
     <View style={profileStyles.container}>

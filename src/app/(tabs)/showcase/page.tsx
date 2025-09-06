@@ -71,7 +71,6 @@ export default function ShowcaseScreen() {
       data.received = userData.ps;
       setLoading(true);
       const inform: any = await api.post('/received-package/create-received-package', data);
-      console.log("resp:", inform.data);
       if (inform.data.length > 0) fetchPackageList()
       setLoading(false);
       closeRegisterModal();
@@ -176,8 +175,8 @@ export default function ShowcaseScreen() {
                 cardsData.sameUser.map((item: any) => (
                   <InfoCardComponent
                     key={item.uuid_package}
-                    title={`Condomínio: ${item.condominium_name} ${item.apartment_block} ${item.apartment}`}
-                    receivedBy={`Recebido por: ${item.name}`}
+                    title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
+                    receivedBy={`Recebido por: ${item.ownerName}`}
                     receivedDate={`Dia: ${formatDateTime(item.created_at)}`}
                     extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"} />
                 ))
@@ -190,9 +189,9 @@ export default function ShowcaseScreen() {
                 cardsData.differentUser.map((item: any) => (
                   <InfoCardComponent
                     key={item.uuid_package}
-                    title={`${item.condominium_name} ${item.apartment_block} ${item.apartment}`}
-                    receivedBy={`${item.name}`}
-                    receivedDate={formatDateTime(item.created_at)}
+                    title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
+                    receivedBy={`Para: ${item.ownerName}`}
+                    receivedDate
                     extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"} />
                 ))
                 :
