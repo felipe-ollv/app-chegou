@@ -38,9 +38,16 @@ export default function ShowcaseScreen() {
   }, [userData]);
 
   const fetchPackageList = async () => {
-    const res: any = await api.get(`/received-package/find-received-package/${userData.ps}`)
-    setCardsData(res.data);
-    setLoading(false);
+    try {
+      setLoading(true)
+      const res: any = await api.get(`/received-package/find-received-package/${userData.ps}`)
+      setCardsData(res.data);
+      setLoading(false);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false)
+    }
   }
 
   const {
@@ -68,15 +75,15 @@ export default function ShowcaseScreen() {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      data.received = userData.ps;
       setLoading(true);
+      data.received = userData.ps;
       const inform: any = await api.post('/received-package/create-received-package', data);
-      if (inform.data.length > 0) fetchPackageList()
-      setLoading(false);
+      if (inform.data) fetchPackageList()
       closeRegisterModal();
     } catch (e) {
-      setLoading(false);
       console.log("Erro ao registrar:", e);
+    } finally {
+      setLoading(false)
     }
   };
 

@@ -42,19 +42,19 @@ export default function ProfileScreen() {
   }
 
   const {
-      control,
-      handleSubmit,
-      formState: { errors, isSubmitting },
-      reset,
-    } = useForm<userProfileForm>({
-      defaultValues: {
-        name: userProfile[0].name,
-        block: userProfile[0].apartment_block,
-        apartment: userProfile[0].apartment.toString(),
-        phone: userProfile[0].phone_number,
-        uuid: userData.ps
-      },
-    });
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<userProfileForm>({
+    defaultValues: {
+      name: userProfile[0].name,
+      block: userProfile[0].apartment_block,
+      apartment: userProfile[0].apartment.toString(),
+      phone: userProfile[0].phone_number,
+      uuid: userData.ps
+    },
+  });
 
   const openRegisterModal = () => {
     reset({
@@ -107,16 +107,34 @@ export default function ProfileScreen() {
 
           <View style={{ width: '100%', height: 1, backgroundColor: colors.green, marginBottom: 10 }} />
           <Text style={profileStyles.condo}>{userProfile[0].condominium_name} {userProfile[0].apartment_block} {userProfile[0].apartment}</Text>
-          <View style={{ width: '100%', height: 1, backgroundColor: colors.green, marginBottom: 10 }} />
-          <Text style={profileStyles.bio}>{userProfile[0].phone_number}</Text>
-          {/* <Text style={profileStyles.bio}>{userProfile[0].type_profile}</Text> */}
 
-          <TouchableOpacity style={profileStyles.button}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View
+              style={profileStyles.card}
+            >
+              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>32</Text>
+              <Text style={{textAlign: 'center', fontSize: 18}}>Recebidos</Text>
+            </View>
+            <View
+              style={profileStyles.card}
+            >
+              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>3</Text>
+              <Text style={{textAlign: 'center', fontSize: 18}}>Pendentes</Text>
+            </View>
+            <View
+              style={profileStyles.card}
+            >
+              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>7</Text>
+              <Text style={{textAlign: 'center', fontSize: 18}}>Entregues</Text>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={profileStyles.button}
             onPress={openRegisterModal}
           >
             <Text style={profileStyles.buttonText}>Editar Perfil</Text>
           </TouchableOpacity>
-
         </View>
 
           <Modal
@@ -134,7 +152,7 @@ export default function ProfileScreen() {
               }}
             >
               <Pressable
-                onPress={() => { } }
+                onPress={() => { }}
                 style={{
                   backgroundColor: "#fff",
                   borderTopLeftRadius: 16,
