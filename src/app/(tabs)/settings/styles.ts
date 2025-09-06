@@ -24,12 +24,14 @@ export const settingsStyles = StyleSheet.create({
     marginBottom: 34
   },
 	form: {
-			flex: 1,
-			backgroundColor: colors.white,
-			borderTopLeftRadius: 16,
-			borderTopRightRadius: 16,
-			paddingTop: 2,
-			paddingLeft: 14,
-			paddingRight: 14,
+    flex: 1,
+    backgroundColor: colors.white,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    paddingTop: 2,
+    paddingLeft: 14,
+    paddingRight: 14,
+    justifyContent: 'center',
+    alignItems: 'center'
 	},
 });
