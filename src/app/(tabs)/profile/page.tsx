@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, Modal, Pressable, ScrollView, TextInput } from 'react-native';
 import { profileStyles } from './styles';
 import HeaderComponent from '../../../components/header/component';
-import LoadingComponent from '../../../components/loading/component';
+import BasicLoading from '../../../components/loading/basic-loading';
 import api from '../../interceptor/axios-config';
 import { useUser } from '../../context/user.context';
 import colors from '@/constants/colors';
@@ -73,29 +73,19 @@ export default function ProfileScreen() {
   };
 
   const onSubmit = async (data: userProfileForm) => {
-    console.log('dados update', data);
     try {
+      setLoading(true)
       const res = await api.post('/user-profile/refresh-user-profile', data);
-      setLoading(true);
-      console.log("resp:", res.data);
-      setLoading(false);
+      if (res.data) {
+        fetchUserProfile();
+      }
       closeRegisterModal();
     } catch (e) {
-      setLoading(false);
       console.log("Erro ao atualizar perfil:", e);
+    } finally {
+      setLoading(false)
     }
   };
-
-const handleProfileType = (data: string): string => {
-  const map: Record<string, string> = {
-    RESIDENT: 'MORADOR',
-    ADMIN: 'ADMINISTRAÇÃO',
-    EMPLOYEE: 'FUNCIONÁRIO',
-    TRUSTEE: 'SÍNDICO',
-  };
-
-  return map[data]
-};
 
   return (
     <View style={profileStyles.container}>
@@ -103,7 +93,7 @@ const handleProfileType = (data: string): string => {
       <HeaderComponent logoText='Chegou' slogan='Seu perfil!' />
 
       {loading ?
-        <LoadingComponent />
+        <BasicLoading />
         :
         <><View style={profileStyles.form}>
 

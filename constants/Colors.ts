@@ -6,5 +6,6 @@ export default {
   green: '#99CF1D',
   ligthgreen: '#cce98892',
   gray: '#DDDDDD',
-  orange: '#ff8800ff'
+  orange: '#ff8800ff',
+  red: '#ea3612ff'
 };

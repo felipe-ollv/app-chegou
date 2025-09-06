@@ -4,7 +4,7 @@ import api from '../../interceptor/axios-config';
 import { View, Text, TouchableOpacity, ScrollView, Pressable, Modal, TextInput } from "react-native";
 import HeaderComponent from '../../../components/header/component';
 import InfoCardComponent from "../../../components/card/component";
-import LoadingComponent from '../../../components/loading/component';
+import BasicLoading from '../../../components/loading/basic-loading';
 import formatDateTime from '../../utils/formatDateTime';
 
 import colors from "@/constants/colors";
@@ -85,7 +85,7 @@ export default function ShowcaseScreen() {
       <HeaderComponent logoText="Chegou" slogan="" />
 
       {loading ?
-        <LoadingComponent />
+        <BasicLoading />
         :
         <><View style={showcaseStyles.form}>
           <View
