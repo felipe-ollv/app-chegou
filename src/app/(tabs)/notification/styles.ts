@@ -88,5 +88,18 @@ export const notificationStyles = StyleSheet.create({
   },
   logoutButton: {
     backgroundColor: '#4682B4',
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    elevation: 4, // sombra Android
+    shadowColor: '#000', // sombra iOS
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    padding: 16,
+    width: '100%',
+    // marginTop: 12
+    marginBottom: 10
   }
 });

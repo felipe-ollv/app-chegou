@@ -7,7 +7,14 @@ export default function NotificationScreen() {
 		<View style={notificationStyles.container}>
 			<HeaderComponent logoText="Chegou" slogan="Aviso do condominio!" />
 			<View style={notificationStyles.form}>
-				<Text>AVISOS</Text>
+				<View style={notificationStyles.card}>
+					<Text style={{fontWeight: 500, fontSize: 16, marginBottom: 2}}>Chegou!</Text>
+					<Text>Abre aqui pra ver!</Text>
+				</View>
+				<View style={notificationStyles.card}>
+					<Text style={{fontWeight: 500, fontSize: 16, marginBottom: 2}}>Chegou!</Text>
+					<Text>Recebido pago!</Text>
+				</View>
 			</View>
 		</View>
 	)
