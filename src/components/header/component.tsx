@@ -12,7 +12,6 @@ type HeaderComponentProps = {
 
 export default function HeaderComponent({ logoText, slogan }: HeaderComponentProps) {
 	const pathName = usePathname();
-	console.log(pathName)
 	return (
 		<View style={styles.header}>
 			<View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>

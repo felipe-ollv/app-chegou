@@ -113,19 +113,19 @@ export default function ProfileScreen() {
               style={profileStyles.card}
             >
               <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>32</Text>
-              <Text style={{textAlign: 'center', fontSize: 18}}>Recebidos</Text>
+              <Text style={{textAlign: 'center', fontSize: 14}}>Recebidos</Text>
             </View>
             <View
               style={profileStyles.card}
             >
               <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>3</Text>
-              <Text style={{textAlign: 'center', fontSize: 18}}>Pendentes</Text>
+              <Text style={{textAlign: 'center', fontSize: 14}}>Pendentes</Text>
             </View>
             <View
               style={profileStyles.card}
             >
               <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>7</Text>
-              <Text style={{textAlign: 'center', fontSize: 18}}>Entregues</Text>
+              <Text style={{textAlign: 'center', fontSize: 14}}>Entregues</Text>
             </View>
           </View>
 

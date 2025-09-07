@@ -30,6 +30,7 @@ export default function ShowcaseScreen() {
   const [loading, setLoading] = useState(true);
   const [receivedView, setLadoSelecionado] = useState(0);
   const [registerVisible, setRegisterVisible] = useState(false);
+  const [awaiting, setAwaiting] = useState(false);
   const [cardsData, setCardsData] = useState(listPackage);
   const { userData } = useUser();
 
@@ -63,6 +64,15 @@ export default function ShowcaseScreen() {
       notes: "",
     },
   });
+
+  const openAwaitingModal = () => {
+    setAwaiting(true);
+  };
+
+  const closeAwaitingModal = () => {
+    setAwaiting(false);
+    reset();
+  };
 
   const openRegisterModal = () => {
     setRegisterVisible(true);
@@ -180,12 +190,14 @@ export default function ShowcaseScreen() {
             {receivedView === 0 ?
               cardsData.sameUser.length > 0 ?
                 cardsData.sameUser.map((item: any) => (
-                  <InfoCardComponent
-                    key={item.uuid_package}
-                    title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
-                    receivedBy={`Recebido por: ${item.ownerName}`}
-                    receivedDate={`Dia: ${formatDateTime(item.created_at)}`}
-                    extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"} />
+                  <TouchableOpacity>
+                    <InfoCardComponent
+                      key={item.uuid_package}
+                      title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
+                      receivedBy={`Recebido por: ${item.ownerName}`}
+                      receivedDate={`Dia: ${formatDateTime(item.created_at)}`}
+                      extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"} />
+                    </TouchableOpacity>
                 ))
                 :
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: "center", justifyContent: "center" }}>
@@ -194,12 +206,218 @@ export default function ShowcaseScreen() {
               :
               cardsData.differentUser.length > 0 ?
                 cardsData.differentUser.map((item: any) => (
-                  <InfoCardComponent
-                    key={item.uuid_package}
-                    title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
-                    receivedBy={`Para: ${item.ownerName}`}
-                    receivedDate
-                    extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"} />
+                  <><TouchableOpacity onPress={openAwaitingModal}>
+                    <InfoCardComponent
+                      key={item.uuid_package}
+                      title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
+                      receivedBy={`Para: ${item.ownerName}`}
+                      receivedDate
+                      extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"} />
+                  </TouchableOpacity>
+                  <Modal
+                    visible={awaiting}
+                    animationType="slide"
+                    transparent
+                    onRequestClose={closeAwaitingModal}
+                  >
+                      <Pressable
+                        onPress={closeAwaitingModal}
+                        style={{
+                          flex: 1,
+                          backgroundColor: "rgba(0,0,0,0.35)",
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        <Pressable
+                          onPress={() => { } }
+                          style={{
+                            backgroundColor: "#fff",
+                            borderTopLeftRadius: 16,
+                            borderTopRightRadius: 16,
+                            paddingHorizontal: 16,
+                            paddingTop: 12,
+                            paddingBottom: 24,
+                            maxHeight: "85%",
+                          }}
+                        >
+                          <View style={{ alignItems: "center", marginBottom: 8 }}>
+                            <View
+                              style={{
+                                width: 40,
+                                height: 4,
+                                borderRadius: 2,
+                                backgroundColor: "#D0D5DD",
+                              }} />
+                          </View>
+
+                          <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 12 }}>
+                            Informar aguardando retirada
+                          </Text>
+
+                          <ScrollView
+                            style={{ maxHeight: "80%" }}
+                            keyboardShouldPersistTaps="handled"
+                            contentContainerStyle={{ paddingBottom: 8 }}
+                          >
+                            <View style={{ gap: 12 }}>
+                              <View>
+                                <Text style={{ fontSize: 14, marginBottom: 6 }}>Destinatário</Text>
+                                <Controller
+                                  control={control}
+                                  name="recipient"
+                                  rules={{ required: "Destinatário" }}
+                                  render={({ field: { onChange, value, onBlur } }) => (
+                                    <TextInput
+                                      placeholder="Nome de quem fez a compra"
+                                      style={{
+                                        borderWidth: 1,
+                                        borderColor: errors.recipient ? "#ef4444" : "#E5E7EB",
+                                        borderRadius: 8,
+                                        paddingHorizontal: 12,
+                                        height: 44,
+                                      }}
+                                      value={value}
+                                      onChangeText={onChange}
+                                      onBlur={onBlur}
+                                      autoCapitalize="words" />
+                                  )} />
+                                {errors.recipient && (
+                                  <Text style={{ color: "red", marginTop: 6 }}>
+                                    {errors.recipient.message}
+                                  </Text>
+                                )}
+                              </View>
+
+                              <View>
+                                <Text style={{ fontSize: 14, marginBottom: 6 }}>Torre/Bloco</Text>
+                                <Controller
+                                  control={control}
+                                  name="block"
+                                  rules={{ required: "Torre/Bloco" }}
+                                  render={({ field: { onChange, value, onBlur } }) => (
+                                    <TextInput
+                                      placeholder="Torre/Bloco"
+                                      style={{
+                                        borderWidth: 1,
+                                        borderColor: errors.block ? "#ef4444" : "#E5E7EB",
+                                        borderRadius: 8,
+                                        paddingHorizontal: 12,
+                                        height: 44,
+                                      }}
+                                      value={value}
+                                      onChangeText={onChange}
+                                      onBlur={onBlur}
+                                      autoCapitalize="characters" />
+                                  )} />
+                                {errors.block && (
+                                  <Text style={{ color: "red", marginTop: 6 }}>
+                                    {errors.block.message}
+                                  </Text>
+                                )}
+                              </View>
+
+                              <View>
+                                <Text style={{ fontSize: 14, marginBottom: 6 }}>Apartamento</Text>
+                                <Controller
+                                  control={control}
+                                  name="apartment"
+                                  rules={{
+                                    required: "Apartamento",
+                                    minLength: { value: 1, message: "Informe o apartamento" },
+                                  }}
+                                  render={({ field: { onChange, value, onBlur } }) => (
+                                    <TextInput
+                                      placeholder="Número do apartamento"
+                                      style={{
+                                        borderWidth: 1,
+                                        borderColor: errors.apartment ? "#ef4444" : "#E5E7EB",
+                                        borderRadius: 8,
+                                        paddingHorizontal: 12,
+                                        height: 44,
+                                      }}
+                                      value={value}
+                                      onChangeText={(t) => onChange(t)}
+                                      onBlur={onBlur}
+                                      keyboardType="numeric" />
+                                  )} />
+                                {errors.apartment && (
+                                  <Text style={{ color: "red", marginTop: 6 }}>
+                                    {errors.apartment.message}
+                                  </Text>
+                                )}
+                              </View>
+
+                              <View>
+                                <Text style={{ fontSize: 14, marginBottom: 6 }}>Observações</Text>
+                                <Controller
+                                  control={control}
+                                  name="notes"
+                                  render={({ field: { onChange, value, onBlur } }) => (
+                                    <TextInput
+                                      placeholder="Ex: Retirar até as 21h"
+                                      multiline
+                                      style={{
+                                        borderWidth: 1,
+                                        borderColor: "#E5E7EB",
+                                        borderRadius: 8,
+                                        paddingHorizontal: 12,
+                                        paddingTop: 10,
+                                        minHeight: 80,
+                                        textAlignVertical: "top",
+                                      }}
+                                      value={value}
+                                      onChangeText={onChange}
+                                      onBlur={onBlur} />
+                                  )} />
+                              </View>
+                            </View>
+                          </ScrollView>
+
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "flex-end",
+                              gap: 12,
+                              marginTop: 16,
+                            }}
+                          >
+                            <TouchableOpacity
+                              onPress={closeAwaitingModal}
+                              disabled={isSubmitting}
+                              style={{
+                                paddingHorizontal: 14,
+                                height: 44,
+                                borderRadius: 8,
+                                borderWidth: 1,
+                                borderColor: "#E5E7EB",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backgroundColor: "#fff",
+                                opacity: isSubmitting ? 0.6 : 1,
+                              }}
+                            >
+                              <Text style={{ color: "#111" }}>Cancelar</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                              onPress={handleSubmit(onSubmit)}
+                              disabled={isSubmitting}
+                              style={{
+                                paddingHorizontal: 16,
+                                height: 44,
+                                borderRadius: 8,
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backgroundColor: colors.green,
+                                opacity: isSubmitting ? 0.6 : 1,
+                              }}
+                            >
+                              <Text style={{ color: "#fff", fontWeight: "600" }}>Confirmar</Text>
+                            </TouchableOpacity>
+                          </View>
+                        </Pressable>
+                      </Pressable>
+                    </Modal></>
                 ))
                 :
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: "center", justifyContent: "center" }}>
@@ -207,27 +425,29 @@ export default function ShowcaseScreen() {
                 </View>}
           </ScrollView>
 
-        </View><TouchableOpacity
-          onPress={openRegisterModal}
-          style={{
-            position: "absolute",
-            right: 20,
-            bottom: 20,
-            width: 56,
-            height: 56,
-            borderRadius: 28,
-            backgroundColor: colors.green,
-            alignItems: "center",
-            justifyContent: "center",
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 6,
-          }}
-        >
+        </View>
+          <TouchableOpacity
+            onPress={openRegisterModal}
+            style={{
+              position: "absolute",
+              right: 20,
+              bottom: 20,
+              width: 56,
+              height: 56,
+              borderRadius: 28,
+              backgroundColor: colors.green,
+              alignItems: "center",
+              justifyContent: "center",
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 6,
+            }}
+          >
             <AntDesign name="plus" size={24} color="#fff" />
-          </TouchableOpacity><Modal
+          </TouchableOpacity>
+          <Modal
             visible={registerVisible}
             animationType="slide"
             transparent
