@@ -42,7 +42,8 @@ export const settingsStyles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 16,
-    padding: 16,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
     width: '100%',
   }
 });
