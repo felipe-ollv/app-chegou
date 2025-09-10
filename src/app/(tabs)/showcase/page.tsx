@@ -6,17 +6,18 @@ import HeaderComponent from '../../../components/header/component';
 import InfoCardComponent from "../../../components/card/component";
 import BasicLoading from '../../../components/loading/basic-loading';
 import formatDateTime from '../../utils/formatDateTime';
-
+import ToastComponent from '../../../components/toast/component';
 import colors from "@/constants/colors";
 import { showcaseStyles } from "./styles";
 import { Controller, useForm } from "react-hook-form";
 import { useUser } from "../../context/user.context";
+import { styles } from "@/src/components/card/styles";
 
 type RegisterForm = {
   recipient: string;
   block: string;
   apartment: string;
-  notes: string;
+  note: string;
   received: string;
 };
 
@@ -42,10 +43,10 @@ export default function ShowcaseScreen() {
     try {
       setLoading(true)
       const res: any = await api.get(`/received-package/find-received-package/${userData.ps}`)
+      console.log(res.data)
       setCardsData(res.data);
-      setLoading(false);
     } catch (error) {
-      throw error;
+      ToastComponent({type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes"})
     } finally {
       setLoading(false)
     }
@@ -61,7 +62,7 @@ export default function ShowcaseScreen() {
       recipient: "",
       block: "",
       apartment: "",
-      notes: "",
+      note: "",
     },
   });
 
@@ -86,12 +87,20 @@ export default function ShowcaseScreen() {
   const onSubmit = async (data: RegisterForm) => {
     try {
       setLoading(true);
+      console.log(data)
       data.received = userData.ps;
       const inform: any = await api.post('/received-package/create-received-package', data);
-      if (inform.data) fetchPackageList()
-      closeRegisterModal();
+      if (inform.data.error === 400) {
+        closeRegisterModal();
+        ToastComponent({type: 'warning', text1: "Falha!", text2: inform.data.message})
+      } else {
+        fetchPackageList();
+        closeRegisterModal();
+        ToastComponent({type: 'success', text1: "Sucesso!", text2: "Recebimento registrado"})
+      }
+      
     } catch (e) {
-      console.log("Erro ao registrar:", e);
+      ToastComponent({type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes"})
     } finally {
       setLoading(false)
     }
@@ -196,7 +205,7 @@ export default function ShowcaseScreen() {
                       title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
                       receivedBy={`Recebido por: ${item.ownerName}`}
                       receivedDate={`Dia: ${formatDateTime(item.created_at)}`}
-                      extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"} />
+                      status_package={item.status_package} />
                     </TouchableOpacity>
                 ))
                 :
@@ -211,8 +220,10 @@ export default function ShowcaseScreen() {
                       key={item.uuid_package}
                       title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
                       receivedBy={`Para: ${item.ownerName}`}
-                      receivedDate
-                      extra={item.status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO"} />
+                      receivedDate={`Recebido: ${formatDateTime(item.created_at)}`}
+                      status_package={item.status_package}
+                    />
+
                   </TouchableOpacity>
                   <Modal
                     visible={awaiting}
@@ -351,7 +362,7 @@ export default function ShowcaseScreen() {
                                 <Text style={{ fontSize: 14, marginBottom: 6 }}>Observações</Text>
                                 <Controller
                                   control={control}
-                                  name="notes"
+                                  name="note"
                                   render={({ field: { onChange, value, onBlur } }) => (
                                     <TextInput
                                       placeholder="Ex: Retirar até as 21h"
@@ -584,7 +595,7 @@ export default function ShowcaseScreen() {
                       <Text style={{ fontSize: 14, marginBottom: 6 }}>Observações</Text>
                       <Controller
                         control={control}
-                        name="notes"
+                        name="note"
                         render={({ field: { onChange, value, onBlur } }) => (
                           <TextInput
                             placeholder="Ex: Retirar até as 21h"

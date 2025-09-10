@@ -7,6 +7,7 @@ import api from '../../interceptor/axios-config';
 import { useUser } from '../../context/user.context';
 import colors from '@/constants/colors';
 import { Controller, useForm } from 'react-hook-form';
+import ToastComponent from '@/src/components/toast/component';
 
 type userProfileForm = {
   name: string;
@@ -27,7 +28,10 @@ export default function ProfileScreen() {
       "condominium_name": "",
       "name": "",
       "phone_number": "",
-      "type_profile": ""
+      "type_profile": "",
+      "total_received": "",
+      "total_delivered": "",
+      "total_pending": ""
     }
   ]);
 
@@ -36,9 +40,14 @@ export default function ProfileScreen() {
   }, []);
 
   const fetchUserProfile = async () => {
-    const res: any = await api.get(`/user-profile/find-user-profile/${userData.ps}`);
-    setUserProfile(res.data);
-    setLoading(false);
+    try {
+      const res: any = await api.get(`/user-profile/find-user-profile/${userData.ps}`);
+      setUserProfile(res.data);
+    } catch (error) {
+        ToastComponent({type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes"})
+    } finally {
+        setLoading(false);
+    }
   }
 
   const {
@@ -80,8 +89,9 @@ export default function ProfileScreen() {
         fetchUserProfile();
       }
       closeRegisterModal();
+      ToastComponent({type: 'success', text1: "Sucesso!", text2: "Seu perfil foi atualizado"})
     } catch (e) {
-      console.log("Erro ao atualizar perfil:", e);
+      ToastComponent({type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes"})
     } finally {
       setLoading(false)
     }
@@ -112,19 +122,19 @@ export default function ProfileScreen() {
             <View
               style={profileStyles.card}
             >
-              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>32</Text>
+              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>{userProfile[0].total_received}</Text>
               <Text style={{textAlign: 'center', fontSize: 14}}>Recebidos</Text>
             </View>
             <View
               style={profileStyles.card}
             >
-              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>3</Text>
+              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>{userProfile[0].total_pending}</Text>
               <Text style={{textAlign: 'center', fontSize: 14}}>Pendentes</Text>
             </View>
             <View
               style={profileStyles.card}
             >
-              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>7</Text>
+              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>{userProfile[0].total_delivered}</Text>
               <Text style={{textAlign: 'center', fontSize: 14}}>Entregues</Text>
             </View>
           </View>

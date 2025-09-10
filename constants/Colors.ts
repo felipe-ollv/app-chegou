@@ -4,8 +4,9 @@ export default {
   black: '#000',
   white: '#fff',
   green: '#99CF1D',
-  ligthgreen: '#cce98892',
+  ligthgreen: '#d9f0a592',
   gray: '#DDDDDD',
-  orange: '#ff8800ff',
+  orange: '#d7af1fff',
+  orangeBackgournd: '#cfab1d1a',
   red: '#ea3612ff'
 };

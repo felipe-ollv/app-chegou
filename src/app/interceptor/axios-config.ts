@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import { getItem } from "expo-secure-store";
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.6:3006/api',
+  baseURL: 'https://app-chegou.com.br/api',
 });
 
 let token: string | null = null;

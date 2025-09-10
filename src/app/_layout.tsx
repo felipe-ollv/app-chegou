@@ -1,5 +1,7 @@
 import { Stack, Slot } from "expo-router";
 import { UserProvider } from "./context/user.context";
+import Toast from 'react-native-toast-message';
+import { toastConfig } from "../components/toast/component";
 
 export default function MainLayout() {
 
@@ -15,5 +17,6 @@ export default function MainLayout() {
 
   return  <UserProvider>
             <Slot />
+            <Toast config={toastConfig}/>
           </UserProvider>
 }
