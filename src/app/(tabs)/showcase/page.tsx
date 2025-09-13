@@ -11,7 +11,6 @@ import colors from "@/constants/colors";
 import { showcaseStyles } from "./styles";
 import { Controller, useForm } from "react-hook-form";
 import { useUser } from "../../context/user.context";
-import { styles } from "@/src/components/card/styles";
 
 type RegisterForm = {
   recipient: string;
@@ -37,13 +36,12 @@ export default function ShowcaseScreen() {
 
   useEffect(() => {
     fetchPackageList();
-  }, [userData]);
+  }, []);
 
   const fetchPackageList = async () => {
     try {
       setLoading(true)
       const res: any = await api.get(`/received-package/find-received-package/${userData.ps}`)
-      console.log(res.data)
       setCardsData(res.data);
     } catch (error) {
       ToastComponent({type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes"})
@@ -87,7 +85,6 @@ export default function ShowcaseScreen() {
   const onSubmit = async (data: RegisterForm) => {
     try {
       setLoading(true);
-      console.log(data)
       data.received = userData.ps;
       const inform: any = await api.post('/received-package/create-received-package', data);
       if (inform.data.error === 400) {

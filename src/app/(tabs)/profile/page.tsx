@@ -40,6 +40,8 @@ export default function ProfileScreen() {
   }, []);
 
   const fetchUserProfile = async () => {
+    
+    setLoading(true);
     try {
       const res: any = await api.get(`/user-profile/find-user-profile/${userData.ps}`);
       setUserProfile(res.data);
@@ -57,10 +59,10 @@ export default function ProfileScreen() {
     reset,
   } = useForm<userProfileForm>({
     defaultValues: {
-      name: userProfile[0].name,
-      block: userProfile[0].apartment_block,
-      apartment: userProfile[0].apartment.toString(),
-      phone: userProfile[0].phone_number,
+      name:'',
+      block: '',
+      apartment: '',
+      phone: '',
       uuid: userData.ps
     },
   });

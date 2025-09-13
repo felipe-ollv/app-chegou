@@ -51,7 +51,6 @@ export default function SignUpScreen() {
 
     const findCondominium = async () => {
       const conds: any = await api.get('/condominium/find-all');
-      console.log('CONDOMINIOS', conds.data)
       setCondominiumList(conds.data);
     }
 
