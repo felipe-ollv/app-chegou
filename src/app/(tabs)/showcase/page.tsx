@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import api from '../../interceptor/axios-config';
+import api from '../../../interceptor/axios-config';
 import { View, Text, TouchableOpacity, ScrollView, Pressable, Modal, TextInput } from "react-native";
 import HeaderComponent from '../../../components/header/component';
 import InfoCardComponent from "../../../components/card/component";
 import BasicLoading from '../../../components/loading/basic-loading';
-import formatDateTime from '../../utils/formatDateTime';
+import formatDateTime from '../../../utils/formatDateTime';
 import ToastComponent from '../../../components/toast/component';
 import colors from "../../../../colors-app/colors";
-import { showcaseStyles } from "./styles";
+import { showcaseStyles } from "../../../styles/showcase-styles";
 import { Controller, useForm } from "react-hook-form";
-import { useUser } from "../../context/user.context";
+import { useUser } from "../../../context/user.context";
 
 type RegisterForm = {
   recipient: string;

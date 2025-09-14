@@ -10,15 +10,16 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 import { useRouter } from "expo-router";
-import api from '../../interceptor/axios-config';
+import api from '../../../interceptor/axios-config';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useForm, Controller } from "react-hook-form";
 import SelectDropdown from "react-native-select-dropdown";
 import BasicLoading from "@/src/components/loading/basic-loading";
-import formatPhoneNumber from '../../utils/formatPhoneNumber';
+import formatPhoneNumber from '../../../utils/formatPhoneNumber';
 
 import styles from "./styles";
 import HeaderComponent from "../../../components/header/component";
+import colors from "../../../../colors-app/colors";
 
 type FormData = {
   name: string;
@@ -143,6 +144,7 @@ export default function SignUpScreen() {
                       <TextInput
                         style={styles.input}
                         placeholder="Seu nome..."
+                        placeholderTextColor={colors.blacklight}
                         value={value}
                         onChangeText={onChange}
                         onBlur={onBlur}
@@ -205,6 +207,7 @@ export default function SignUpScreen() {
                       <TextInput
                         style={styles.input}
                         placeholder="Seu apartamento..."
+                        placeholderTextColor={colors.blacklight}
                         value={value}
                         onChangeText={onChange}
                         onBlur={onBlur}
@@ -226,6 +229,7 @@ export default function SignUpScreen() {
                       <TextInput
                         style={styles.input}
                         placeholder="Seu bloco/Torre..."
+                        placeholderTextColor={colors.blacklight}
                         value={value}
                         onChangeText={onChange}
                         onBlur={onBlur}
@@ -321,6 +325,7 @@ export default function SignUpScreen() {
                       <TextInput
                         style={styles.input}
                         placeholder="Digite seu telefone..."
+                        placeholderTextColor={colors.blacklight}
                         keyboardType="numeric"
                         value={formatPhoneNumber(value)}
                         onChangeText={onChange}
@@ -349,6 +354,7 @@ export default function SignUpScreen() {
                       <TextInput
                         style={styles.input}
                         placeholder="Digite sua senha..."
+                        placeholderTextColor={colors.blacklight}
                         secureTextEntry
                         value={value}
                         onChangeText={onChange}

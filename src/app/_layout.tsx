@@ -1,5 +1,5 @@
 import { Stack, Slot } from "expo-router";
-import { UserProvider } from "./context/user.context";
+import { UserProvider } from "../context/user.context";
 import Toast from 'react-native-toast-message';
 import { toastConfig } from "../components/toast/component";
 

@@ -1,7 +1,7 @@
 import HeaderComponent from '../../../components/header/component';
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { settingsStyles } from './styles';
+import { settingsStyles } from '../../../styles/settings-styles';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';

@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import colors from "../../../../colors-app/colors";
+import colors from "../../colors-app/colors";
 
-export const notificationStyles = StyleSheet.create({
+export const showcaseStyles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 34,
@@ -28,9 +28,9 @@ export const notificationStyles = StyleSheet.create({
     backgroundColor: colors.white,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    paddingTop: 24,
+    paddingTop: 2,
     paddingLeft: 14,
-    paddingRight: 14
+    paddingRight: 14,
   }, 
   label: {
     color: colors.zinc,
@@ -88,18 +88,5 @@ export const notificationStyles = StyleSheet.create({
   },
   logoutButton: {
     backgroundColor: '#4682B4',
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    elevation: 4, // sombra Android
-    shadowColor: '#000', // sombra iOS
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 16,
-    padding: 16,
-    width: '100%',
-    // marginTop: 12
-    marginBottom: 10
   }
 });

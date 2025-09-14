@@ -8,5 +8,6 @@ export default {
   gray: '#DDDDDD',
   orange: '#d7af1fff',
   orangeBackgournd: '#cfab1d1a',
-  red: '#ea3612ff'
+  red: '#ea3612ff',
+  blacklight: '#777'
 };

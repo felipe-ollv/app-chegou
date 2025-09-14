@@ -1,6 +1,6 @@
 import HeaderComponent from "@/src/components/header/component";
 import { Text, View } from "react-native";
-import { notificationStyles } from "./styles";
+import { notificationStyles } from "../../../styles/notification-styles";
 
 export default function NotificationScreen() {
 	return (

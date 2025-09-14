@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { Text, View, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useRouter } from "expo-router";
-import api, { setToken } from './interceptor/axios-config';
-import { styles } from "./styles";
+import api, { setToken } from '../interceptor/axios-config';
+import { styles } from "../styles/index-styles";
 import HeaderComponent from "../components/header/component";
 import LoadingComponent from '../components/loading/component';
 import ToastComponent from '../components/toast/component';
 import ActionStorage from "./(auth)/midleware/authStorage";
 import { jwtDecode } from "jwt-decode";
-import { useUser } from "./context/user.context";
+import { useUser } from "../context/user.context";
+import colors from "../../colors-app/colors";
 
 function formatPhoneNumber(value: any) {
   return value
@@ -73,6 +74,7 @@ export default function LoginScreen() {
             <Text style={styles.label}>Telefone</Text>
             <TextInput
               placeholder="Seu telefone..."
+              placeholderTextColor={colors.blacklight}
               style={styles.input}
               keyboardType='numeric'
               value={phone}
@@ -84,6 +86,7 @@ export default function LoginScreen() {
             <Text style={styles.label}>Senha</Text>
             <TextInput
               placeholder="Sua senha..."
+              placeholderTextColor={colors.blacklight}
               secureTextEntry
               style={styles.input}
               value={password}
