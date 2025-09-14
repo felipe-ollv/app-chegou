@@ -7,7 +7,7 @@ import InfoCardComponent from "../../../components/card/component";
 import BasicLoading from '../../../components/loading/basic-loading';
 import formatDateTime from '../../utils/formatDateTime';
 import ToastComponent from '../../../components/toast/component';
-import colors from "@/constants/colors";
+import colors from "../../../../colors-app/colors";
 import { showcaseStyles } from "./styles";
 import { Controller, useForm } from "react-hook-form";
 import { useUser } from "../../context/user.context";

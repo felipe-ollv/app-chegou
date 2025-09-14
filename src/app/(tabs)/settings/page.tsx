@@ -5,7 +5,7 @@ import { settingsStyles } from './styles';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import colors from '@/constants/colors';
+import colors from '../../../../colors-app/colors';
 
 export default function SettingsScreen() {
 	return (

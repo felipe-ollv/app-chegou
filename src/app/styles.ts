@@ -1,4 +1,4 @@
-import colors from "../../constants/colors";
+import colors from "../../colors-app/colors";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 8,
     paddingTop: 14,
-    paddingBottom: 14
+    paddingBottom: 14,
   },
   button: {
     backgroundColor: colors.green,

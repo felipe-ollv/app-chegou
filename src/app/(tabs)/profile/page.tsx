@@ -5,7 +5,7 @@ import HeaderComponent from '../../../components/header/component';
 import BasicLoading from '../../../components/loading/basic-loading';
 import api from '../../interceptor/axios-config';
 import { useUser } from '../../context/user.context';
-import colors from '@/constants/colors';
+import colors from '../../../../colors-app/colors';
 import { Controller, useForm } from 'react-hook-form';
 import ToastComponent from '@/src/components/toast/component';
 
