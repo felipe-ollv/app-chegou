@@ -1,13 +1,14 @@
 
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
+import colors from "../../../colors-app/colors";
 
 export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#024699fd',
-        tabBarInactiveTintColor: '#8e8e93',
+        tabBarActiveTintColor: colors.darkblue,
+        tabBarInactiveTintColor: colors.gray2,
       }}
     >
       <Tabs.Screen name="showcase/page" options={{
