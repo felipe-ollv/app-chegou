@@ -11,5 +11,5 @@ export default {
   red: '#ea3612ff',
   blacklight: '#777',
   darkblue: '#03056eff',
-  gray2: '8e8e93'
+  gray2: '#8e8e93'
 };

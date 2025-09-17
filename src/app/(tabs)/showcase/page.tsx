@@ -277,6 +277,7 @@ export default function ShowcaseScreen() {
                                   render={({ field: { onChange, value, onBlur } }) => (
                                     <TextInput
                                       placeholder="Nome de quem fez a compra"
+                                      placeholderTextColor={colors.blacklight}
                                       style={{
                                         borderWidth: 1,
                                         borderColor: errors.recipient ? "#ef4444" : "#E5E7EB",
@@ -305,6 +306,7 @@ export default function ShowcaseScreen() {
                                   render={({ field: { onChange, value, onBlur } }) => (
                                     <TextInput
                                       placeholder="Torre/Bloco"
+                                      placeholderTextColor={colors.blacklight}
                                       style={{
                                         borderWidth: 1,
                                         borderColor: errors.block ? "#ef4444" : "#E5E7EB",
@@ -336,6 +338,7 @@ export default function ShowcaseScreen() {
                                   render={({ field: { onChange, value, onBlur } }) => (
                                     <TextInput
                                       placeholder="Número do apartamento"
+                                      placeholderTextColor={colors.blacklight}
                                       style={{
                                         borderWidth: 1,
                                         borderColor: errors.apartment ? "#ef4444" : "#E5E7EB",
@@ -363,6 +366,7 @@ export default function ShowcaseScreen() {
                                   render={({ field: { onChange, value, onBlur } }) => (
                                     <TextInput
                                       placeholder="Ex: Retirar até as 21h"
+                                      placeholderTextColor={colors.blacklight}
                                       multiline
                                       style={{
                                         borderWidth: 1,
@@ -510,6 +514,7 @@ export default function ShowcaseScreen() {
                         render={({ field: { onChange, value, onBlur } }) => (
                           <TextInput
                             placeholder="Nome de quem fez a compra"
+                            placeholderTextColor={colors.blacklight}
                             style={{
                               borderWidth: 1,
                               borderColor: errors.recipient ? "#ef4444" : "#E5E7EB",
@@ -538,6 +543,7 @@ export default function ShowcaseScreen() {
                         render={({ field: { onChange, value, onBlur } }) => (
                           <TextInput
                             placeholder="Torre/Bloco"
+                            placeholderTextColor={colors.blacklight}
                             style={{
                               borderWidth: 1,
                               borderColor: errors.block ? "#ef4444" : "#E5E7EB",
@@ -569,6 +575,7 @@ export default function ShowcaseScreen() {
                         render={({ field: { onChange, value, onBlur } }) => (
                           <TextInput
                             placeholder="Número do apartamento"
+                            placeholderTextColor={colors.blacklight}
                             style={{
                               borderWidth: 1,
                               borderColor: errors.apartment ? "#ef4444" : "#E5E7EB",
@@ -596,6 +603,7 @@ export default function ShowcaseScreen() {
                         render={({ field: { onChange, value, onBlur } }) => (
                           <TextInput
                             placeholder="Ex: Retirar até as 21h"
+                            placeholderTextColor={colors.blacklight}
                             multiline
                             style={{
                               borderWidth: 1,

@@ -4,7 +4,7 @@ import { getItem } from "expo-secure-store";
 import { router } from "expo-router"; // importa o router
 
 const api = axios.create({
-  baseURL: 'https://app-chegou.com.br/api',
+  baseURL: 'http://localhost:3006/api',
 });
 
 let token: string | null = null;
