@@ -1,6 +1,6 @@
 import HeaderComponent from '../../../components/header/component';
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Pressable, Modal, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { settingsStyles } from '../../../styles/settings-styles';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -12,15 +12,6 @@ import ModalSuport from '../../../components/modals/modal-suporte';
 export default function SettingsScreen() {
 	const [modalTermsVisible, setModalTermsVisible] = useState(false);
 	const [modalSuportVisible, setModalSuportVisible] = useState(false);
-		const [registerVisible, setRegisterVisible] = useState(false);
-
-	  const openRegisterModal = () => {
-    setRegisterVisible(true);
-  };
-
-  const closeRegisterModal = () => {
-    setRegisterVisible(false);
-  };
 	
 	return (
 		<View style={settingsStyles.container}>

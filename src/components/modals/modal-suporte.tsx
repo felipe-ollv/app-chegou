@@ -51,32 +51,15 @@ export default function ModalSuport({
                 </Text>
 
                 <ScrollView
-                  style={{ maxHeight: "80%" }}
+                  style={{ height: "40%" }}
                   keyboardShouldPersistTaps="handled"
                   contentContainerStyle={{ paddingBottom: 8 }}
                 >
-                  <View style={{ gap: 12 }}>
-                    <View>
-                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Destinatário</Text>
-                     
-                  
-                    </View>
-
-                    <View>
-                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Torre/Bloco</Text>
-                      
-                    </View>
-
-                    <View>
-                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Apartamento</Text>
-                     
-                    </View>
-
-                    <View>
-                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Observações</Text>
-                     
-                    </View>
+                  <View style={{ width: '100%', height: 200, justifyContent: 'center', alignItems: 'center', gap: 20 }}>
+                    <Text>WhatsApp</Text>
+                    <Text>Email</Text>
                   </View>
+                  
                 </ScrollView>
 
                 <View
