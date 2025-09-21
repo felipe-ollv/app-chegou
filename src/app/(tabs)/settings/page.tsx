@@ -7,11 +7,13 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import colors from '../../../../colors-app/colors';
 import ModalTermsAndPrivacy from '../../../components/modals/modal-terms-privacy';
-import ModalSuport from '../../../components/modals/modal-suporte';
+import ModalSuport from '../../../components/modals/modal-suport';
+import ModalChangePassword from '../../../components/modals/modal-change-password';
 
 export default function SettingsScreen() {
 	const [modalTermsVisible, setModalTermsVisible] = useState(false);
 	const [modalSuportVisible, setModalSuportVisible] = useState(false);
+	const [modalChangePasswordVisible, setModalChangePasswordVisible] = useState(false);
 	
 	return (
 		<View style={settingsStyles.container}>
@@ -19,7 +21,7 @@ export default function SettingsScreen() {
 			<View style={settingsStyles.form}>
 				<View style={settingsStyles.card}>
 					<View style={{ width: '100%' }}>
-						<TouchableOpacity>
+						<TouchableOpacity onPress={() => setModalChangePasswordVisible(true)}>
 							<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 								<View style={{ flexDirection: 'row' }}>
 									<MaterialIcons name="password" size={22} color={colors.zinc} />
@@ -33,7 +35,7 @@ export default function SettingsScreen() {
 							<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 								<View style={{ flexDirection: 'row' }}>
 									<AntDesign name="customerservice" size={22} color={colors.zinc} />
-								<Text style={{ fontSize: 16, marginLeft: 22 }}>Suporte/FAQ</Text>
+								<Text style={{ fontSize: 16, marginLeft: 22 }}>Suporte/Atendimento</Text>
 								</View>
 								<MaterialIcons name="arrow-forward-ios" size={14} color={colors.zinc} />
 							</View>
@@ -56,6 +58,10 @@ export default function SettingsScreen() {
 						<ModalSuport 
 							visible={modalSuportVisible}
 							onClose={() => setModalSuportVisible(false)}
+						/>
+						<ModalChangePassword 
+							visible={modalChangePasswordVisible}
+							onClose={() => setModalChangePasswordVisible(false)}
 						/>
 					</View>
 				</View>

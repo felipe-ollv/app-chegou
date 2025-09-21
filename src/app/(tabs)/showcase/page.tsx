@@ -213,7 +213,7 @@ export default function ShowcaseScreen() {
                       key={item.uuid_package}
                       title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
                       receivedBy={`Recebido por: ${item.ownerName}`}
-                      receivedDate={`Dia: ${formatDateTime(item.created_at)}`}
+                      receivedDate={`Data: ${formatDateTime(item.created_at)}`}
                       status_package={item.status_package} />
                   </TouchableOpacity><Modal
                     visible={awaiting}
