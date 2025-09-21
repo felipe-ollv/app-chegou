@@ -7,7 +7,8 @@ import api from '../../../interceptor/axios-config';
 import { useUser } from '../../../context/user.context';
 import colors from '../../../../colors-app/colors';
 import { Controller, useForm } from 'react-hook-form';
-import ToastComponent from '@/src/components/toast/component';
+import ToastComponent from '../../../components/toast/component';
+import ProfileImageComponent from '../../../components/image/image-profile';
 
 type userProfileForm = {
   name: string;
@@ -27,6 +28,7 @@ export default function ProfileScreen() {
       "apartment_block": "",
       "condominium_name": "",
       "name": "",
+      "profile_image": "",
       "phone_number": "",
       "type_profile": "",
       "total_received": "",
@@ -110,10 +112,7 @@ export default function ProfileScreen() {
         <><View style={profileStyles.form}>
 
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Image
-              source={require('../../../../assets/images/11539820.png')}
-              style={profileStyles.profileImageCss} />
-
+            <ProfileImageComponent uri={userProfile[0].profile_image} />
             <Text style={profileStyles.name}>{userProfile[0].name}</Text>
           </View>
 
