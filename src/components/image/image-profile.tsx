@@ -96,10 +96,16 @@ export default function ProfileImageComponent({ uri }: ProfileImageProps) {
 						<BasicLoading /> 
 					</View>
 				:
-					<Image
-						source={{ uri: currentImage }}
-						style={{ width: 200, height: 200, borderRadius: 100 }}
-					/>
+					currentImage ?
+						<Image
+							source={{ uri: currentImage }}
+							style={{ width: 200, height: 200, borderRadius: 100 }}
+						/> 
+						:
+						<Image
+							source={ require('../../../assets/images/11539820.png') }
+							style={{ width: 200, height: 200, borderRadius: 100 }}
+						/> 
 				}
 			<View
 				style={{
