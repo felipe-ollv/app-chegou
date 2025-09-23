@@ -148,12 +148,14 @@ export default function ShowcaseScreen() {
                         setVisibleModalInformCode(true)
                         setSelectedItem(item.confirmation_code)
                       }}
+                      disabled={item.status_package === 'DELIVERED'}
                     >
                       <InfoCardComponent
                         title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
                         receivedBy={`Recebido por: ${item.ownerName}`}
                         receivedDate={`Data: ${formatDateTime(item.created_at)}`}
-                        status_package={item.status_package} />
+                        status_package={item.status_package} 
+                      />
                     </TouchableOpacity>
 
                     <ModalInformCode
@@ -175,8 +177,10 @@ export default function ShowcaseScreen() {
                       key={item.uuid_package}
                       onPress={() => {
                         setVisibleModalConfirmationCode(true)
-                        setSelectedItem(item.confirmation_code)
-                      }}>
+                        setSelectedItem(item.uuid_package)
+                      }}
+                      disabled={item.status_package === 'DELIVERED'}
+                    >
                       <InfoCardComponent
                         title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
                         receivedBy={`Para: ${item.ownerName}`}

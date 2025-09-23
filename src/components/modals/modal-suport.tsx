@@ -104,7 +104,7 @@ export default function ModalSuport({
           </View>
           <View
             style={{
-              flexDirection: "row",
+              flexDirection: 'column',
               justifyContent: "flex-end",
               gap: 12,
               marginTop: 16,

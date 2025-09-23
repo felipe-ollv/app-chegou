@@ -86,6 +86,7 @@ export default function ModalInformCode({
 							}}
 							style={{
 								paddingHorizontal: 14,
+								width: '100%',
 								height: 44,
 								borderRadius: 8,
 								borderWidth: 1,

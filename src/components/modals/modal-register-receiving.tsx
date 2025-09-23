@@ -223,10 +223,10 @@ export default function ModalRegisterReceiving({
 
 					<View
 						style={{
-							flexDirection: "row",
+							flexDirection: 'column',
 							justifyContent: "flex-end",
 							gap: 12,
-							marginTop: 16,
+							marginTop: 36,
 						}}
 					>
 						<TouchableOpacity

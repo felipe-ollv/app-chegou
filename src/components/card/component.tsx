@@ -15,7 +15,6 @@ export default function InfoCardComponent({
   receivedDate,
   status_package,
 }: InfoCardProps) {
-  // define texto e estilo baseado no status
   const extraText = status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO";
   const extraStyle =
     status_package === "RECEIVED" ? styles.extraReceived : styles.extraDefault;
