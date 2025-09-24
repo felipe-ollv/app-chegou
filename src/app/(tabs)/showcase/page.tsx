@@ -16,9 +16,8 @@ import ModalRegisterReceiving from "../../../components/modals/modal-register-re
 
 
 const listPackage = {
-  sameUser: [],
-  ownerLogged: [],
-  loggedReceiverUser: [],
+  pickup: [],
+  deliver: [],
   ordinance: false
 }
 
@@ -139,8 +138,8 @@ export default function ShowcaseScreen() {
 
           <ScrollView style={{ flex: 1, width: '100%', paddingHorizontal: 1 }}>
             {receivedView === 0 ?
-              cardsData.loggedReceiverUser.length > 0 ?
-                cardsData.loggedReceiverUser.map((item: any) => (
+              cardsData.pickup.length > 0 ?
+                cardsData.pickup.map((item: any) => (
                   <>
                     <TouchableOpacity
                       key={item.uuid_package}
@@ -170,8 +169,8 @@ export default function ShowcaseScreen() {
                   <Text>Nenhuma encomenda registrada!</Text>
                 </View>
               :
-              cardsData.ownerLogged.length > 0 ?
-                cardsData.ownerLogged.map((item: any) => (
+              cardsData.deliver.length > 0 ?
+                cardsData.deliver.map((item: any) => (
                   <>
                     <TouchableOpacity
                       key={item.uuid_package}
