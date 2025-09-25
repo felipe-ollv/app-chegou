@@ -13,7 +13,7 @@ import { useUser } from "../../../context/user.context";
 import ModalConfirmationCode from '../../../components/modals/modal-confirmation-code';
 import ModalInformCode from "../../../components/modals/modal-inform-code";
 import ModalRegisterReceiving from "../../../components/modals/modal-register-receiving";
-
+import usePushNotifications from "../../../hooks/push-notification";
 
 const listPackage = {
   pickup: [],
@@ -30,10 +30,24 @@ export default function ShowcaseScreen() {
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [visibleModalConfirmationCode, setVisibleModalConfirmationCode] = useState(false);
   const [visibleModalInformCode, setVisibleModalInformCode] = useState(false);
+  const expoPushToken = usePushNotifications();
 
   useEffect(() => {
     fetchPackageList();
   }, []);
+
+  useEffect(() => {
+    registerTokenPush();
+  }, [expoPushToken]);
+
+  const registerTokenPush = async () => {
+    if (expoPushToken) {
+      const result = await api.post('/push-notification/register-token-notification', {
+        token: expoPushToken,
+        uuidUserProfile: userData.ps
+      })
+    }
+  }
 
   const fetchPackageList = async () => {
     try {
