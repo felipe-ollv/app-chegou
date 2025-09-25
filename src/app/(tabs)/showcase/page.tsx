@@ -34,8 +34,13 @@ export default function ShowcaseScreen() {
 
   useEffect(() => {
     fetchPackageList();
-    registerTokenPush();
   }, []);
+
+  useEffect(() => {
+    if (expoPushToken && userData?.ps) {
+      registerTokenPush();
+    }
+  }, [expoPushToken, userData]);
 
   const registerTokenPush = async () => {
     if (expoPushToken) {
@@ -164,7 +169,7 @@ export default function ShowcaseScreen() {
                         title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
                         receivedBy={`Recebido por: ${item.ownerName}`}
                         receivedDate={`Data: ${formatDateTime(item.created_at)}`}
-                        status_package={item.status_package} 
+                        status_package={item.status_package}
                       />
                     </TouchableOpacity>
 
@@ -235,7 +240,7 @@ export default function ShowcaseScreen() {
           >
             <AntDesign name="plus" size={24} color="#fff" />
           </TouchableOpacity>
-          
+
           <ModalRegisterReceiving
             visible={modalRegisterVisible}
             onClose={() => setModalRegisterVisible(false)}

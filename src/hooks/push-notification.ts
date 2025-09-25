@@ -7,7 +7,9 @@ export default function usePushNotifications() {
   const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    registerForPushNotificationsAsync().then(token => {
+      setExpoPushToken(token);
+    });
   }, []);
 
   return expoPushToken;
@@ -36,7 +38,6 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
 
   const tokenData = await Notifications.getExpoPushTokenAsync();
   token = tokenData.data;
-  console.log("Expo Push Token:", token);
 
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("default", {
