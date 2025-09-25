@@ -34,11 +34,8 @@ export default function ShowcaseScreen() {
 
   useEffect(() => {
     fetchPackageList();
-  }, []);
-
-  useEffect(() => {
     registerTokenPush();
-  }, [expoPushToken]);
+  }, []);
 
   const registerTokenPush = async () => {
     if (expoPushToken) {

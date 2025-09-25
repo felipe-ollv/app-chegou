@@ -16,10 +16,10 @@ export default function usePushNotifications() {
 async function registerForPushNotificationsAsync(): Promise<string | null> {
   let token: string | null = null;
 
-  if (!Device.isDevice) {
-    alert("Precisa de um dispositivo real para push notifications");
-    return null;
-  }
+  // if (!Device.isDevice) {
+  //   alert("Precisa de um dispositivo real para push notifications");
+  //   return null;
+  // }
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
