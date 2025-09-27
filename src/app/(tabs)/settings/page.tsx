@@ -5,15 +5,18 @@ import { settingsStyles } from '../../../styles/settings-styles';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import colors from '../../../../colors-app/colors';
 import ModalTermsAndPrivacy from '../../../components/modals/modal-terms-privacy';
 import ModalSuport from '../../../components/modals/modal-suport';
 import ModalChangePassword from '../../../components/modals/modal-change-password';
+import ModalExcludeAccount from '../../../components/modals/modal-exclude-account';
 
 export default function SettingsScreen() {
 	const [modalTermsVisible, setModalTermsVisible] = useState(false);
 	const [modalSuportVisible, setModalSuportVisible] = useState(false);
 	const [modalChangePasswordVisible, setModalChangePasswordVisible] = useState(false);
+	const [modalExcludeAccount, setModalExcludeAccount] = useState(false);
 	
 	return (
 		<View style={settingsStyles.container}>
@@ -45,12 +48,22 @@ export default function SettingsScreen() {
 							<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 								<View style={{ flexDirection: 'row' }}>
 									<MaterialCommunityIcons name="information-outline" size={22} color={colors.zinc} />
-								<Text style={{ fontSize: 16, marginLeft: 22 }}>Sobre o App</Text>
+								<Text style={{ fontSize: 16, marginLeft: 22 }}>Termos e Privacidade</Text>
 								</View>
 								<MaterialIcons name="arrow-forward-ios" size={14} color={colors.zinc} />
 							</View>
-							
 						</TouchableOpacity>
+						<View style={{ width: '100%', height: 1, backgroundColor: colors.green, marginBottom: 20, marginTop: 20 }} />
+						<TouchableOpacity onPress={() => setModalExcludeAccount(true)}>
+							<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+								<View style={{ flexDirection: 'row' }}>
+									<Ionicons name="exit-outline" size={22} color={colors.zinc} />
+								<Text style={{ fontSize: 16, marginLeft: 22 }}>Excluir cadastro</Text>
+								</View>
+								<MaterialIcons name="arrow-forward-ios" size={14} color={colors.zinc} />
+							</View>
+						</TouchableOpacity>
+
 						<ModalTermsAndPrivacy
 							visible={modalTermsVisible}
 							onClose={() => setModalTermsVisible(false)}
@@ -62,6 +75,10 @@ export default function SettingsScreen() {
 						<ModalChangePassword 
 							visible={modalChangePasswordVisible}
 							onClose={() => setModalChangePasswordVisible(false)}
+						/>
+						<ModalExcludeAccount
+							visible={modalExcludeAccount}
+							onClose={() => setModalExcludeAccount(false)}
 						/>
 					</View>
 				</View>

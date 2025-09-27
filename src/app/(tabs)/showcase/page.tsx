@@ -63,6 +63,10 @@ export default function ShowcaseScreen() {
     }
   }
 
+  const handleRegisterModal = () => {
+    fetchPackageList();
+  }
+
   return (
     <View style={showcaseStyles.container}>
       <HeaderComponent logoText="Chegou" slogan="" />
@@ -244,7 +248,7 @@ export default function ShowcaseScreen() {
           <ModalRegisterReceiving
             visible={modalRegisterVisible}
             onClose={() => setModalRegisterVisible(false)}
-            selected=''
+            onSuccessRegister={handleRegisterModal}
           />
         </>
       }

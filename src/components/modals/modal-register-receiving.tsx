@@ -2,6 +2,7 @@ import colors from "@/colors-app/colors";
 import { Controller, useForm } from "react-hook-form";
 import { Modal, Pressable, View, TouchableOpacity, Text, TextInput } from "react-native";
 import ToastComponent from "../toast/component";
+import BasicLoading from '../loading/basic-loading';
 import { useState } from "react";
 import { useUser } from "../../context/user.context";
 import api from "../../interceptor/axios-config";
@@ -17,11 +18,11 @@ type RegisterForm = {
 export default function ModalRegisterReceiving({
 	visible,
 	onClose,
-	selected
+	onSuccessRegister
 }: {
 	visible: boolean;
 	onClose: () => void;
-	selected: any
+	onSuccessRegister: () => void;
 }) {
 
 	const { userData } = useUser();
@@ -46,18 +47,20 @@ export default function ModalRegisterReceiving({
 			data.received = userData.ps;
 			const inform: any = await api.post('/received-package/create-received-package', data);
 			if (inform.data.error === 400) {
-				onClose();
 				ToastComponent({ type: 'warning', text1: "Falha!", text2: inform.data.message })
 			} else {
-				// fetchPackageList();
 				onClose();
+				reset();
+				setLoading(false)
+				onSuccessRegister();
 				ToastComponent({ type: 'success', text1: "Sucesso!", text2: "Recebimento registrado" })
 			}
 
 		} catch (e) {
-			ToastComponent({ type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes" })
-		} finally {
+			onClose();
+			reset();
 			setLoading(false)
+			ToastComponent({ type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes" })
 		}
 	};
 
@@ -105,121 +108,127 @@ export default function ModalRegisterReceiving({
 					</Text>
 
 					<View style={{ gap: 12 }}>
-						<View>
-							<Text style={{ fontSize: 14, marginBottom: 6 }}>Destinatário</Text>
-							<Controller
-								control={control}
-								name="recipient"
-								rules={{ required: "Destinatário" }}
-								render={({ field: { onChange, value, onBlur } }) => (
-									<TextInput
-										placeholder="Nome de quem fez a compra"
-										placeholderTextColor={colors.blacklight}
-										style={{
-											borderWidth: 1,
-											borderColor: errors.recipient ? "#ef4444" : "#E5E7EB",
-											borderRadius: 8,
-											paddingHorizontal: 12,
-											height: 44,
-										}}
-										value={value}
-										onChangeText={onChange}
-										onBlur={onBlur}
-										autoCapitalize="words" />
-								)} />
-							{errors.recipient && (
-								<Text style={{ color: "red", marginTop: 6 }}>
-									{errors.recipient.message}
-								</Text>
-							)}
-						</View>
 
-						<View>
-							<Text style={{ fontSize: 14, marginBottom: 6 }}>Torre/Bloco</Text>
-							<Controller
-								control={control}
-								name="block"
-								rules={{ required: "Torre/Bloco" }}
-								render={({ field: { onChange, value, onBlur } }) => (
-									<TextInput
-										placeholder="Torre/Bloco"
-										placeholderTextColor={colors.blacklight}
-										style={{
-											borderWidth: 1,
-											borderColor: errors.block ? "#ef4444" : "#E5E7EB",
-											borderRadius: 8,
-											paddingHorizontal: 12,
-											height: 44,
-										}}
-										value={value}
-										onChangeText={onChange}
-										onBlur={onBlur}
-										autoCapitalize="characters" />
-								)} />
-							{errors.block && (
-								<Text style={{ color: "red", marginTop: 6 }}>
-									{errors.block.message}
-								</Text>
-							)}
+						{
+							loading ? 
+								<View style={{height: 100}}>
+									<BasicLoading />
+								</View> :
+								<>
+								<View>
+									<Text style={{ fontSize: 14, marginBottom: 6 }}>Destinatário</Text>
+									<Controller
+										control={control}
+										name="recipient"
+										rules={{ required: "Destinatário" }}
+										render={({ field: { onChange, value, onBlur } }) => (
+											<TextInput
+												placeholder="Nome de quem fez a compra"
+												placeholderTextColor={colors.blacklight}
+												style={{
+													borderWidth: 1,
+													borderColor: errors.recipient ? "#ef4444" : "#E5E7EB",
+													borderRadius: 8,
+													paddingHorizontal: 12,
+													height: 44,
+												}}
+												value={value}
+												onChangeText={onChange}
+												onBlur={onBlur}
+												autoCapitalize="words" />
+										)} />
+									{errors.recipient && (
+										<Text style={{ color: "red", marginTop: 6 }}>
+											{errors.recipient.message}
+										</Text>
+									)}
+								</View>
+								<View>
+										<Text style={{ fontSize: 14, marginBottom: 6 }}>Torre/Bloco</Text>
+										<Controller
+											control={control}
+											name="block"
+											rules={{ required: "Torre/Bloco" }}
+											render={({ field: { onChange, value, onBlur } }) => (
+												<TextInput
+													placeholder="Torre/Bloco"
+													placeholderTextColor={colors.blacklight}
+													style={{
+														borderWidth: 1,
+														borderColor: errors.block ? "#ef4444" : "#E5E7EB",
+														borderRadius: 8,
+														paddingHorizontal: 12,
+														height: 44,
+													}}
+													value={value}
+													onChangeText={onChange}
+													onBlur={onBlur}
+													autoCapitalize="characters" />
+											)} />
+										{errors.block && (
+											<Text style={{ color: "red", marginTop: 6 }}>
+												{errors.block.message}
+											</Text>
+										)}
+									</View>
+									<View>
+										<Text style={{ fontSize: 14, marginBottom: 6 }}>Apartamento</Text>
+										<Controller
+											control={control}
+											name="apartment"
+											rules={{
+												required: "Apartamento",
+												minLength: { value: 1, message: "Informe o apartamento" },
+											}}
+											render={({ field: { onChange, value, onBlur } }) => (
+												<TextInput
+													placeholder="Número do apartamento"
+													placeholderTextColor={colors.blacklight}
+													style={{
+														borderWidth: 1,
+														borderColor: errors.apartment ? "#ef4444" : "#E5E7EB",
+														borderRadius: 8,
+														paddingHorizontal: 12,
+														height: 44,
+													}}
+													value={value}
+													onChangeText={(t) => onChange(t)}
+													onBlur={onBlur}
+													keyboardType="numeric" />
+											)} />
+										{errors.apartment && (
+											<Text style={{ color: "red", marginTop: 6 }}>
+												{errors.apartment.message}
+											</Text>
+										)}
+									</View>
+									<View>
+										<Text style={{ fontSize: 14, marginBottom: 6 }}>Observações</Text>
+										<Controller
+											control={control}
+											name="note"
+											render={({ field: { onChange, value, onBlur } }) => (
+												<TextInput
+													placeholder="Ex: Retirar até as 21h"
+													placeholderTextColor={colors.blacklight}
+													multiline
+													style={{
+														borderWidth: 1,
+														borderColor: "#E5E7EB",
+														borderRadius: 8,
+														paddingHorizontal: 12,
+														paddingTop: 10,
+														minHeight: 80,
+														textAlignVertical: "top",
+													}}
+													value={value}
+													onChangeText={onChange}
+													onBlur={onBlur} />
+											)} />
+									</View>
+								</>
+						}
 						</View>
-
-						<View>
-							<Text style={{ fontSize: 14, marginBottom: 6 }}>Apartamento</Text>
-							<Controller
-								control={control}
-								name="apartment"
-								rules={{
-									required: "Apartamento",
-									minLength: { value: 1, message: "Informe o apartamento" },
-								}}
-								render={({ field: { onChange, value, onBlur } }) => (
-									<TextInput
-										placeholder="Número do apartamento"
-										placeholderTextColor={colors.blacklight}
-										style={{
-											borderWidth: 1,
-											borderColor: errors.apartment ? "#ef4444" : "#E5E7EB",
-											borderRadius: 8,
-											paddingHorizontal: 12,
-											height: 44,
-										}}
-										value={value}
-										onChangeText={(t) => onChange(t)}
-										onBlur={onBlur}
-										keyboardType="numeric" />
-								)} />
-							{errors.apartment && (
-								<Text style={{ color: "red", marginTop: 6 }}>
-									{errors.apartment.message}
-								</Text>
-							)}
-						</View>
-
-						<View>
-							<Text style={{ fontSize: 14, marginBottom: 6 }}>Observações</Text>
-							<Controller
-								control={control}
-								name="note"
-								render={({ field: { onChange, value, onBlur } }) => (
-									<TextInput
-										placeholder="Ex: Retirar até as 21h"
-										placeholderTextColor={colors.blacklight}
-										multiline
-										style={{
-											borderWidth: 1,
-											borderColor: "#E5E7EB",
-											borderRadius: 8,
-											paddingHorizontal: 12,
-											paddingTop: 10,
-											minHeight: 80,
-											textAlignVertical: "top",
-										}}
-										value={value}
-										onChangeText={onChange}
-										onBlur={onBlur} />
-								)} />
-						</View>
-					</View>
 
 					<View
 						style={{
@@ -249,7 +258,6 @@ export default function ModalRegisterReceiving({
 
 						<TouchableOpacity
 							onPress={handleSubmit(onSubmit)}
-							disabled={isSubmitting}
 							style={{
 								paddingHorizontal: 16,
 								height: 44,
