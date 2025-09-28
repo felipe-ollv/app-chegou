@@ -2,14 +2,15 @@
   "expo": {
     "name": "ChegouApp!",
     "slug": "chegou-app",
+    "owner": "olvfelipe",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/chegouapp_android_icon_512.png",
     "scheme": "chegouapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/chegouapp_splash_screen_1242x2436.png",
       "resizeMode": "cover",
       "backgroundColor": "#0c0c1b"
     },
@@ -17,24 +18,24 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.gusen.chegouapp",
       "buildNumber": "1.0.0",
+      "icon": "./assets/images/chegouapp_ios_icon_1024.png",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
+      "package": "com.gusen.chegouapp",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/splash.png",
-        "backgroundColor": "#0c0c1b",
-        "package": "com.gusen.chegouapp",
-        "versionCode": 1
+        "foregroundImage": "./assets/images/chegouapp_android_adaptive_foreground_432.png",
+        "backgroundColor": "#0c0c1b"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.gusen.chegouapp"
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.ico"
     },
     "plugins": [
       "expo-router",

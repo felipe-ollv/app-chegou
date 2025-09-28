@@ -1,11 +1,10 @@
 import axios from 'axios';
-import Constants from "expo-constants";
 import { jwtDecode } from 'jwt-decode';
 import { getItem } from "expo-secure-store";
 import { router } from "expo-router";
 
 const api = axios.create({
-  baseURL: Constants.expoConfig?.extra?.apiUrl,
+  baseURL: 'https://app-chegou.com.br/api',
 });
 
 let token: string | null = null;
