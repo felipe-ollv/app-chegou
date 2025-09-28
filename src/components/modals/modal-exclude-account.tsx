@@ -4,6 +4,7 @@ import ToastComponent from "../toast/component";
 import BasicLoading from '../loading/basic-loading';
 import { useState } from "react";
 import { useUser } from "../../context/user.context";
+import { useLogout } from '../../hooks/user-logout';
 import api from "../../interceptor/axios-config";
 
 export default function ModalExcludeAccount({
@@ -15,10 +16,23 @@ export default function ModalExcludeAccount({
 }) {
 	const { userData } = useUser();
 	const [loading, setLoading] = useState(false);
+	const { logout } = useLogout();
 
-  const handleExcludeAccount = async () => {
-    //chama endpoint para excluir conta 
-  }
+	const handleExcludeAccount = async () => {
+		try {
+			const result: any = await api.post('/user-profile/exclude-account', { up: userData.ps })
+			if (result.data.code === 200) {
+				ToastComponent({ type: 'success', text1: 'Sucesso!', text2: result.data.message })
+				onClose();
+				logout();
+			} else {
+				ToastComponent({ type: 'error', text1: 'Falha!', text2: result.data.message })
+			}
+		} catch (error) {
+				ToastComponent({ type: 'error', text1: 'Erro!', text2: 'Aguarde alguns instantes' })
+		}
+
+	}
 
 	return (
 		<Modal
@@ -59,14 +73,14 @@ export default function ModalExcludeAccount({
 							}} />
 					</View>
 
-					<Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 20 }}>
+					<Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 20, textAlign: 'center' }}>
 						Certeza que quer excluir seu cadastro ?
 					</Text>
 
 					<View style={{ gap: 12 }}>
-
-						
-						</View>
+						<Text style={{ fontSize: 18, textAlign: 'center' }}>Atenção!</Text>
+						<Text style={{ textAlign: 'center' }}>Todos os dados do seu perfil serão apagados.</Text>
+					</View>
 
 					<View
 						style={{
@@ -76,35 +90,45 @@ export default function ModalExcludeAccount({
 							marginTop: 36,
 						}}
 					>
-						<TouchableOpacity
-							onPress={() => handleExcludeAccount()}
-							style={{
-								paddingHorizontal: 16,
-								height: 44,
-								borderRadius: 8,
-								alignItems: "center",
-								justifyContent: "center",
-								backgroundColor: colors.green,
-							}}
-						>
-							<Text style={{ color: "#fff", fontWeight: "600" }}>Confirmar</Text>
-						</TouchableOpacity>
-
-            <TouchableOpacity
-							onPress={onClose}
-							style={{
-								paddingHorizontal: 14,
-								height: 44,
-								borderRadius: 8,
-								borderWidth: 1,
-								borderColor: "#E5E7EB",
-								alignItems: "center",
-								justifyContent: "center",
-								backgroundColor: "#fff",
-							}}
-						>
-							<Text style={{ color: "#111" }}>Cancelar</Text>
-						</TouchableOpacity>
+						{loading ? 
+							<View style={{ height: 100}}>
+								<BasicLoading />
+							</View>
+							 :
+							<>
+								<TouchableOpacity
+									onPress={onClose}
+									style={{
+										paddingHorizontal: 14,
+										height: 44,
+										borderRadius: 8,
+										borderWidth: 1,
+										borderColor: "#E5E7EB",
+										alignItems: "center",
+										justifyContent: "center",
+										backgroundColor: "#fff",
+									}}
+								>
+									<Text style={{ color: "#111" }}>Cancelar</Text>
+								</TouchableOpacity>
+								<TouchableOpacity
+									onPress={() => {
+										setLoading(true),
+											handleExcludeAccount()
+									}}
+									style={{
+										paddingHorizontal: 16,
+										height: 44,
+										borderRadius: 8,
+										alignItems: "center",
+										justifyContent: "center",
+										backgroundColor: colors.green,
+									}}
+								>
+									<Text style={{ color: "#fff", fontWeight: "600" }}>Confirmar</Text>
+								</TouchableOpacity>
+							</>
+						}
 					</View>
 				</Pressable>
 			</Pressable>

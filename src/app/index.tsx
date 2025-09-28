@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import api, { setToken } from '../interceptor/axios-config';
@@ -6,18 +6,12 @@ import { styles } from "../styles/index-styles";
 import HeaderComponent from "../components/header/component";
 import LoadingComponent from '../components/loading/component';
 import ToastComponent from '../components/toast/component';
+import formatPhoneNumber from "../utils/formatPhoneNumber";
 import ActionStorage from "./(auth)/midleware/authStorage";
 import { jwtDecode } from "jwt-decode";
 import { useUser } from "../context/user.context";
 import colors from "../../colors-app/colors";
 
-function formatPhoneNumber(value: any) {
-  return value
-    .replace(/\D/g, '')
-    .replace(/(\d{2})(\d)/, '($1) $2')
-    .replace(/(\d{5})(\d{1,4})$/, '$1-$2')
-    .slice(0, 15);
-}
 
 export default function LoginScreen() {
   const [phone, setPhone] = useState('');
@@ -26,9 +20,13 @@ export default function LoginScreen() {
   const router = useRouter();
   const { setUserData } = useUser();
 
+  useEffect(() => {
+    // handleExistToken();
+  }, [])
+
   const handleLogin = async () => {
     if (!phone || !password) {
-      Alert.alert("Atenção!", "Preencha telefone e senha");
+      ToastComponent({ type: 'warning', text1: 'Atenção!', text2: 'Preencha telefone e senha'});
       return;
     }
 
@@ -61,6 +59,21 @@ export default function LoginScreen() {
   const handleNavigate = () => {
     router.push('./(auth)/signup/page');
   };
+
+  const handleExistToken = async () => {
+    setLoading(true);
+    ActionStorage.getToken().then(token => {
+      if (token) {
+        setToken(token);
+        const decoded = jwtDecode(token);
+        setUserData(decoded);
+        router.replace("/showcase/page");
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    });
+  }
 
   return (
     <View style={styles.container}>

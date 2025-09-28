@@ -16,7 +16,7 @@ import { useForm, Controller } from "react-hook-form";
 import SelectDropdown from "react-native-select-dropdown";
 import BasicLoading from "@/src/components/loading/basic-loading";
 import formatPhoneNumber from '../../../utils/formatPhoneNumber';
-
+import ToastComponent from '../../../components/toast/component';
 import styles from "./styles";
 import HeaderComponent from "../../../components/header/component";
 import colors from "../../../../colors-app/colors";
@@ -35,10 +35,8 @@ type FormData = {
 };
 
 const profileList = [
-  "MORADOR",
-  "ADM",
-  "FUNCIONARIO",
-  "SINDICO"
+  "MORADOR(A)",
+  "FUNCIONARIO(A)"
 ]
 
 export default function SignUpScreen() {
@@ -91,26 +89,21 @@ export default function SignUpScreen() {
   const onSubmit = async (form: FormData) => {
     try {
       setLoading(true)
-      const { data } = await api.post("/user/register-user", {
+      const data = await api.post("/user/register-user", {
         ...form,
         birthdate: date.toISOString().split("T")[0],
         status: 'ACTIVE'
       });
 
-      Alert.alert("Sucesso", data.message, [
-        {
-          text: 'OK',
-          onPress: () => {
-            reset();
-            router.push('/');
-          }
-        }
-      ],
-        { cancelable: false }
-      );
+      console.log(data.data)
+
+      if (data) {
+        ToastComponent({ type: 'success', text1: 'Sucesso!', text2: 'Perfil registrado!'});
+        router.push('/');
+      }
     } catch (err: any) {
       console.error(err.response?.data || err.message);
-      Alert.alert("Erro", err.response?.data?.message || "Erro ao cadastrar");
+      ToastComponent({ type: 'error', text1: 'Erro!', text2: 'Aguarde alguns instantes'});
     } finally {
       setLoading(false)
     }

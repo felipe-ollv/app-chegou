@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import ToastComponent from "../toast/component";
 import api from "../../interceptor/axios-config";
+import BasicLoading from "../loading/basic-loading";
 
 type ConfirmCodeReceiving = {
   code: string;
@@ -157,33 +158,37 @@ export default function ModalConfirmationCode({
                   marginVertical: 20,
                 }}
               >
-                <View style={{ flexDirection: "row", gap: 15 }}>
-                  {otp.map((digit, index) => (
-                    <TextInput
-                      key={index}
-                      ref={(el) => {
-                        inputsRef.current[index] = el;
-                      }}
-                      value={digit}
-                      onChangeText={(value) => handleChange(value, index)}
-                      onKeyPress={(e) => handleKeyPress(e, index)}
-                      keyboardType="numeric" // teclado numérico
-                      maxLength={1}
-                      style={{
-                        width: 40,
-                        height: 50,
-                        textAlign: "center",
-                        fontSize: 24,
-                        borderWidth: 1,
-                        borderColor: colors.green,
-                        borderRadius: 8,
-                      }}
-                    />
-                  ))}
-                </View>
+                {
+                  loading ? <BasicLoading /> :
+
+                  <View style={{ flexDirection: "row", gap: 15 }}>
+                    {otp.map((digit, index) => (
+                      <TextInput
+                        key={index}
+                        ref={(el) => {
+                          inputsRef.current[index] = el;
+                        }}
+                        value={digit}
+                        onChangeText={(value) => handleChange(value, index)}
+                        onKeyPress={(e) => handleKeyPress(e, index)}
+                        keyboardType="numeric"
+                        maxLength={1}
+                        style={{
+                          width: 40,
+                          height: 50,
+                          textAlign: "center",
+                          fontSize: 24,
+                          borderWidth: 1,
+                          borderColor: colors.green,
+                          borderRadius: 8,
+                        }}
+                      />
+                    ))}
+                  </View>
+                }
+
               </View>
 
-              {/* Botões */}
               <View
                 style={{
                   flexDirection: "column",
@@ -217,8 +222,9 @@ export default function ModalConfirmationCode({
                     borderRadius: 8,
                     alignItems: "center",
                     justifyContent: "center",
-                    backgroundColor: colors.green,
-                    opacity: otp.some((d) => d === "") ? 0.6 : 1,
+                    backgroundColor: (isSubmitting || otp.some((d) => d === "")) 
+                      ? colors.gray
+                      : colors.green, 
                   }}
                 >
                   <Text style={{ color: "#fff", fontWeight: "600" }}>Confirmar</Text>

@@ -160,9 +160,8 @@ export default function ShowcaseScreen() {
             {receivedView === 0 ?
               cardsData.pickup.length > 0 ?
                 cardsData.pickup.map((item: any) => (
-                  <>
+                  <React.Fragment key={item.uuid_package}>
                     <TouchableOpacity
-                      key={item.uuid_package}
                       onPress={() => {
                         setVisibleModalInformCode(true)
                         setSelectedItem(item.confirmation_code)
@@ -182,7 +181,7 @@ export default function ShowcaseScreen() {
                       onClose={() => setVisibleModalInformCode(false)}
                       selected={selectedItem}
                     />
-                  </>
+                  </React.Fragment>
                 ))
                 :
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: "center", justifyContent: "center" }}>
@@ -191,9 +190,8 @@ export default function ShowcaseScreen() {
               :
               cardsData.deliver.length > 0 ?
                 cardsData.deliver.map((item: any) => (
-                  <>
+                  <React.Fragment key={item.uuid_package}>
                     <TouchableOpacity
-                      key={item.uuid_package}
                       onPress={() => {
                         setVisibleModalConfirmationCode(true)
                         setSelectedItem(item.uuid_package)
@@ -214,7 +212,7 @@ export default function ShowcaseScreen() {
                       onClose={() => setVisibleModalConfirmationCode(false)}
                       selected={selectedItem}
                     />
-                  </>
+                  </React.Fragment>
                 ))
                 :
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: "center", justifyContent: "center" }}>

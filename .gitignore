@@ -10,3 +10,4 @@ credentials.json
 @olvfelipe__chegou-app.jks
 /credentials
 .expo/
+.env
