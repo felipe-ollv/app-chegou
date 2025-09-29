@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import api from '../../../interceptor/axios-config';
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
@@ -30,26 +30,31 @@ export default function ShowcaseScreen() {
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [visibleModalConfirmationCode, setVisibleModalConfirmationCode] = useState(false);
   const [visibleModalInformCode, setVisibleModalInformCode] = useState(false);
+  const [registeredToken, setRegisteredToken] = useState<any>();
   const expoPushToken = usePushNotifications();
 
   useEffect(() => {
     fetchPackageList();
   }, []);
 
+  const registerTokenPush = useCallback(async () => {
+    if (!expoPushToken || !userData?.ps) return;
+    try {
+      await api.post('/push-notification/register-token-notification', {
+        token: expoPushToken,
+        uuidUserProfile: userData.ps,
+      });
+      setRegisteredToken(expoPushToken);
+    } catch (e) {
+      console.log("Erro ao registrar token:", e);
+    }
+  }, [expoPushToken, userData?.ps]);
+
   useEffect(() => {
-    if (expoPushToken && userData?.ps) {
+    if (expoPushToken && userData?.ps && registeredToken !== expoPushToken) {
       registerTokenPush();
     }
-  }, [expoPushToken, userData]);
-
-  const registerTokenPush = async () => {
-    if (expoPushToken) {
-      const result = await api.post('/push-notification/register-token-notification', {
-        token: expoPushToken,
-        uuidUserProfile: userData.ps
-      })
-    }
-  }
+  }, [expoPushToken, userData?.ps, registeredToken, registerTokenPush]);
 
   const fetchPackageList = async () => {
     try {
