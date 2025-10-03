@@ -51,10 +51,8 @@ export default function ShowcaseScreen() {
   }, [expoPushToken, userData?.ps]);
 
   useEffect(() => {
-    if (expoPushToken && userData?.ps && registeredToken !== expoPushToken) {
-      registerTokenPush();
-    }
-  }, [expoPushToken, userData?.ps, registeredToken, registerTokenPush]);
+    registerTokenPush();
+  }, [expoPushToken, userData?.ps]);
 
   const fetchPackageList = async () => {
     try {
