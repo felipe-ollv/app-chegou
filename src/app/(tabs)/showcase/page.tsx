@@ -14,6 +14,7 @@ import ModalConfirmationCode from '../../../components/modals/modal-confirmation
 import ModalInformCode from "../../../components/modals/modal-inform-code";
 import ModalRegisterReceiving from "../../../components/modals/modal-register-receiving";
 import usePushNotifications from "../../../hooks/push-notification";
+import { useFocusEffect } from "expo-router";
 
 const listPackage = {
   pickup: [],
@@ -36,6 +37,12 @@ export default function ShowcaseScreen() {
     fetchPackageList();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchPackageList();
+    }, [])
+  );
+
   useEffect(() => {
     if (expoPushToken && userData?.ps) {
       registerTokenPush();
@@ -50,12 +57,6 @@ export default function ShowcaseScreen() {
       })
     }
   }
-
-  useEffect(() => {
-    if (expoPushToken && userData?.ps) {
-      registerTokenPush();
-    }
-  }, [expoPushToken, userData]);
 
   const fetchPackageList = async () => {
     try {

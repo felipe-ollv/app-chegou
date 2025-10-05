@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, Modal, Pressable, ScrollView, TextInput } from 'react-native';
 import { profileStyles } from '../../../styles/profile-styles';
 import HeaderComponent from '../../../components/header/component';
@@ -9,6 +9,7 @@ import colors from '../../../../colors-app/colors';
 import { Controller, useForm } from 'react-hook-form';
 import ToastComponent from '../../../components/toast/component';
 import ProfileImageComponent from '../../../components/image/image-profile';
+import { useFocusEffect } from 'expo-router';
 
 type userProfileForm = {
   name: string;
@@ -40,6 +41,12 @@ export default function ProfileScreen() {
   useEffect(() => {
     fetchUserProfile();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserProfile();
+    }, [])
+  );
 
   const fetchUserProfile = async () => {
     
