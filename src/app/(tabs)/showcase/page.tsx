@@ -37,22 +37,26 @@ export default function ShowcaseScreen() {
     fetchPackageList();
   }, []);
 
-  const registerTokenPush = useCallback(async () => {
-    if (!expoPushToken || !userData?.ps) return;
+  const registerTokenPush = async () => {
+    if (!expoPushToken) return;
+
     try {
       await api.post('/push-notification/register-token-notification', {
         token: expoPushToken,
         uuidUserProfile: userData.ps,
       });
+      console.info('Expo push token', expoPushToken)
       setRegisteredToken(expoPushToken);
     } catch (e) {
       console.log("Erro ao registrar token:", e);
     }
-  }, [expoPushToken, userData?.ps]);
+  };
 
   useEffect(() => {
-    registerTokenPush();
-  }, [expoPushToken, userData?.ps]);
+    if (expoPushToken && userData?.ps) {
+      registerTokenPush();
+    }
+  }, [expoPushToken]);
 
   const fetchPackageList = async () => {
     try {

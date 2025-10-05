@@ -21,7 +21,7 @@ export default function LoginScreen() {
   const { setUserData } = useUser();
 
   useEffect(() => {
-    handleExistToken();
+    // handleExistToken();
   }, [])
 
   const handleLogin = async () => {
