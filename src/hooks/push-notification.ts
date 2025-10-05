@@ -4,6 +4,16 @@ import Constants from "expo-constants";
 import * as Device from "expo-device";
 import { Platform } from "react-native";
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
+
 export default function usePushNotifications() {
   const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
   const [notification, setNotification] = useState<any>(null);
@@ -55,9 +65,13 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
     return null;
   }
 
-  const projectId = Constants.expoConfig?.extra?.eas?.projectId ?? Constants.easConfig?.projectId;
+    const projectId =
+    Constants.expoConfig?.extra?.eas?.projectId ??
+    Constants.easConfig?.projectId ??
+    "e258b308-d015-4620-8429-1993b40f9241";
 
   const tokenData = await Notifications.getExpoPushTokenAsync({ projectId });
+  console.log("Expo Push Token:", tokenData.data);
   token = tokenData.data;
 
   if (Platform.OS === "android") {

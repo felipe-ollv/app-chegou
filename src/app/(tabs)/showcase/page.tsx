@@ -36,6 +36,12 @@ export default function ShowcaseScreen() {
     fetchPackageList();
   }, []);
 
+  useEffect(() => {
+    if (expoPushToken && userData?.ps) {
+      registerTokenPush();
+    }
+  }, [expoPushToken, userData]);
+
   const registerTokenPush = async () => {
     if (expoPushToken) {
       await api.post('/push-notification/register-token-notification', {
