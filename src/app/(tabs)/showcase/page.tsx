@@ -30,7 +30,6 @@ export default function ShowcaseScreen() {
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [visibleModalConfirmationCode, setVisibleModalConfirmationCode] = useState(false);
   const [visibleModalInformCode, setVisibleModalInformCode] = useState(false);
-  const [registeredToken, setRegisteredToken] = useState<any>();
   const expoPushToken = usePushNotifications();
 
   useEffect(() => {
@@ -38,25 +37,19 @@ export default function ShowcaseScreen() {
   }, []);
 
   const registerTokenPush = async () => {
-    if (!expoPushToken) return;
-
-    try {
+    if (expoPushToken) {
       await api.post('/push-notification/register-token-notification', {
         token: expoPushToken,
-        uuidUserProfile: userData.ps,
-      });
-      console.info('Expo push token', expoPushToken)
-      setRegisteredToken(expoPushToken);
-    } catch (e) {
-      console.log("Erro ao registrar token:", e);
+        uuidUserProfile: userData.ps
+      })
     }
-  };
+  }
 
   useEffect(() => {
     if (expoPushToken && userData?.ps) {
       registerTokenPush();
     }
-  }, [expoPushToken]);
+  }, [expoPushToken, userData]);
 
   const fetchPackageList = async () => {
     try {
@@ -218,6 +211,7 @@ export default function ShowcaseScreen() {
                       visible={visibleModalConfirmationCode}
                       onClose={() => setVisibleModalConfirmationCode(false)}
                       selected={selectedItem}
+                      onConfirmCode={handleRegisterModal}
                     />
                   </React.Fragment>
                 ))

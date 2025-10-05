@@ -24,10 +24,12 @@ export default function ModalConfirmationCode({
   visible,
   onClose,
   selected,
+  onConfirmCode
 }: {
   visible: boolean;
   onClose: () => void;
   selected: any;
+  onConfirmCode: () => void;
 }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const inputsRef = useRef<Array<TextInput | null>>([]);
@@ -83,6 +85,7 @@ export default function ModalConfirmationCode({
         ToastComponent({ type: 'warning', text1: "Falha!", text2: confirm.data.message })
       } else {
         ToastComponent({ type: 'success', text1: "Sucesso!", text2: confirm.data.message })
+        onConfirmCode();
       }
 
     } catch (e) {
