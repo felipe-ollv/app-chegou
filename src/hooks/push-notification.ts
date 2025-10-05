@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
 import * as Device from "expo-device";
 import { Platform } from "react-native";
 
@@ -54,7 +55,9 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
     return null;
   }
 
-  const tokenData = await Notifications.getExpoPushTokenAsync();
+  const projectId = Constants.expoConfig?.extra?.eas?.projectId ?? Constants.easConfig?.projectId;
+
+  const tokenData = await Notifications.getExpoPushTokenAsync({ projectId });
   token = tokenData.data;
 
   if (Platform.OS === "android") {
