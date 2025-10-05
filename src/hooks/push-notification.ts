@@ -19,6 +19,7 @@ export default function usePushNotifications() {
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => {
+            console.log(token)
       setExpoPushToken(token);
     });
 

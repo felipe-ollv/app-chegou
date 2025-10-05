@@ -11,3 +11,10 @@ credentials.json
 /credentials
 .expo/
 .env
+
+dist/
+web-build/
+assets/
+.expo/
+.expo-shared/
+build/

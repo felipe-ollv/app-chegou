@@ -44,19 +44,22 @@ export default function ShowcaseScreen() {
   );
 
   useEffect(() => {
-    if (expoPushToken && userData?.ps) {
-      registerTokenPush();
-    }
-  }, [expoPushToken, userData]);
+    if (!expoPushToken || !userData?.ps) return;
 
-  const registerTokenPush = async () => {
-    if (expoPushToken) {
-      await api.post('/push-notification/register-token-notification', {
-        token: expoPushToken,
-        uuidUserProfile: userData.ps
-      })
-    }
-  }
+    const registerTokenPush = async () => {
+      try {
+        await api.post('/push-notification/register-token-notification', {
+          token: expoPushToken,
+          uuidUserProfile: userData.ps,
+        });
+        console.log('Token registrado com sucesso!');
+      } catch (err) {
+        console.log('Erro ao registrar token:', err);
+      }
+    };
+
+    registerTokenPush();
+  }, [expoPushToken, userData?.ps]);
 
   const fetchPackageList = async () => {
     try {
