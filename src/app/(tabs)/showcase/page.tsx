@@ -31,7 +31,7 @@ export default function ShowcaseScreen() {
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [visibleModalConfirmationCode, setVisibleModalConfirmationCode] = useState(false);
   const [visibleModalInformCode, setVisibleModalInformCode] = useState(false);
-  const expoPushToken = usePushNotifications();
+  const { expoPushToken } = usePushNotifications();
 
   useEffect(() => {
     fetchPackageList();
@@ -44,22 +44,18 @@ export default function ShowcaseScreen() {
   );
 
   useEffect(() => {
-    if (!expoPushToken || !userData?.ps) return;
+    if (!expoPushToken) return;
 
     const registerTokenPush = async () => {
-      try {
-        await api.post('/push-notification/register-token-notification', {
-          token: expoPushToken,
-          uuidUserProfile: userData.ps,
-        });
-        console.log('Token registrado com sucesso!');
-      } catch (err) {
-        console.log('Erro ao registrar token:', err);
-      }
+      await api.post('/push-notification/register-token-notification', {
+        token: expoPushToken,
+        uuidUserProfile: userData.ps,
+      });
+      console.log('Token registrado com sucesso!');
     };
 
     registerTokenPush();
-  }, [expoPushToken, userData?.ps]);
+  }, [expoPushToken]);
 
   const fetchPackageList = async () => {
     try {

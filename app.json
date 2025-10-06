@@ -14,6 +14,7 @@
       "resizeMode": "cover",
       "backgroundColor": "#0c0c1b"
     },
+    
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.gusen.chegouapp",
@@ -30,7 +31,8 @@
         "foregroundImage": "./assets/images/adaptative.png",
         "backgroundColor": "#0c0c1b"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",

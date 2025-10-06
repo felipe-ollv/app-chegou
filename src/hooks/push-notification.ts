@@ -18,20 +18,22 @@ export default function usePushNotifications() {
   const [notification, setNotification] = useState<any>(null);
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => {
-            console.log(token)
-      setExpoPushToken(token);
-    });
+    const initPush = async () => {
+      const token = await registerForPushNotificationsAsync();
+      if (token) {
+        setExpoPushToken(token);
+      }
+    };
+    initPush();
 
-    const subscription = Notifications.addNotificationReceivedListener(notif => {
-      console.log("Notificação recebida:", notif);
+    const subscription = Notifications.addNotificationReceivedListener((notif) => {
       setNotification(notif);
     });
-
-    const responseSubscription =
-      Notifications.addNotificationResponseReceivedListener(response => {
+    const responseSubscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
         console.log("Usuário tocou na notificação:", response);
-      });
+      }
+    );
 
     return () => {
       subscription.remove();
@@ -43,38 +45,54 @@ export default function usePushNotifications() {
 }
 
 async function registerForPushNotificationsAsync(): Promise<string | null> {
-  let token: string | null = null;
-
   if (!Device.isDevice) {
     alert("Precisa de um dispositivo real para push notifications");
     return null;
   }
 
+  // Verifica permissões
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
+  console.log('Permissão anterior:', finalStatus);
 
   if (existingStatus !== "granted") {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
+    try {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+      console.log('Permissão após request:', finalStatus);
+    } catch (e) {
+      console.log('Erro ao pedir permissão:', e);
+      alert('Erro ao pedir permissão de notificação!');
+      return null;
+    }
   }
 
   if (finalStatus !== "granted") {
-    alert("Falha ao obter permissão para notificações!");
+    alert("Permissão de notificações não concedida!");
     return null;
   }
 
-  const tokenData = await Notifications.getExpoPushTokenAsync();
-  console.log("Expo Push Token:", tokenData.data);
-  token = tokenData.data;
-
   if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
+    try {
+      await Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF231F7C",
+      });
+      console.log('Canal de notificação criado com sucesso.');
+    } catch (e) {
+      console.log('Erro ao criar canal de notificação Android:', e);
+    }
   }
 
-  return token;
+  try {
+    const tokenData = await Notifications.getExpoPushTokenAsync();
+    console.log("Expo Push Token:", tokenData.data);
+    return tokenData.data ?? null;
+  } catch (e) {
+    console.log("Erro ao obter Expo Push Token:", e);
+    alert("Erro ao obter token de push notification!");
+    return null;
+  }
 }
