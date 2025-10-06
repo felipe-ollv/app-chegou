@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
+import Constants from 'expo-constants'
 import { Platform } from "react-native";
 
 Notifications.setNotificationHandler({
@@ -50,7 +51,6 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
     return null;
   }
 
-  // Verifica permissões
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
   console.log('Permissão anterior:', finalStatus);
@@ -87,7 +87,12 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
   }
 
   try {
-    const tokenData = await Notifications.getExpoPushTokenAsync();
+    const projectId =
+    Constants.expoConfig?.extra?.eas?.projectId ??
+    Constants.easConfig?.projectId;
+
+    console.log("Project ID:", projectId);
+    const tokenData = await Notifications.getExpoPushTokenAsync(projectId);
     console.log("Expo Push Token:", tokenData.data);
     return tokenData.data ?? null;
   } catch (e) {
