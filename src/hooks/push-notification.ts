@@ -87,12 +87,10 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
   }
 
   try {
-    const projectId =
-    Constants.expoConfig?.extra?.eas?.projectId ??
-    Constants.easConfig?.projectId;
+    const projectId = "e258b308-d015-4620-8429-1993b40f9241";
 
     console.log("Project ID:", projectId);
-    const tokenData = await Notifications.getExpoPushTokenAsync(projectId);
+    const tokenData = await Notifications.getExpoPushTokenAsync({projectId: projectId});
     console.log("Expo Push Token:", tokenData.data);
     return tokenData.data ?? null;
   } catch (e) {
