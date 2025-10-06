@@ -6,6 +6,7 @@ type InfoCardProps = {
   title: string;
   receivedBy: string;
   receivedDate: string;
+  note: string;
   status_package: "RECEIVED" | string;
 };
 
@@ -13,6 +14,7 @@ export default function InfoCardComponent({
   title,
   receivedBy,
   receivedDate,
+  note,
   status_package,
 }: InfoCardProps) {
   const extraText = status_package === "RECEIVED" ? "PENDENTE" : "RECEBIDO";
@@ -24,7 +26,9 @@ export default function InfoCardComponent({
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.desc}>{receivedBy}</Text>
       <Text style={styles.desc}>{receivedDate}</Text>
-
+      {note ? (
+        <Text style={styles.desc}>Obs.: {note}</Text>
+      ) : null}
       <Text style={[styles.extraBase, extraStyle]}>{extraText}</Text>
     </View>
   );

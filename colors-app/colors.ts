@@ -1,6 +1,9 @@
 
 export default {
   zinc: '#0c0c1b',
+  zinc2: '#3B4C8A',
+  zinc3: '#232D52',
+  zinc4: '#8D9BCE',
   black: '#000',
   white: '#fff',
   green: '#99CF1D',

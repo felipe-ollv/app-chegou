@@ -126,13 +126,13 @@ export default function ProfileImageComponent({ uri }: ProfileImageProps) {
 						height: 50,
 						borderRadius: 25,
 						borderWidth: 2,
-						borderColor: colors.green,
+						borderColor: colors.zinc2,
 						justifyContent: 'center',
 						alignItems: 'center',
 						marginTop: -20,
 					}}
 				>
-					<MaterialCommunityIcons name="image-edit-outline" size={24} color={colors.zinc} />
+					<MaterialCommunityIcons name="image-edit-outline" size={24} color={colors.zinc2} />
 				</Pressable>
 			</View>
 		</View>

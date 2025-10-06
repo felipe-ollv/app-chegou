@@ -178,6 +178,7 @@ export default function ShowcaseScreen() {
                         title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
                         receivedBy={`Recebido por: ${item.ownerName}`}
                         receivedDate={`Data: ${formatDateTime(item.created_at)}`}
+                        note={item.note}
                         status_package={item.status_package}
                       />
                     </TouchableOpacity>
@@ -208,6 +209,7 @@ export default function ShowcaseScreen() {
                         title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
                         receivedBy={`Para: ${item.ownerName}`}
                         receivedDate={`Recebido: ${formatDateTime(item.created_at)}`}
+                        note={item.note}
                         status_package={item.status_package}
                       />
 
