@@ -11,7 +11,8 @@ import ActionStorage from "./(auth)/midleware/authStorage";
 import { jwtDecode } from "jwt-decode";
 import { useUser } from "../context/user.context";
 import colors from "../../colors-app/colors";
-
+import { checkDeviceSupport } from "./service/check-identity-capability";
+import * as LocalAuthentication from 'expo-local-authentication';
 
 export default function LoginScreen() {
   const [phone, setPhone] = useState('');
@@ -21,7 +22,7 @@ export default function LoginScreen() {
   const { setUserData } = useUser();
 
   useEffect(() => {
-    // handleExistToken();
+    handleBiometricLogin();
   }, [])
 
   const handleLogin = async () => {
@@ -59,6 +60,23 @@ export default function LoginScreen() {
   const handleNavigate = () => {
     router.push('./(auth)/signup/page');
   };
+
+  const handleBiometricLogin = async () => {
+    const supported = await checkDeviceSupport();
+    if (!supported) return;
+
+    const result = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Autentique-se para entrar',
+      fallbackLabel: 'Usar senha',
+      cancelLabel: 'Cancelar',
+    });
+
+    if (result.success) {
+      handleExistToken();
+    } else {
+      ToastComponent({ type: 'warning', text1: 'Atenção!', text2: 'A autenticação falhou!'});
+    }
+  }
 
   const handleExistToken = async () => {
     setLoading(true);
