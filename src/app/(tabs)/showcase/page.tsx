@@ -175,8 +175,8 @@ export default function ShowcaseScreen() {
                       disabled={item.status_package === 'DELIVERED'}
                     >
                       <InfoCardComponent
-                        title={`Condomínio: ${item.condominium_name} ${item.blockOwner} ${item.apartmentOwner}`}
-                        receivedBy={`Recebido por: ${item.ownerName}`}
+                        title={`Condomínio: ${item.condominium_name} ${item.blockReceiver} ${item.apartmentReceiver}`}
+                        receivedBy={`Recebido por: ${item.receiverName}`}
                         receivedDate={`Data: ${formatDateTime(item.created_at)}`}
                         note={item.note}
                         status_package={item.status_package}
