@@ -10,6 +10,7 @@ export default function MainLayout() {
     return (
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)/signin/page" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/signup/page" options={{ headerShown: false }} />
       </Stack>
     );

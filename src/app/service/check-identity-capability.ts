@@ -1,4 +1,5 @@
 import * as LocalAuthentication from 'expo-local-authentication';
+import ToastComponent from '../../components/toast/component';
 
 export const checkDeviceSupport = async () => {
   const compatible = await LocalAuthentication.hasHardwareAsync();
@@ -9,7 +10,7 @@ export const checkDeviceSupport = async () => {
   }
 
   if (!enrolled) {
-    alert("Cadastre sua biometria no celular para login mais seguro!");
+    ToastComponent({type: "warning", text1: "Atençāo!", text2: "Cadastre a biometria no celular para login seguro!"});
     return false;
   }
 

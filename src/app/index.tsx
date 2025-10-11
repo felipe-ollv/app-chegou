@@ -14,10 +14,10 @@ import colors from "../../colors-app/colors";
 import { checkDeviceSupport } from "./service/check-identity-capability";
 import * as LocalAuthentication from 'expo-local-authentication';
 
-export default function LoginScreen() {
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+import SigninScreen from "./(auth)/signin/page";
+
+export default function InitScreen() {
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { setUserData } = useUser();
 
@@ -25,45 +25,14 @@ export default function LoginScreen() {
     handleBiometricLogin();
   }, [])
 
-  const handleLogin = async () => {
-    if (!phone || !password) {
-      ToastComponent({ type: 'warning', text1: 'Atenção!', text2: 'Preencha telefone e senha'});
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const res: any = await api.post("/login/user", {
-        phone_number: phone,
-        password: password
-      });
-
-      const secret = res.data;
-
-      await ActionStorage.saveToken(secret.token);
-
-      setToken(secret.token);
-
-      const decoded = jwtDecode(secret.token);
-      setUserData(decoded);
-
-      router.replace("/showcase/page");
-
-    } catch (err: any) {
-      ToastComponent({ type: 'error', text1: "Erro!", text2: 'Usuário ou senha inválidos' });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleNavigate = () => {
-    router.push('./(auth)/signup/page');
-  };
-
   const handleBiometricLogin = async () => {
     const supported = await checkDeviceSupport();
-    if (!supported) return;
+
+    if (!supported) {
+      setLoading(false);
+      router.replace('./(auth)/signin/page');
+      return;
+    }  
 
     const result = await LocalAuthentication.authenticateAsync({
       promptMessage: 'Autentique-se para entrar',
@@ -75,6 +44,7 @@ export default function LoginScreen() {
       handleExistToken();
     } else {
       ToastComponent({ type: 'warning', text1: 'Atenção!', text2: 'A autenticação falhou!'});
+      setLoading(false)
     }
   }
 
@@ -95,42 +65,10 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      {!loading && <HeaderComponent logoText='Chegou' slogan='Descomplicando encomendas!' />}
-
-      {loading ? (
+      {!loading ? (
         <LoadingComponent />
       ) : (
-        <View style={styles.form}>
-          <View>
-            <Text style={styles.label}>Telefone</Text>
-            <TextInput
-              placeholder="Seu telefone..."
-              placeholderTextColor={colors.blacklight}
-              style={styles.input}
-              keyboardType='numeric'
-              value={phone}
-              onChangeText={t => setPhone(formatPhoneNumber(t))}
-              maxLength={15}
-            />
-          </View>
-          <View>
-            <Text style={styles.label}>Senha</Text>
-            <TextInput
-              placeholder="Sua senha..."
-              placeholderTextColor={colors.blacklight}
-              secureTextEntry
-              style={styles.input}
-              value={password}
-              onChangeText={setPassword}
-            />
-          </View>
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Acessar</Text>
-          </TouchableOpacity>
-          <Text style={styles.link} onPress={handleNavigate}>
-            Ainda não tem uma conta? Cadastre-se!
-          </Text>
-        </View>
+        <SigninScreen />
       )}
     </View>
   );
