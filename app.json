@@ -24,7 +24,8 @@
         "ITSAppUsesNonExemptEncryption": false,
         "UIBackgroundModes": ["remote-notification"],
         "NSCameraUsageDescription": "Este aplicativo precisa acessar sua câmera para alterar a foto de perfil.",
-        "NSPhotoLibraryUsageDescription": "Este aplicativo precisa acessar suas fotos para selecionar uma imagem de perfil."
+        "NSPhotoLibraryUsageDescription": "Este aplicativo precisa acessar suas fotos para selecionar uma imagem de perfil.",
+        "NSFaceIDUsageDescription": "Usaremos o Face ID para autenticar você com segurança."
       }
     },
     "android": {
