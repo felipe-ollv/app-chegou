@@ -15,6 +15,7 @@ import {
 import ToastComponent from "../toast/component";
 import api from "../../interceptor/axios-config";
 import BasicLoading from "../loading/basic-loading";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 type ConfirmCodeReceiving = {
   code: string;
@@ -164,30 +165,35 @@ export default function ModalConfirmationCode({
                 {
                   loading ? <BasicLoading /> :
 
-                  <View style={{ flexDirection: "row", gap: 15 }}>
-                    {otp.map((digit, index) => (
-                      <TextInput
-                        key={index}
-                        ref={(el) => {
-                          inputsRef.current[index] = el;
-                        }}
-                        value={digit}
-                        onChangeText={(value) => handleChange(value, index)}
-                        onKeyPress={(e) => handleKeyPress(e, index)}
-                        keyboardType="numeric"
-                        maxLength={1}
-                        style={{
-                          width: 40,
-                          height: 50,
-                          textAlign: "center",
-                          fontSize: 24,
-                          borderWidth: 1,
-                          borderColor: colors.green,
-                          borderRadius: 8,
-                        }}
-                      />
-                    ))}
-                  </View>
+                  	<>
+                    <View style={{ width: '100%', flexDirection: 'row', gap: 10, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+                      <Ionicons name="information-circle-outline" size={24} color="black" />
+                      <Text>Digite o código que o proprietario(a) recebeu!</Text>
+                    </View>
+
+                    <View style={{ flexDirection: "row", gap: 15, marginTop: 28 }}>
+                        {otp.map((digit, index) => (
+                          <TextInput
+                            key={index}
+                            ref={(el) => {
+                              inputsRef.current[index] = el;
+                            } }
+                            value={digit}
+                            onChangeText={(value) => handleChange(value, index)}
+                            onKeyPress={(e) => handleKeyPress(e, index)}
+                            keyboardType="numeric"
+                            maxLength={1}
+                            style={{
+                              width: 40,
+                              height: 50,
+                              textAlign: "center",
+                              fontSize: 24,
+                              borderWidth: 1,
+                              borderColor: colors.green,
+                              borderRadius: 8,
+                            }} />
+                        ))}
+                      </View></>
                 }
 
               </View>

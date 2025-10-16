@@ -1,5 +1,6 @@
 import colors from "@/colors-app/colors";
 import { Modal, Pressable, View, TouchableOpacity, Text } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function ModalInformCode({
 	visible,
@@ -54,7 +55,12 @@ export default function ModalInformCode({
 						Informar código de recebimento
 					</Text>
 
-					<View style={{ width: '100%', height: 200, justifyContent: 'center', alignItems: 'center', gap: 20 }}>
+					<View style={{ width: '100%', flexDirection: 'row', gap: 10, justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
+						<Ionicons name="information-circle-outline" size={24} color="black" />
+						<Text>Código único para cada recebimento!</Text>
+					</View>
+
+					<View style={{ width: '100%', height: 160, justifyContent: 'center', alignItems: 'center' }}>
 
 						<View style={{ alignItems: "center", marginVertical: 20 }}>
 							<View
