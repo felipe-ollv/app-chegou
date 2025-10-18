@@ -54,6 +54,14 @@
             "googleServicesFile": "./google-services.json"
           }
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/chegouapp_icon_96x96.png",
+          "color": "#ffffff",
+          "defaultChannel": "default"
+        }
       ]
     ],
     "experiments": {
