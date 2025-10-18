@@ -42,7 +42,6 @@ export default function ShowcaseScreen() {
       fetchPackageList();
     }, [])
   );
-
   useEffect(() => {
     if (!expoPushToken) return;
 
