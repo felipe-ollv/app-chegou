@@ -3,7 +3,7 @@
     "name": "ChegouApp!",
     "slug": "chegou-app",
     "owner": "olvfelipe",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/chegouapp_android_icon_512.png",
     "scheme": "chegouapp",
@@ -18,7 +18,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.gusen.chegouapp",
-      "buildNumber": "1.0.1",
+      "buildNumber": "1.0.2",
       "icon": "./assets/images/chegouapp_ios_icon_1024.png",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,

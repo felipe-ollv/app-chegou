@@ -19,6 +19,7 @@ import formatPhoneNumber from '../../../utils/formatPhoneNumber';
 import ToastComponent from '../../../components/toast/component';
 import styles from "./styles";
 import HeaderComponent from "../../../components/header/component";
+import ModalInform from "../../../components/modals/modal-inform";
 import colors from "../../../../colors-app/colors";
 
 type FormData = {
@@ -44,13 +45,18 @@ export default function SignUpScreen() {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [condominiumList, setCondominiumList] = useState([]);
+  const [modalInformVisible, setModalInformVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
 
     const findCondominium = async () => {
-      const conds: any = await api.get('/condominium/find-all');
-      setCondominiumList(conds.data);
+      const conds: any = await api.get(`/condominium/find-condominium/${276424765}`);
+      if (conds.data.code === 204) {
+        setModalInformVisible(true)
+      } else {
+        setCondominiumList(conds.data);
+      }
     }
 
     findCondominium();
@@ -371,6 +377,10 @@ export default function SignUpScreen() {
             </ScrollView>
           </KeyboardAvoidingView>
       }
+      <ModalInform 
+        visible={modalInformVisible}
+        onClose={() => setModalInformVisible(false)}
+      />
     </View>
   );
 }
