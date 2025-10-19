@@ -74,11 +74,13 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
   if (Platform.OS === "android") {
     try {
       await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: "#FF231F7C",
-      });
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
+      showBadge: true,
+    });
       console.log('Canal de notificação criado com sucesso.');
     } catch (e) {
       console.log('Erro ao criar canal de notificação Android:', e);
