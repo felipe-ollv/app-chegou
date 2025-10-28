@@ -21,19 +21,24 @@ export default function NotificationScreen() {
 					<Text style={{fontWeight: 500, fontSize: 16, marginBottom: 2}}>Chegou!</Text>
 					<Text>Recebido pago!</Text>
 				</View>
-				<View
-					style={{
-						position: "absolute",
-						right: 1,
-						bottom: 1,
-						width: 1,
-						height: 1,
-						borderRadius: 28,
-						justifyContent: "center",
-					}}
-				>
-					<UploadPdfComponent />
-				</View>
+				{
+					userData.ts === 'TRUSTEE' ?
+					<View
+						style={{
+							position: "absolute",
+							right: 1,
+							bottom: 1,
+							width: 1,
+							height: 1,
+							borderRadius: 28,
+							justifyContent: "center",
+						}}
+					>
+						<UploadPdfComponent />
+					</View>
+					: 
+					null
+				}
 			</View>
 		</View>
 	)
