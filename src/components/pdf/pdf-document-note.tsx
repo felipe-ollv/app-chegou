@@ -41,8 +41,9 @@ export default function UploadPdfComponent() {
         name: file.name || "document.pdf",
       } as any);
       formData.append("uuidUserProfile", userData.ps);
+      formData.append("uuidCondominium", userData.cs);
 
-      const result = await api.post("/notification/document", formData, {
+      const result = await api.post("/note-data/document", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
