@@ -6,8 +6,7 @@ import { useUser } from "../../../context/user.context";
 
 export default function NotificationScreen() {
 
-	const userData = useUser();
-	console.log('userdata', userData)
+	const value = useUser();
 
 	return (
 		<View style={notificationStyles.container}>
@@ -22,7 +21,7 @@ export default function NotificationScreen() {
 					<Text>Recebido pago!</Text>
 				</View>
 				{
-					userData.ts === 'TRUSTEE' ?
+					value.userData.ts === 'TRUSTEE' ?
 					<View
 						style={{
 							position: "absolute",
