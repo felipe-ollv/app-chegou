@@ -51,7 +51,7 @@ export default function SignUpScreen() {
   useEffect(() => {
 
     const findCondominium = async () => {
-      const conds: any = await api.get(`/condominium/find-condominium/${276424765}`);
+      const conds: any = await api.get(`/condominium/find-condominium/${'e860e23c-fab2-4f8d-8078-38a96ba956d3'}`);
       if (conds.data.code === 204) {
         setModalInformVisible(true)
       } else {
