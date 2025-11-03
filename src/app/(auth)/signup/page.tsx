@@ -9,7 +9,7 @@ import {
   Alert,
   KeyboardAvoidingView
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import api from '../../../interceptor/axios-config';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useForm, Controller } from "react-hook-form";
@@ -44,28 +44,40 @@ export default function SignUpScreen() {
   const router = useRouter();
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  const [condominiumList, setCondominiumList] = useState([]);
+  // const [condominiumList, setCondominiumList] = useState([]);
   const [modalInformVisible, setModalInformVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { condominiumId } = useLocalSearchParams();
+  const [ condominiumName, setCondominiumName] = useState('');
 
   useEffect(() => {
+    const fetchCondominium = async () => {
+      if (!condominiumId) return;
 
-    const findCondominium = async () => {
-      const conds: any = await api.get(`/condominium/find-condominium/${'e860e23c-fab2-4f8d-8078-38a96ba956d3'}`);
-      if (conds.data.code === 204) {
-        setModalInformVisible(true)
-      } else {
-        setCondominiumList(conds.data);
+      try {
+        setLoading(true);
+        const resp = await api.get(`/condominium/find-condominium/${condominiumId}`);
+        if (resp.data && resp.data.condominium_name) {
+          setCondominiumName(resp.data.condominium_name);
+          setValue("condominium", condominiumId as string);
+        } else {
+          setModalInformVisible(true);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar condomínio:", error);
+        setModalInformVisible(true);
+      } finally {
+        setLoading(false);
       }
-    }
+    };
 
-    findCondominium();
-  }, [])
+    fetchCondominium();
+  }, [condominiumId])
 
   const {
     control,
     handleSubmit,
-    reset,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({
     defaultValues: {
@@ -160,39 +172,18 @@ export default function SignUpScreen() {
                   <Controller
                     control={control}
                     name="condominium"
-                    rules={{ required: "Condomínio obrigatório" }}
-                    render={({ field: { onChange, value } }) => (
-                      <SelectDropdown
-                        data={condominiumList}
-                        onSelect={(selectedItem) => {
-                          onChange(selectedItem.uuid_condominium);
-                        }}
-                        defaultValue={value}
-                        renderButton={(selectedItem) => (
-                          <View style={styles.input}>
-                            <Text style={{ color: selectedItem ? "#000" : "#999" }}>
-                              {selectedItem?.condominium_name ?? "Selecione seu condomínio"}
-                            </Text>
-                          </View>
-                        )}
-                        renderItem={(item, index, isSelected) => (
-                          <View
-                            style={{
-                              padding: 10,
-                              backgroundColor: isSelected ? "#edf4ff" : "#fff",
-                            }}
-                          >
-                            <Text style={{ color: "#333" }}>{item.condominium_name}</Text>
-                          </View>
-                        )}
-                        dropdownStyle={{
-                          borderRadius: 8,
-                        }}
+                    render={() => (
+                      <TextInput
+                        style={[styles.input, { backgroundColor: "#f2f2f2" }]}
+                        editable={false}
+                        value={condominiumName || ""}
+                        placeholder="Buscando condomínio..."
+                        placeholderTextColor="#999"
                       />
                     )}
                   />
                   {errors.condominium && (
-                    <Text style={{ color: "red", marginBottom: 12 }}>{errors.condominium.message}</Text>
+                    <Text style={{ color: "red" }}>{errors.condominium.message}</Text>
                   )}
                 </View>
 
