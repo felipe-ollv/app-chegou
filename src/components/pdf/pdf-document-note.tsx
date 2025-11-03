@@ -5,7 +5,6 @@ import api from "../../interceptor/axios-config";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useUser } from "../../context/user.context";
 import ToastComponent from "../toast/component";
-import BasicLoading from "../loading/basic-loading";
 import colors from "../../../colors-app/colors";
 
 export default function UploadPdfComponent() {
