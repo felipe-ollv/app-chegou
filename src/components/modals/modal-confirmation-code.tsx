@@ -1,5 +1,6 @@
 import colors from "../../../colors-app/colors";
 import { useState, useRef, useEffect } from "react";
+import { Keyboard } from "react-native";
 import { useForm } from "react-hook-form";
 import {
   Modal,
@@ -60,7 +61,11 @@ export default function ModalConfirmationCode({
 
       if (index < otp.length - 1) {
         inputsRef.current[index + 1]?.focus();
+      } else {
+        Keyboard.dismiss();
+        inputsRef.current[index]?.blur();
       }
+      
     } else if (value === "") {
       const newOtp = [...otp];
       newOtp[index] = "";
