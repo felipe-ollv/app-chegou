@@ -64,8 +64,7 @@ export default function ModalPdfView({
               onError={(error) => console.log("Erro ao abrir PDF:", error)}
               style={{
                 flex: 1,
-                width: Dimensions.get("window").width,
-                height: Dimensions.get("window").height,
+                width: '100%',
               }}
             />
           </View>

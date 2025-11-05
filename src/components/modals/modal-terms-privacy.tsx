@@ -66,7 +66,8 @@ export default function ModalTermsAndPrivacy({
 					<ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator>
 						{/* --- TERMOS DE USO --- */}
 						<Text style={styles.title}>Termos de Uso</Text>
-						<Text style={styles.normal}>Versão 1.2 – Vigência: 22 de setembro de 2025</Text>
+						<Text style={styles.title}>Termos de Uso</Text>
+						<Text style={styles.normal}>Versão 1.2 – Vigência: 30 de setembro de 2025</Text>
 
 						<Text style={styles.subTitle}>Bem-vindo ao ChegouApp!</Text>
 						<Text style={styles.normal}>
@@ -76,15 +77,14 @@ export default function ModalTermsAndPrivacy({
 
 						<Text style={styles.subTitle}>1. Aceitação dos Termos</Text>
 						<Text style={styles.normal}>
-							Ao criar uma conta ou utilizar o App, você declara ter lido, compreendido e
-							aceitado estes Termos e a Política de Privacidade.
+							Ao criar uma conta ou utilizar o App, você declara ter lido, compreendido e aceitado
+							estes Termos e a Política de Privacidade.
 						</Text>
 
 						<Text style={styles.subTitle}>2. Descrição do Serviço</Text>
 						<Text style={styles.normal}>
 							O App é uma ferramenta de comunicação entre moradores e administradores de
 							condomínios para registrar e notificar o recebimento de encomendas.
-
 							{"\n\n"}O App não gerencia, armazena, transporta, fiscaliza ou se responsabiliza
 							por encomendas, extravios, danos, atrasos, trocas ou qualquer outra situação
 							física relacionada às mercadorias.
@@ -92,8 +92,8 @@ export default function ModalTermsAndPrivacy({
 
 						<Text style={styles.subTitle}>3. Cadastro e Conta</Text>
 						<Text style={styles.normal}>
-							Você deve fornecer dados verdadeiros e atualizados. Cada usuário é responsável
-							pelas informações fornecidas.
+							O usuário deve fornecer dados verdadeiros e atualizados. Cada usuário é responsável
+							pelas informações cadastradas.
 						</Text>
 
 						<Text style={styles.subTitle}>4. Uso Permitido</Text>
@@ -122,7 +122,6 @@ export default function ModalTermsAndPrivacy({
 						<Text style={styles.normal}>
 							O App não se responsabiliza por problemas, perdas, danos, extravios, atrasos ou
 							defeitos relacionados a encomendas.
-
 							{"\n\n"}Qualquer disputa sobre encomendas deve ser resolvida diretamente entre os
 							envolvidos (usuários, administradores, transportadoras, síndico etc.), sem envolver
 							o App.
@@ -141,7 +140,7 @@ export default function ModalTermsAndPrivacy({
 						</Text>
 
 						<Text style={styles.subTitle}>10. Contato</Text>
-						<Text style={styles.normal}>Dúvidas: suporte@encomendascondominio.com</Text>
+						<Text style={styles.normal}>Dúvidas: felipe@app-chegou.com.br</Text>
 
 						<Text style={styles.subTitle}>Resumo</Text>
 						<Text style={styles.normal}>
@@ -152,14 +151,13 @@ export default function ModalTermsAndPrivacy({
 
 						{/* --- POLÍTICA DE PRIVACIDADE --- */}
 						<Text style={[styles.title, { marginTop: 12 }]}>Política de Privacidade</Text>
-						<Text style={styles.normal}>Versão 1.2 – Vigência: 22 de setembro de 2025</Text>
+						<Text style={styles.normal}>Versão 1.2 – Vigência: 30 de setembro de 2025</Text>
 
 						<Text style={styles.subTitle}>1. Coleta de Informações</Text>
 						<Text style={styles.normal}>
 							Coletamos apenas dados essenciais para operação do App:
 							{"\n"}- Cadastro: nome, sobrenome, bloco e apartamento;
 							{"\n"}- Histórico de notificações sobre encomendas.
-
 							{"\n\n"}Não coletamos informações sobre conteúdo, valor, transportadora, rastreamento
 							externo ou ciclo de vida das encomendas.
 						</Text>
@@ -184,7 +182,7 @@ export default function ModalTermsAndPrivacy({
 						<Text style={styles.subTitle}>5. Cookies e Tecnologias</Text>
 						<Text style={styles.normal}>
 							Usamos cookies apenas para garantir funcionalidades básicas do App. Não há rastreamento
-							das encomendas.
+							de encomendas.
 						</Text>
 
 						<Text style={styles.subTitle}>6. Direitos do Titular</Text>
@@ -209,8 +207,9 @@ export default function ModalTermsAndPrivacy({
 
 						<Text style={styles.subTitle}>Resumo</Text>
 						<Text style={styles.normal}>
-							O ChegouApp! se responsabiliza por encomendas, perdas, danos ou atrasos.
-							O uso do App implica ciência e aceitação desta isenção.
+							O ChegouApp! é apenas uma ferramenta de comunicação. Não nos responsabilizamos por
+							perdas, danos ou atrasos relacionados a encomendas. O uso do App implica ciência e
+							aceitação desta Política.
 						</Text>
 					</ScrollView>
 				</Animated.View>

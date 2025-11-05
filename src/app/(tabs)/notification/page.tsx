@@ -54,7 +54,12 @@ export default function NotificationScreen() {
             <Pressable
               key={index}
               style={notificationStyles.card}
-              onPress={() => getPdfBase64(note.content)}
+              onPress={ async () => {
+								const base64 = await getPdfBase64(note.content);
+								if (base64) {
+									setVisible(true);
+								}
+							}}
             >
               <Text
                 style={{
