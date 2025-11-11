@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, Modal, Pressable, ScrollView, TextInput } from 'react-native';
-import { profileStyles } from '../../../styles/profile-styles';
+import { View, Text, TouchableOpacity, Modal, Pressable, ScrollView, TextInput } from 'react-native';
+import { profileStyles, modalStyles } from '../../../styles/profile-styles';
 import HeaderComponent from '../../../components/header/component';
 import BasicLoading from '../../../components/loading/basic-loading';
 import api from '../../../interceptor/axios-config';
@@ -49,15 +49,14 @@ export default function ProfileScreen() {
   );
 
   const fetchUserProfile = async () => {
-    
     setLoading(true);
     try {
       const res: any = await api.get(`/user-profile/find-user-profile/${userData.ps}`);
       setUserProfile(res.data);
     } catch (error) {
-        ToastComponent({type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes"})
+      ToastComponent({ type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes" });
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   }
 
@@ -68,7 +67,7 @@ export default function ProfileScreen() {
     reset,
   } = useForm<userProfileForm>({
     defaultValues: {
-      name:'',
+      name: '',
       block: '',
       apartment: '',
       phone: '',
@@ -94,143 +93,95 @@ export default function ProfileScreen() {
 
   const onSubmit = async (data: userProfileForm) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const res = await api.post('/user-profile/refresh-user-profile', data);
-      if (res.data) {
-        fetchUserProfile();
-      }
+      if (res.data) fetchUserProfile();
       closeRegisterModal();
-      ToastComponent({type: 'success', text1: "Sucesso!", text2: "Seu perfil foi atualizado"})
+      ToastComponent({ type: 'success', text1: "Sucesso!", text2: "Seu perfil foi atualizado" });
     } catch (e) {
-      ToastComponent({type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes"})
+      ToastComponent({ type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes" });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   return (
     <View style={profileStyles.container}>
-
       <HeaderComponent logoText='Chegou' slogan='Seu perfil!' />
 
-      {loading ?
+      {loading ? (
         <BasicLoading />
-        :
-        <><View style={profileStyles.form}>
+      ) : (
+        <>
+          <View style={profileStyles.form}>
+            <View style={profileStyles.profileHeader}>
+              <ProfileImageComponent uri={userProfile[0].profile_image} />
+              <Text style={profileStyles.name}>{userProfile[0].name}</Text>
+            </View>
 
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <ProfileImageComponent uri={userProfile[0].profile_image} />
-            <Text style={profileStyles.name}>{userProfile[0].name}</Text>
+            <View style={profileStyles.divider} />
+            <Text style={profileStyles.condo}>
+              {userProfile[0].condominium_name} {userProfile[0].apartment_block} {userProfile[0].apartment}
+            </Text>
+
+            <View style={profileStyles.statsRow}>
+              <View style={profileStyles.card}>
+                <Text style={profileStyles.cardValue}>{userProfile[0].total_received}</Text>
+                <Text style={profileStyles.cardLabel}>Recebidos</Text>
+              </View>
+              <View style={profileStyles.card}>
+                <Text style={profileStyles.cardValue}>{userProfile[0].total_pending}</Text>
+                <Text style={profileStyles.cardLabel}>Pendentes</Text>
+              </View>
+              <View style={profileStyles.card}>
+                <Text style={profileStyles.cardValue}>{userProfile[0].total_delivered}</Text>
+                <Text style={profileStyles.cardLabel}>Entregues</Text>
+              </View>
+            </View>
+
+            <TouchableOpacity style={profileStyles.button} onPress={openRegisterModal}>
+              <Text style={profileStyles.buttonText}>Editar Perfil</Text>
+            </TouchableOpacity>
           </View>
 
-          <View style={{ width: '100%', height: 1, backgroundColor: colors.green, marginBottom: 10 }} />
-          <Text style={profileStyles.condo}>{userProfile[0].condominium_name} {userProfile[0].apartment_block} {userProfile[0].apartment}</Text>
-
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <View
-              style={profileStyles.card}
-            >
-              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>{userProfile[0].total_received}</Text>
-              <Text style={{textAlign: 'center', fontSize: 14}}>Recebidos</Text>
-            </View>
-            <View
-              style={profileStyles.card}
-            >
-              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>{userProfile[0].total_pending}</Text>
-              <Text style={{textAlign: 'center', fontSize: 14}}>Pendentes</Text>
-            </View>
-            <View
-              style={profileStyles.card}
-            >
-              <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 500, marginBottom: 2}}>{userProfile[0].total_delivered}</Text>
-              <Text style={{textAlign: 'center', fontSize: 14}}>Entregues</Text>
-            </View>
-          </View>
-
-          <TouchableOpacity
-            style={profileStyles.button}
-            onPress={openRegisterModal}
-          >
-            <Text style={profileStyles.buttonText}>Editar Perfil</Text>
-          </TouchableOpacity>
-        </View>
-
-          <Modal
-            visible={registerVisible}
-            animationType="slide"
-            transparent
-            onRequestClose={closeRegisterModal}
-          >
-            <Pressable
-              onPress={closeRegisterModal}
-              style={{
-                flex: 1,
-                backgroundColor: "rgba(0,0,0,0.35)",
-                justifyContent: "flex-end",
-              }}
-            >
-              <Pressable
-                onPress={() => { }}
-                style={{
-                  backgroundColor: "#fff",
-                  borderTopLeftRadius: 16,
-                  borderTopRightRadius: 16,
-                  paddingHorizontal: 16,
-                  paddingTop: 12,
-                  paddingBottom: 24,
-                  maxHeight: "85%",
-                }}
-              >
-                <View style={{ alignItems: "center", marginBottom: 8 }}>
-                  <View
-                    style={{
-                      width: 40,
-                      height: 4,
-                      borderRadius: 2,
-                      backgroundColor: "#D0D5DD",
-                    }} />
+          <Modal visible={registerVisible} animationType="slide" transparent onRequestClose={closeRegisterModal}>
+            <Pressable onPress={closeRegisterModal} style={modalStyles.overlay}>
+              <Pressable onPress={() => {}} style={modalStyles.modalContainer}>
+                <View style={modalStyles.dragIndicatorContainer}>
+                  <View style={modalStyles.dragIndicator} />
                 </View>
 
-                <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 12 }}>
-                  Editar perfil
-                </Text>
+                <Text style={modalStyles.modalTitle}>Editar perfil</Text>
 
                 <ScrollView
-                  style={{ maxHeight: "80%" }}
+                  style={modalStyles.scrollArea}
                   keyboardShouldPersistTaps="handled"
-                  contentContainerStyle={{ paddingBottom: 8 }}
+                  contentContainerStyle={modalStyles.scrollContent}
                 >
-                  <View style={{ gap: 12 }}>
+                  <View style={modalStyles.formFields}>
+                    {/* Nome */}
                     <View>
-                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Nome</Text>
+                      <Text style={modalStyles.label}>Nome</Text>
                       <Controller
                         control={control}
                         name="name"
                         rules={{ required: "Nome" }}
                         render={({ field: { onChange, value, onBlur } }) => (
                           <TextInput
-                            placeholder=""
-                            style={{
-                              borderWidth: 1,
-                              borderColor: errors.name ? "#ef4444" : "#E5E7EB",
-                              borderRadius: 8,
-                              paddingHorizontal: 12,
-                              height: 44,
-                            }}
+                            style={[modalStyles.input, errors.name && modalStyles.inputError]}
                             value={value}
                             onChangeText={onChange}
                             onBlur={onBlur}
-                            autoCapitalize="words" />
-                        )} />
-                      {errors.name && (
-                        <Text style={{ color: "red", marginTop: 6 }}>
-                          {errors.name.message}
-                        </Text>
-                      )}
+                            autoCapitalize="words"
+                          />
+                        )}
+                      />
+                      {errors.name && <Text style={modalStyles.errorText}>{errors.name.message}</Text>}
                     </View>
 
+                    {/* Bloco */}
                     <View>
-                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Torre/Bloco</Text>
+                      <Text style={modalStyles.label}>Torre/Bloco</Text>
                       <Controller
                         control={control}
                         name="block"
@@ -238,27 +189,20 @@ export default function ProfileScreen() {
                         render={({ field: { onChange, value, onBlur } }) => (
                           <TextInput
                             placeholder="Torre/Bloco"
-                            style={{
-                              borderWidth: 1,
-                              borderColor: errors.block ? "#ef4444" : "#E5E7EB",
-                              borderRadius: 8,
-                              paddingHorizontal: 12,
-                              height: 44,
-                            }}
+                            style={[modalStyles.input, errors.block && modalStyles.inputError]}
                             value={value}
                             onChangeText={onChange}
                             onBlur={onBlur}
-                            autoCapitalize="characters" />
-                        )} />
-                      {errors.block && (
-                        <Text style={{ color: "red", marginTop: 6 }}>
-                          {errors.block.message}
-                        </Text>
-                      )}
+                            autoCapitalize="characters"
+                          />
+                        )}
+                      />
+                      {errors.block && <Text style={modalStyles.errorText}>{errors.block.message}</Text>}
                     </View>
 
+                    {/* Apartamento */}
                     <View>
-                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Apartamento</Text>
+                      <Text style={modalStyles.label}>Apartamento</Text>
                       <Controller
                         control={control}
                         name="apartment"
@@ -269,27 +213,20 @@ export default function ProfileScreen() {
                         render={({ field: { onChange, value, onBlur } }) => (
                           <TextInput
                             placeholder="Número do apartamento"
-                            style={{
-                              borderWidth: 1,
-                              borderColor: errors.apartment ? "#ef4444" : "#E5E7EB",
-                              borderRadius: 8,
-                              paddingHorizontal: 12,
-                              height: 44,
-                            }}
+                            style={[modalStyles.input, errors.apartment && modalStyles.inputError]}
                             value={value}
-                            onChangeText={(t) => onChange(t)}
+                            onChangeText={onChange}
                             onBlur={onBlur}
-                            keyboardType="numeric" />
-                        )} />
-                      {errors.apartment && (
-                        <Text style={{ color: "red", marginTop: 6 }}>
-                          {errors.apartment.message}
-                        </Text>
-                      )}
+                            keyboardType="numeric"
+                          />
+                        )}
+                      />
+                      {errors.apartment && <Text style={modalStyles.errorText}>{errors.apartment.message}</Text>}
                     </View>
 
+                    {/* Telefone */}
                     <View>
-                      <Text style={{ fontSize: 14, marginBottom: 6 }}>Telefone</Text>
+                      <Text style={modalStyles.label}>Telefone</Text>
                       <Controller
                         control={control}
                         name="phone"
@@ -299,75 +236,40 @@ export default function ProfileScreen() {
                         }}
                         render={({ field: { onChange, value, onBlur } }) => (
                           <TextInput
-                            placeholder=""
-                            style={{
-                              borderWidth: 1,
-                              borderColor: "#E5E7EB",
-                              borderRadius: 8,
-                              paddingHorizontal: 12,
-                              paddingTop: 10,
-                              height: 44,
-                              textAlignVertical: "top",
-                            }}
+                            style={[modalStyles.input, errors.phone && modalStyles.inputError]}
                             value={value}
                             onChangeText={onChange}
-                            onBlur={onBlur} />
-                        )} />
-                      {errors.phone && (
-                        <Text style={{ color: "red", marginTop: 6 }}>
-                          {errors.phone.message}
-                        </Text>
-                      )}
+                            onBlur={onBlur}
+                          />
+                        )}
+                      />
+                      {errors.phone && <Text style={modalStyles.errorText}>{errors.phone.message}</Text>}
                     </View>
                   </View>
                 </ScrollView>
 
-                <View
-                  style={{
-                    flexDirection: 'column',
-                    justifyContent: "flex-end",
-                    gap: 12,
-                    marginTop: 36
-                  }}
-                >
+                <View style={modalStyles.footer}>
                   <TouchableOpacity
                     onPress={closeRegisterModal}
                     disabled={isSubmitting}
-                    style={{
-                      paddingHorizontal: 14,
-                      height: 44,
-                      borderRadius: 8,
-                      borderWidth: 1,
-                      borderColor: "#E5E7EB",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      backgroundColor: "#fff",
-                      opacity: isSubmitting ? 0.6 : 1,
-                    }}
+                    style={[modalStyles.cancelButton, isSubmitting && modalStyles.disabled]}
                   >
-                    <Text style={{ color: "#111" }}>Cancelar</Text>
+                    <Text style={modalStyles.cancelText}>Cancelar</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     onPress={handleSubmit(onSubmit)}
                     disabled={isSubmitting}
-                    style={{
-                      paddingHorizontal: 16,
-                      height: 44,
-                      borderRadius: 8,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      backgroundColor: colors.green,
-                      opacity: isSubmitting ? 0.6 : 1,
-                    }}
+                    style={[modalStyles.confirmButton, isSubmitting && modalStyles.disabled]}
                   >
-                    <Text style={{ color: "#fff", fontWeight: "600" }}>Confirmar</Text>
+                    <Text style={modalStyles.confirmText}>Confirmar</Text>
                   </TouchableOpacity>
                 </View>
               </Pressable>
             </Pressable>
-          </Modal></>
-      }
+          </Modal>
+        </>
+      )}
     </View>
-  )
+  );
 }

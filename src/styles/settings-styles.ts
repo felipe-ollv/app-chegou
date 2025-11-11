@@ -5,45 +5,47 @@ export const settingsStyles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 34,
-    backgroundColor: colors.zinc
+    backgroundColor: colors.zinc,
   },
-  header: {
-    paddingTop: 24,
-    paddingLeft: 14,
-    paddingRight: 14
-  }, 
-  logoText: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: colors.white,
-    marginBottom: 8
-  },
-  slogan: {
-    fontSize: 28,
-    color: colors.white,
-    marginBottom: 34
-  },
-	form: {
+  form: {
     flex: 1,
     backgroundColor: colors.white,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    paddingTop: 2,
-    paddingLeft: 14,
-    paddingRight: 14,
+    paddingHorizontal: 14,
     justifyContent: 'center',
-    alignItems: 'center'
-	},
-   card: {
-    backgroundColor: '#fff',
+    alignItems: 'center',
+  },
+  card: {
+    backgroundColor: colors.white,
     borderRadius: 16,
-    elevation: 4, // sombra Android
-    shadowColor: '#000', // sombra iOS
+    elevation: 4, // Android
+    shadowColor: '#000', // iOS
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 16,
     paddingVertical: 20,
     paddingHorizontal: 16,
     width: '100%',
-  }
+  },
+  optionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  optionLabelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  optionLabel: {
+    fontSize: 16,
+    marginLeft: 22,
+    color: colors.black,
+  },
+  separator: {
+    width: '100%',
+    height: 1,
+    backgroundColor: colors.green,
+    marginVertical: 20,
+  },
 });

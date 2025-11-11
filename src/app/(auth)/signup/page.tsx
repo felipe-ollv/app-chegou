@@ -44,7 +44,6 @@ export default function SignUpScreen() {
   const router = useRouter();
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  // const [condominiumList, setCondominiumList] = useState([]);
   const [modalInformVisible, setModalInformVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const { condominiumId } = useLocalSearchParams();
@@ -177,7 +176,7 @@ export default function SignUpScreen() {
                         style={[styles.input, { backgroundColor: "#f2f2f2" }]}
                         editable={false}
                         value={condominiumName || ""}
-                        placeholder="Buscando condomínio..."
+                        placeholder="Nome do condomínio..."
                         placeholderTextColor="#999"
                       />
                     )}
