@@ -34,7 +34,7 @@ export default function ModalPdfView({
         </View>
 
         <View style={styles.content}>
-          <Pdf
+          {/* <Pdf
             source={source}
             renderActivityIndicator={() => (
               <ActivityIndicator size="large" color="#000" />
@@ -44,7 +44,7 @@ export default function ModalPdfView({
             }
             onError={(error) => console.log("Erro ao abrir PDF:", error)}
             style={styles.pdf}
-          />
+          /> */}
         </View>
 
         <View style={styles.footer}>

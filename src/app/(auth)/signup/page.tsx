@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Platform,
-  Alert,
   KeyboardAvoidingView
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
@@ -21,6 +20,7 @@ import styles from "./styles";
 import HeaderComponent from "../../../components/header/component";
 import ModalInform from "../../../components/modals/modal-inform";
 import colors from "../../../../colors-app/colors";
+import { Ionicons } from "@expo/vector-icons";
 
 type FormData = {
   name: string;
@@ -339,22 +339,44 @@ export default function SignUpScreen() {
                         message: "Senha deve ter pelo menos 6 caracteres",
                       },
                     }}
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        style={styles.input}
-                        placeholder="Digite sua senha..."
-                        placeholderTextColor={colors.blacklight}
-                        secureTextEntry
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                      />
-                    )}
+                    render={({ field: { onChange, value, onBlur } }) => {
+                      const [showPassword, setShowPassword] = useState(false);
+
+                      return (
+                        <View style={{ position: "relative", justifyContent: "center" }}>
+                          <TextInput
+                            style={[styles.input, { paddingRight: 40 }]}
+                            placeholder="Digite sua senha..."
+                            placeholderTextColor={colors.blacklight}
+                            secureTextEntry={!showPassword}
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                          />
+
+                          <TouchableOpacity
+                            onPress={() => setShowPassword((prev) => !prev)}
+                            style={{
+                              position: "absolute",
+                              right: 10,
+                              padding: 6,
+                            }}
+                          >
+                            <Ionicons
+                              name={showPassword ? "eye-outline" : "eye-off-outline"}
+                              size={20}
+                              color={colors.blacklight}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      );
+                    }}
                   />
                   {errors.password && (
                     <Text style={{ color: "red", marginBottom: 12 }}>{errors.password.message}</Text>
                   )}
                 </View>
+
 
                 <TouchableOpacity
                   style={styles.button}

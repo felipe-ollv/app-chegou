@@ -11,6 +11,7 @@ import ActionStorage from "../midleware/authStorage";
 import { jwtDecode } from "jwt-decode";
 import { useUser } from "../../../context/user.context";
 import colors from "../../../../colors-app/colors";
+import { Ionicons } from "@expo/vector-icons";
 
 
 export default function SigninScreen() {
@@ -19,6 +20,8 @@ export default function SigninScreen() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { setUserData } = useUser();
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const handleLogin = async () => {
     if (!phone || !password) {
@@ -78,14 +81,31 @@ export default function SigninScreen() {
           </View>
           <View>
             <Text style={styles.label}>Senha</Text>
-            <TextInput
-              placeholder="Sua senha..."
-              placeholderTextColor={colors.blacklight}
-              secureTextEntry
-              style={styles.input}
-              value={password}
-              onChangeText={setPassword}
-            />
+            <View style={{ position: "relative", justifyContent: "center" }}>
+              <TextInput
+                placeholder="Sua senha..."
+                placeholderTextColor={colors.blacklight}
+                secureTextEntry={!showPassword}
+                style={[styles.input, { paddingRight: 40 }]}
+                value={password}
+                onChangeText={setPassword}
+              />
+              <TouchableOpacity
+                onPress={() => setShowPassword((prev) => !prev)}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  padding: 6,
+                  transform: [{ translateY: -8 }],
+                }}
+              >
+                <Ionicons
+                  name={showPassword ? "eye-outline" : "eye-off-outline"}
+                  size={20}
+                  color={colors.blacklight}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Acessar</Text>
