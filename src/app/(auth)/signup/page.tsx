@@ -50,28 +50,27 @@ export default function SignUpScreen() {
   const [ condominiumName, setCondominiumName] = useState('');
 
   useEffect(() => {
-    const fetchCondominium = async () => {
-      if (!condominiumId) return;
-
-      try {
-        setLoading(true);
-        const resp = await api.get(`/condominium/find-condominium/${condominiumId}`);
-        if (resp.data && resp.data.condominium_name) {
-          setCondominiumName(resp.data.condominium_name);
-          setValue("condominium", condominiumId as string);
-        } else {
-          setModalInformVisible(true);
-        }
-      } catch (error) {
-        console.error("Erro ao buscar condomínio:", error);
-        setModalInformVisible(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCondominium();
-  }, [condominiumId])
+  }, [condominiumId]);
+
+  const fetchCondominium = async () => {
+    // if (!condominiumId) return;
+
+    try {
+      setLoading(true);
+      const resp: any = await api.get('/condominium/find-condominium', { params: { condominiumId }});
+      if (resp.data && resp.data.condominium_name) {
+        setCondominiumName(resp.data.condominium_name);
+        setValue("condominium", condominiumId as string);
+      } else {
+        setModalInformVisible(true);
+      }
+    } catch (error) {
+      setModalInformVisible(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const {
     control,
@@ -283,14 +282,44 @@ export default function SignUpScreen() {
                     />
                   </TouchableOpacity>
                   {showPicker && (
-                    <DateTimePicker
-                      value={date}
-                      mode="date"
-                      display="spinner"
-                      locale="pt-BR"
-                      maximumDate={new Date()}
-                      onChange={onChangeDate}
-                    />
+                    Platform.OS === "ios" ? (
+                      <View style={{ backgroundColor: "#fff", padding: 10 }}>
+                        
+                        <DateTimePicker
+                          value={date}
+                          mode="date"
+                          display="spinner"
+                          locale="pt-BR"
+                          maximumDate={new Date()}
+                          onChange={onChangeDate}
+                          textColor={colors.black}
+                        />
+
+                        <TouchableOpacity
+                          onPress={() => setShowPicker(false)}
+                          style={{
+                            marginTop: 10,
+                            padding: 12,
+                            borderWidth: 1,
+                            borderColor: colors.gray,
+                            borderRadius: 8,
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text style={{ color: colors.black }}>Fechar</Text>
+                        </TouchableOpacity>
+
+                      </View>
+                    ) : (
+                      <DateTimePicker
+                        value={date}
+                        mode="date"
+                        display="spinner"
+                        locale="pt-BR"
+                        maximumDate={new Date()}
+                        onChange={onChangeDate}
+                      />
+                    )
                   )}
                 </View>
 

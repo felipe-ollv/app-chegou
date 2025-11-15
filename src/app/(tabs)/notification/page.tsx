@@ -68,7 +68,7 @@ export default function NotificationScreen() {
       <HeaderComponent logoText="Chegou" slogan="Avisos do condomínio!" />
 
       <ScrollView
-        style={{ flex: 1 }}
+        style={{ flex: 1, backgroundColor: "#fff", borderTopRightRadius: 16, borderTopLeftRadius: 16 }}
         // contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
@@ -116,7 +116,7 @@ export default function NotificationScreen() {
             right: 20,
             bottom: 20,
             borderRadius: 28,
-            justifyContent: "center",
+            justifyContent: "center"
           }}
         >
           <UploadPdfComponent />

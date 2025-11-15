@@ -32,7 +32,7 @@ api.interceptors.request.use(
       }
     }
 
-    const publicPaths = ['/login/user', '/condominium/find-all', '/user/register-user', '/health'];
+    const publicPaths = ['/login/user', '/condominium/find-condominium', '/user/register-user', '/health'];
     const isPublic = publicPaths.some(path => config.url?.startsWith(path));
 
     if (!isPublic && !token) {
