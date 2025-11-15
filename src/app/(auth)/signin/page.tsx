@@ -86,17 +86,29 @@ export default function SigninScreen() {
                 placeholder="Sua senha..."
                 placeholderTextColor={colors.blacklight}
                 secureTextEntry={!showPassword}
-                style={[styles.input, { paddingRight: 40 }]}
+                style={[
+                  styles.input,
+                  { 
+                    paddingRight: 40,
+                    fontFamily: undefined // <-- fix no Android
+                  }
+                ]}
                 value={password}
                 onChangeText={setPassword}
+                textContentType="password"
+                autoComplete="password"
+                autoCorrect={false}
+                autoCapitalize="none"
+                importantForAutofill="no"
               />
+
               <TouchableOpacity
-                onPress={() => setShowPassword((prev) => !prev)}
+                onPress={() => setShowPassword(prev => !prev)}
                 style={{
                   position: "absolute",
                   right: 10,
                   padding: 6,
-                  transform: [{ translateY: -8 }],
+                  top: 8,
                 }}
               >
                 <Ionicons
