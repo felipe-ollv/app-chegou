@@ -3,7 +3,7 @@
     "name": "ChegouApp!",
     "slug": "chegou-app",
     "owner": "olvfelipe",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "orientation": "portrait",
     "icon": "./assets/images/chegouapp_android_icon_512.png",
     "scheme": "chegouapp",
@@ -14,14 +14,15 @@
       "resizeMode": "cover",
       "backgroundColor": "#0c0c1b"
     },
-    
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.gusen.chegouapp",
       "icon": "./assets/images/chegouapp_ios_icon_1024.png",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "UIBackgroundModes": ["remote-notification"],
+        "UIBackgroundModes": [
+          "remote-notification"
+        ],
         "NSCameraUsageDescription": "Este aplicativo precisa acessar sua câmera para alterar a foto de perfil.",
         "NSPhotoLibraryUsageDescription": "Este aplicativo precisa acessar suas fotos para selecionar uma imagem de perfil.",
         "NSFaceIDUsageDescription": "Usaremos o Face ID para autenticar você com segurança."
