@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   ScrollView,
   Platform,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import api from '../../../interceptor/axios-config';
@@ -24,11 +26,9 @@ import { Ionicons } from "@expo/vector-icons";
 
 type FormData = {
   name: string;
-  // lastName: string;
   condominium: string;
   apartment: string;
   apartment_block: string;
-
   phone_number: string;
   type_profile: string;
   status: string;
@@ -38,7 +38,7 @@ type FormData = {
 const profileList = [
   "MORADOR(A)",
   "FUNCIONARIO(A)"
-]
+];
 
 export default function SignUpScreen() {
   const router = useRouter();
@@ -47,15 +47,13 @@ export default function SignUpScreen() {
   const [modalInformVisible, setModalInformVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const { condominiumId } = useLocalSearchParams();
-  const [ condominiumName, setCondominiumName] = useState('');
+  const [condominiumName, setCondominiumName] = useState('');
 
   useEffect(() => {
     fetchCondominium();
   }, [condominiumId]);
 
   const fetchCondominium = async () => {
-    // if (!condominiumId) return;
-
     try {
       setLoading(true);
       const resp: any = await api.get('/condominium/find-condominium', { params: { condominiumId }});
@@ -80,7 +78,6 @@ export default function SignUpScreen() {
   } = useForm<FormData>({
     defaultValues: {
       name: "",
-      // lastName: "",
       apartment: "",
       apartment_block: "",
       condominium: "",
@@ -111,8 +108,6 @@ export default function SignUpScreen() {
         status: 'ACTIVE'
       });
 
-      console.log(data.data)
-
       if (data) {
         ToastComponent({ type: 'success', text1: 'Sucesso!', text2: 'Perfil registrado!'});
         router.push('/');
@@ -126,23 +121,24 @@ export default function SignUpScreen() {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <HeaderComponent logoText="Chegou" slogan="Criando sua conta!" />
 
-    <View style={styles.container}>
-      <HeaderComponent logoText="Chegou" slogan="Criando sua conta!" />
-      {
-        loading ? <BasicLoading />
-          :
+        {loading ? (
+          <BasicLoading />
+        ) : (
           <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 24}
-            contentContainerStyle={{ flexGrow: 1 }}
           >
             <ScrollView
               contentContainerStyle={{ flexGrow: 1 }}
               keyboardShouldPersistTaps="handled"
             >
               <View style={styles.form}>
+
                 <View>
                   <Text style={styles.label}>Nome</Text>
                   <Controller
@@ -156,7 +152,10 @@ export default function SignUpScreen() {
                         placeholderTextColor={colors.blacklight}
                         value={value}
                         onChangeText={onChange}
-                        onBlur={onBlur}
+                        onBlur={() => { onBlur(); Keyboard.dismiss(); }}
+                        blurOnSubmit
+                        returnKeyType="done"
+                        onSubmitEditing={Keyboard.dismiss}
                       />
                     )}
                   />
@@ -180,9 +179,6 @@ export default function SignUpScreen() {
                       />
                     )}
                   />
-                  {errors.condominium && (
-                    <Text style={{ color: "red" }}>{errors.condominium.message}</Text>
-                  )}
                 </View>
 
                 <View>
@@ -198,7 +194,10 @@ export default function SignUpScreen() {
                         placeholderTextColor={colors.blacklight}
                         value={value}
                         onChangeText={onChange}
-                        onBlur={onBlur}
+                        onBlur={() => { onBlur(); Keyboard.dismiss(); }}
+                        blurOnSubmit
+                        returnKeyType="done"
+                        onSubmitEditing={Keyboard.dismiss}
                       />
                     )}
                   />
@@ -220,12 +219,15 @@ export default function SignUpScreen() {
                         placeholderTextColor={colors.blacklight}
                         value={value}
                         onChangeText={onChange}
-                        onBlur={onBlur}
+                        onBlur={() => { onBlur(); Keyboard.dismiss(); }}
+                        blurOnSubmit
+                        returnKeyType="done"
+                        onSubmitEditing={Keyboard.dismiss}
                       />
                     )}
                   />
-                  {errors.name && (
-                    <Text style={{ color: "red", marginBottom: 12 }}>{errors.name.message}</Text>
+                  {errors.apartment_block && (
+                    <Text style={{ color: "red", marginBottom: 12 }}>{errors.apartment_block.message}</Text>
                   )}
                 </View>
 
@@ -238,9 +240,7 @@ export default function SignUpScreen() {
                     render={({ field: { onChange, value } }) => (
                       <SelectDropdown
                         data={profileList}
-                        onSelect={(selectedItem) => {
-                          onChange(selectedItem);
-                        }}
+                        onSelect={(selectedItem) => onChange(selectedItem)}
                         defaultValue={value}
                         renderButton={(selectedItem) => (
                           <View style={styles.input}>
@@ -251,17 +251,12 @@ export default function SignUpScreen() {
                         )}
                         renderItem={(item, index, isSelected) => (
                           <View
-                            style={{
-                              padding: 10,
-                              backgroundColor: isSelected ? "#edf4ff" : "#fff",
-                            }}
+                            style={{ padding: 10, backgroundColor: isSelected ? "#edf4ff" : "#fff" }}
                           >
                             <Text style={{ color: "#333" }}>{item}</Text>
                           </View>
                         )}
-                        dropdownStyle={{
-                          borderRadius: 8,
-                        }}
+                        dropdownStyle={{ borderRadius: 8 }}
                       />
                     )}
                   />
@@ -281,10 +276,10 @@ export default function SignUpScreen() {
                       value={date.toLocaleDateString("pt-BR")}
                     />
                   </TouchableOpacity>
+
                   {showPicker && (
                     Platform.OS === "ios" ? (
                       <View style={{ backgroundColor: "#fff", padding: 10 }}>
-                        
                         <DateTimePicker
                           value={date}
                           mode="date"
@@ -294,7 +289,6 @@ export default function SignUpScreen() {
                           onChange={onChangeDate}
                           textColor={colors.black}
                         />
-
                         <TouchableOpacity
                           onPress={() => setShowPicker(false)}
                           style={{
@@ -308,7 +302,6 @@ export default function SignUpScreen() {
                         >
                           <Text style={{ color: colors.black }}>Fechar</Text>
                         </TouchableOpacity>
-
                       </View>
                     ) : (
                       <DateTimePicker
@@ -330,13 +323,10 @@ export default function SignUpScreen() {
                     name="phone_number"
                     rules={{
                       required: "Telefone obrigatório",
-                      minLength: {
-                        value: 8,
-                        message: "Telefone inválido (mín. 10 dígitos)",
-                      },
+                      minLength: { value: 8, message: "Telefone inválido" },
                       pattern: {
                         value: /^\(\d{2}\) \d{4,5}-\d{4}$/,
-                        message: 'Formato: (99) 99999-9999'
+                        message: "Formato: (99) 99999-9999",
                       },
                     }}
                     render={({ field: { onChange, value, onBlur } }) => (
@@ -347,7 +337,10 @@ export default function SignUpScreen() {
                         keyboardType="numeric"
                         value={formatPhoneNumber(value)}
                         onChangeText={onChange}
-                        onBlur={onBlur}
+                        onBlur={() => { onBlur(); Keyboard.dismiss(); }}
+                        blurOnSubmit
+                        returnKeyType="done"
+                        onSubmitEditing={Keyboard.dismiss}
                       />
                     )}
                   />
@@ -363,10 +356,7 @@ export default function SignUpScreen() {
                     name="password"
                     rules={{
                       required: "Senha obrigatória",
-                      minLength: {
-                        value: 6,
-                        message: "Senha deve ter pelo menos 6 caracteres",
-                      },
+                      minLength: { value: 6, message: "Senha deve ter pelo menos 6 caracteres" },
                     }}
                     render={({ field: { onChange, value, onBlur } }) => {
                       const [showPassword, setShowPassword] = useState(false);
@@ -380,16 +370,15 @@ export default function SignUpScreen() {
                             secureTextEntry={!showPassword}
                             value={value}
                             onChangeText={onChange}
-                            onBlur={onBlur}
+                            onBlur={() => { onBlur(); Keyboard.dismiss(); }}
+                            blurOnSubmit
+                            returnKeyType="done"
+                            onSubmitEditing={Keyboard.dismiss}
                           />
 
                           <TouchableOpacity
                             onPress={() => setShowPassword((prev) => !prev)}
-                            style={{
-                              position: "absolute",
-                              right: 10,
-                              padding: 6,
-                            }}
+                            style={{ position: "absolute", right: 10, padding: 6 }}
                           >
                             <Ionicons
                               name={showPassword ? "eye-outline" : "eye-off-outline"}
@@ -406,7 +395,6 @@ export default function SignUpScreen() {
                   )}
                 </View>
 
-
                 <TouchableOpacity
                   style={styles.button}
                   onPress={handleSubmit(onSubmit)}
@@ -414,14 +402,17 @@ export default function SignUpScreen() {
                 >
                   <Text style={styles.buttonText}>Criar conta</Text>
                 </TouchableOpacity>
+
               </View>
             </ScrollView>
           </KeyboardAvoidingView>
-      }
-      <ModalInform 
-        visible={modalInformVisible}
-        onClose={() => setModalInformVisible(false)}
-      />
-    </View>
+        )}
+
+        <ModalInform
+          visible={modalInformVisible}
+          onClose={() => setModalInformVisible(false)}
+        />
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
