@@ -89,3 +89,10 @@
 - arquivos config
 - estrutura inicial do app
 
+
+## Version 1.0.15
+2025-11-16T22:09:41.360Z
+
+- melhoria usabilidade inputs
+- script para build do app
+
