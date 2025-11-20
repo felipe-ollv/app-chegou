@@ -114,3 +114,11 @@
 
 - componente input, ajuste tecnico secret android
 
+
+## Version 1.0.19
+2025-11-20T19:20:18.830Z
+
+- ajustes layout e gambiarra para android
+- correcao texto termo de uso
+- ajuste teclado cobrindo input no ios
+
