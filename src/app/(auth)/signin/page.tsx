@@ -80,7 +80,7 @@ export default function SigninScreen() {
           <View>
             <Text style={styles.label}>Senha</Text>
             <View style={{ position: "relative", justifyContent: "center" }}>
-              <PasswordInput value={password} onChangeText={setPassword} />
+              <PasswordInput value={password} onChangeText={setPassword} style=''/>
             </View>
           </View>
           <TouchableOpacity style={styles.button} onPress={handleLogin}>

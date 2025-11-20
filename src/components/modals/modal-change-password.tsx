@@ -123,7 +123,7 @@ export default function ModalChangePassword({
 									},
 								}}
 								render={({ field: { onChange, value, onBlur } }) => (
-									<><PasswordInput value={value} onChangeText={onChange} /></>
+									<><PasswordInput value={value} onChangeText={onChange} style={{ marginBottom: 16 }} /></>
 								)} 
 								/>
 							{errors.password && (

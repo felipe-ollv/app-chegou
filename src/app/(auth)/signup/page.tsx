@@ -362,7 +362,7 @@ export default function SignUpScreen() {
                     render={({ field: { onChange, value, onBlur } }) => {
                     return (
                       <View style={{ position: "relative", justifyContent: "center" }}>
-                        <PasswordInput value={value} onChangeText={onChange} /> 
+                        <PasswordInput value={value} onChangeText={onChange} style=''/> 
                       </View>
                       );
                     }}
