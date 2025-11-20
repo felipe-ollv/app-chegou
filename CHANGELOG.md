@@ -96,3 +96,9 @@
 - melhoria usabilidade inputs
 - script para build do app
 
+
+## Version 1.0.16
+2025-11-20T00:38:50.511Z
+
+- ajuste inputs senha
+
