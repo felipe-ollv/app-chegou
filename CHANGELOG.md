@@ -102,3 +102,9 @@
 
 - ajuste inputs senha
 
+
+## Version 1.0.17
+2025-11-20T03:01:02.346Z
+
+- No changes available
+
