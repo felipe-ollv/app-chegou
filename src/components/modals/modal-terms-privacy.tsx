@@ -66,7 +66,6 @@ export default function ModalTermsAndPrivacy({
 					<ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator>
 						{/* --- TERMOS DE USO --- */}
 						<Text style={styles.title}>Termos de Uso</Text>
-						<Text style={styles.title}>Termos de Uso</Text>
 						<Text style={styles.normal}>Versão 1.2 – Vigência: 30 de setembro de 2025</Text>
 
 						<Text style={styles.subTitle}>Bem-vindo ao ChegouApp!</Text>
