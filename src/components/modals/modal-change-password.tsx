@@ -1,6 +1,6 @@
 import colors from "@/colors-app/colors";
 import { Controller, useForm } from "react-hook-form";
-import { Modal, Pressable, View, TouchableOpacity, Text, KeyboardAvoidingView, Platform } from "react-native";
+import { Modal, Pressable, View, TouchableOpacity, Text, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import ToastComponent from "../toast/component";
 import { useState } from "react";
 import { useUser } from "../../context/user.context";
@@ -77,15 +77,24 @@ export default function ModalChangePassword({
 				<Pressable
 					onPress={() => { }}
 					style={{
+						minHeight: '50%',
 						backgroundColor: "#fff",
 						borderTopLeftRadius: 16,
 						borderTopRightRadius: 16,
 						paddingHorizontal: 16,
 						paddingTop: 12,
 						paddingBottom: 24,
-						maxHeight: "85%",
 					}}
 				>
+				<KeyboardAvoidingView
+					style={{ flex: 1 }}
+					behavior={Platform.OS === "ios" ? "padding" : "height"}
+					keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 24}
+				>
+					<ScrollView
+						contentContainerStyle={{ flexGrow: 1 }}
+						keyboardShouldPersistTaps="handled"
+					>
 					<View style={{ alignItems: "center", marginBottom: 8 }}>
 						<View
 							style={{
@@ -114,13 +123,7 @@ export default function ModalChangePassword({
 									},
 								}}
 								render={({ field: { onChange, value, onBlur } }) => (
-									<><KeyboardAvoidingView
-										style={{ flex: 1 }}
-										behavior={Platform.OS === "ios" ? "padding" : "height"}
-										keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 24}
-									>
-										<PasswordInput value={value} onChangeText={onChange} />
-									</KeyboardAvoidingView></>
+									<><PasswordInput value={value} onChangeText={onChange} /></>
 								)} 
 								/>
 							{errors.password && (
@@ -176,6 +179,8 @@ export default function ModalChangePassword({
 							<Text style={{ color: "#fff", fontWeight: "600" }}>Confirmar</Text>
 						</TouchableOpacity>
 					</View>
+					</ScrollView>
+					</KeyboardAvoidingView>
 				</Pressable>
 			</Pressable>
 		</Modal>
