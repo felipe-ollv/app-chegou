@@ -1,10 +1,11 @@
 import colors from "@/colors-app/colors";
 import { Controller, useForm } from "react-hook-form";
-import { Modal, Pressable, View, ScrollView, TextInput, TouchableOpacity, Text } from "react-native";
+import { Modal, Pressable, View, TextInput, TouchableOpacity, Text, Platform } from "react-native";
 import ToastComponent from "../toast/component";
 import { useState } from "react";
 import { useUser } from "../../context/user.context";
 import api from "../../interceptor/axios-config";
+import { Ionicons } from "@expo/vector-icons";
 
 type ChangePassword = {
 	uuid_profile: string,
@@ -20,6 +21,7 @@ export default function ModalChangePassword({
 }) {
 
 	const [loading, setLoading] = useState(false);
+		const [showPassword, setShowPassword] = useState(false);
 	const { userData } = useUser();
 
 	const {
@@ -113,21 +115,36 @@ export default function ModalChangePassword({
 									},
 								}}
 								render={({ field: { onChange, value, onBlur } }) => (
-									<TextInput
-										placeholder="Nova senha"
-										placeholderTextColor={colors.blacklight}
-										secureTextEntry
+								<TextInput
+									secureTextEntry={!showPassword}
 										style={{
 											borderWidth: 1,
 											borderColor: errors.password ? "#ef4444" : "#E5E7EB",
 											borderRadius: 8,
 											paddingHorizontal: 12,
 											height: 44,
+											fontFamily: Platform.OS === "android" ? "Roboto" : undefined
 										}}
 										value={value}
 										onChangeText={onChange}
 										onBlur={onBlur} />
-								)} />
+									)} 
+								/>
+								<TouchableOpacity
+									onPress={() => setShowPassword(prev => !prev)}
+									style={{
+										position: "absolute",
+										right: 10,
+										padding: 6,
+										top: 28,
+									}}
+								>
+                <Ionicons
+                  name={showPassword ? "eye-outline" : "eye-off-outline"}
+                  size={20}
+                  color={colors.blacklight}
+                />
+              </TouchableOpacity>
 							{errors.password && (
 								<Text style={{ color: "red", marginTop: 6 }}>
 									{errors.password.message}

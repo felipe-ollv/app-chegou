@@ -361,20 +361,28 @@ export default function SignUpScreen() {
                     render={({ field: { onChange, value, onBlur } }) => {
                       const [showPassword, setShowPassword] = useState(false);
 
-                      return (
-                        <View style={{ position: "relative", justifyContent: "center" }}>
-                          <TextInput
-                            style={[styles.input, { paddingRight: 40 }]}
-                            placeholder="Digite sua senha..."
-                            placeholderTextColor={colors.blacklight}
-                            secureTextEntry={!showPassword}
-                            value={value}
-                            onChangeText={onChange}
-                            onBlur={() => { onBlur(); Keyboard.dismiss(); }}
-                            blurOnSubmit
-                            returnKeyType="done"
-                            onSubmitEditing={Keyboard.dismiss}
-                          />
+                    return (
+                      <View style={{ position: "relative", justifyContent: "center" }}>
+                        <TextInput
+                          style={[
+                            styles.input,
+                            {
+                              paddingRight: 40,
+                              fontFamily: Platform.OS === "android" ? "Roboto" : undefined
+                            }
+                          ]}
+                          placeholder="Digite sua senha..."
+                          placeholderTextColor={colors.blacklight}
+                          secureTextEntry={!showPassword}
+                          value={value}
+                          onChangeText={onChange}
+
+                          autoCorrect={false}
+                          autoCapitalize="none"
+                          textContentType="oneTimeCode" 
+                          autoComplete="off"
+                          importantForAutofill="no"
+                        />
 
                           <TouchableOpacity
                             onPress={() => setShowPassword((prev) => !prev)}

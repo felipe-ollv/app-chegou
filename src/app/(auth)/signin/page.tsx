@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, TouchableOpacity } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import api, { setToken } from '../../../interceptor/axios-config';
 import { styles } from "../../../styles/index-styles";
@@ -82,17 +82,16 @@ export default function SigninScreen() {
           <View>
             <Text style={styles.label}>Senha</Text>
             <View style={{ position: "relative", justifyContent: "center" }}>
-              <TextInput
-                placeholder="Sua senha..."
-                placeholderTextColor={colors.blacklight}
-                secureTextEntry={!showPassword}
-                style={[
-                  styles.input,
-                  { 
+            <TextInput
+              style={[
+                styles.input,
+                  {
                     paddingRight: 40,
-                    fontFamily: undefined // <-- fix no Android
+                    fontFamily: Platform.OS === "android" ? "Roboto" : undefined
                   }
                 ]}
+                secureTextEntry={!showPassword}
+                placeholder="Sua senha..."
                 value={password}
                 onChangeText={setPassword}
                 textContentType="password"
