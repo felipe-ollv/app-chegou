@@ -108,3 +108,9 @@
 
 - No changes available
 
+
+## Version 1.0.18
+2025-11-20T17:51:30.630Z
+
+- componente input, ajuste tecnico secret android
+
