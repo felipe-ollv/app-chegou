@@ -22,7 +22,7 @@ import styles from "./styles";
 import HeaderComponent from "../../../components/header/component";
 import ModalInform from "../../../components/modals/modal-inform";
 import colors from "../../../../colors-app/colors";
-import { Ionicons } from "@expo/vector-icons";
+import PasswordInput from "../../../components/input/passwrod.input";
 
 type FormData = {
   name: string;
@@ -119,7 +119,7 @@ export default function SignUpScreen() {
       setLoading(false)
     }
   };
-
+  
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -146,6 +146,7 @@ export default function SignUpScreen() {
                     name="name"
                     rules={{ required: "Nome obrigatório" }}
                     render={({ field: { onChange, value, onBlur } }) => (
+                      
                       <TextInput
                         style={styles.input}
                         placeholder="Seu nome..."
@@ -359,42 +360,10 @@ export default function SignUpScreen() {
                       minLength: { value: 6, message: "Senha deve ter pelo menos 6 caracteres" },
                     }}
                     render={({ field: { onChange, value, onBlur } }) => {
-                      const [showPassword, setShowPassword] = useState(false);
-
                     return (
                       <View style={{ position: "relative", justifyContent: "center" }}>
-                        <TextInput
-                          style={[
-                            styles.input,
-                            {
-                              paddingRight: 40,
-                              fontFamily: Platform.OS === "android" ? "Roboto" : undefined
-                            }
-                          ]}
-                          placeholder="Digite sua senha..."
-                          placeholderTextColor={colors.blacklight}
-                          secureTextEntry={!showPassword}
-                          value={value}
-                          onChangeText={onChange}
-
-                          autoCorrect={false}
-                          autoCapitalize="none"
-                          textContentType="oneTimeCode" 
-                          autoComplete="off"
-                          importantForAutofill="no"
-                        />
-
-                          <TouchableOpacity
-                            onPress={() => setShowPassword((prev) => !prev)}
-                            style={{ position: "absolute", right: 10, padding: 6 }}
-                          >
-                            <Ionicons
-                              name={showPassword ? "eye-outline" : "eye-off-outline"}
-                              size={20}
-                              color={colors.blacklight}
-                            />
-                          </TouchableOpacity>
-                        </View>
+                        <PasswordInput value={value} onChangeText={onChange} /> 
+                      </View>
                       );
                     }}
                   />

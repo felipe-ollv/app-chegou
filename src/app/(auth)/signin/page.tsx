@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, TouchableOpacity, Platform } from "react-native";
+import { Text, View, TextInput, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import api, { setToken } from '../../../interceptor/axios-config';
 import { styles } from "../../../styles/index-styles";
@@ -11,7 +11,7 @@ import ActionStorage from "../midleware/authStorage";
 import { jwtDecode } from "jwt-decode";
 import { useUser } from "../../../context/user.context";
 import colors from "../../../../colors-app/colors";
-import { Ionicons } from "@expo/vector-icons";
+import PasswordInput from "../../../components/input/passwrod.input";
 
 
 export default function SigninScreen() {
@@ -20,8 +20,6 @@ export default function SigninScreen() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { setUserData } = useUser();
-  const [showPassword, setShowPassword] = useState(false);
-
 
   const handleLogin = async () => {
     if (!phone || !password) {
@@ -82,40 +80,7 @@ export default function SigninScreen() {
           <View>
             <Text style={styles.label}>Senha</Text>
             <View style={{ position: "relative", justifyContent: "center" }}>
-            <TextInput
-              style={[
-                styles.input,
-                  {
-                    paddingRight: 40,
-                    fontFamily: Platform.OS === "android" ? "Roboto" : undefined
-                  }
-                ]}
-                secureTextEntry={!showPassword}
-                placeholder="Sua senha..."
-                value={password}
-                onChangeText={setPassword}
-                textContentType="password"
-                autoComplete="password"
-                autoCorrect={false}
-                autoCapitalize="none"
-                importantForAutofill="no"
-              />
-
-              <TouchableOpacity
-                onPress={() => setShowPassword(prev => !prev)}
-                style={{
-                  position: "absolute",
-                  right: 10,
-                  padding: 6,
-                  top: 8,
-                }}
-              >
-                <Ionicons
-                  name={showPassword ? "eye-outline" : "eye-off-outline"}
-                  size={20}
-                  color={colors.blacklight}
-                />
-              </TouchableOpacity>
+              <PasswordInput value={password} onChangeText={setPassword} />
             </View>
           </View>
           <TouchableOpacity style={styles.button} onPress={handleLogin}>

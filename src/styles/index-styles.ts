@@ -52,7 +52,8 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%'
+    width: '100%',
+    marginTop: 12
   },
   buttonText: {
     color: colors.white,
