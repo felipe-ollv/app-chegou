@@ -122,3 +122,10 @@
 - correcao texto termo de uso
 - ajuste teclado cobrindo input no ios
 
+
+## Version 1.0.20
+2025-11-30T03:46:00.466Z
+
+- melhoria usabilidade
+- ajuste input senha
+
