@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Platform, TextInput, View, TouchableOpacity, Text } from "react-native";
+import { Platform, TextInput, View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "@/colors-app/colors";
 
@@ -10,21 +10,20 @@ export default function PasswordInput({
   style
 }) {
   const [show, setShow] = useState(false);
-  const isAndroid = Platform.OS === "android";
-
-  const masked = value?.replace(/./g, "•") ?? "";
 
   return (
     <View style={[{ position: "relative" }, style]}>
-      
       <TextInput
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={colors.blacklight}
-        secureTextEntry={!show && Platform.OS === "ios"}
+        secureTextEntry={!show}
         autoCorrect={false}
         autoCapitalize="none"
+        
+        textContentType={Platform.OS === "android" ? "oneTimeCode" : "password"}
+
         style={{
           borderWidth: 1,
           borderColor: colors.gray,
@@ -32,25 +31,10 @@ export default function PasswordInput({
           paddingHorizontal: 12,
           paddingRight: 40,
           height: 44,
-          fontFamily: isAndroid ? "Roboto" : undefined,
-          color: show || Platform.OS === "ios" ? "#000" : "transparent",
+          fontSize: 16,
+          color: "#000",
         }}
       />
-
-      {Platform.OS === "android" && !show && (
-        <Text
-          style={{
-            position: "absolute",
-            left: 12,
-            top: 12,
-            color: "#000",
-            fontSize: 16,
-            fontFamily: "Roboto",
-          }}
-        >
-          {masked}
-        </Text>
-      )}
 
       <TouchableOpacity
         onPress={() => setShow((prev) => !prev)}
@@ -58,7 +42,7 @@ export default function PasswordInput({
           position: "absolute",
           right: 10,
           top: 8,
-          padding: 6
+          padding: 6,
         }}
       >
         <Ionicons
