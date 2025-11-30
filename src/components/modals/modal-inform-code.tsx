@@ -62,16 +62,17 @@ export default function ModalInformCode({
 
 					<View style={{ width: '100%', height: 160, justifyContent: 'center', alignItems: 'center' }}>
 
-						<View style={{ alignItems: "center", marginVertical: 20 }}>
+						<View style={{ alignItems: "center", marginVertical: 20, width: '100%', }}>
 							<View
 								style={{
+									width: '50%',
 									borderWidth: 2,
 									borderColor: colors.green,
 									padding: 8,
 									borderRadius: 8,
 								}}
 							>
-								<Text style={{ fontSize: 26, letterSpacing: 6, color: colors.zinc }}>
+								<Text style={{ fontSize: 26, letterSpacing: 6, color: colors.zinc, textAlign: 'center' }}>
 									{selected}
 								</Text>
 							</View>

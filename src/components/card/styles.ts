@@ -12,7 +12,10 @@ export const styles = StyleSheet.create({
     shadowRadius: 16,
     padding: 16,
     width: '100%',
-    marginTop: 12
+    marginTop: 12,
+    minHeight: 120,
+    maxHeight: 160,
+
   },
   title: {
     fontWeight: 'bold',

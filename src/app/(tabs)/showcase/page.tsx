@@ -1,53 +1,79 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
 
 import api from "../../../interceptor/axios-config";
 import HeaderComponent from "../../../components/header/component";
-import InfoCardComponent from "../../../components/card/component";
 import BasicLoading from "../../../components/loading/basic-loading";
 import ToastComponent from "../../../components/toast/component";
 import ModalConfirmationCode from "../../../components/modals/modal-confirmation-code";
 import ModalInformCode from "../../../components/modals/modal-inform-code";
 import ModalRegisterReceiving from "../../../components/modals/modal-register-receiving";
 
-import formatDateTime from "../../../utils/formatDateTime";
 import { useUser } from "../../../context/user.context";
 import usePushNotifications from "../../../hooks/push-notification";
 
 import { showcaseStyles } from "../../../styles/showcase-styles";
 import colors from "../../../../colors-app/colors";
+import { PackageItem } from "../../../components/types/package-item";
+import GroupDetailsModal from "../../../components/modals/modal-group-detail";
 
-const groupByDate = (list: any[]) => {
-  const grouped: Record<string, any[]> = {};
+
+/* 🔥 AGRUPAR POR DATA → BLOCO + APTO */
+const groupByDateBlockApt = (
+  list: PackageItem[],
+  receivedView: number
+): Record<string, PackageItem[]> => {
+  const grouped: Record<string, PackageItem[]> = {};
+
   list.forEach((item) => {
     const date = new Date(item.created_at);
-    const key = date.toLocaleDateString("pt-BR", {
+    const dateKey = date.toLocaleDateString("pt-BR", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
     });
+
+    const block = receivedView === 0 ? item.blockReceiver : item.blockOwner;
+    const apt = receivedView === 0 ? item.apartmentReceiver : item.apartmentOwner;
+
+    const key = `${dateKey} - Bloco ${block} - Apto ${apt}`;
+
     if (!grouped[key]) grouped[key] = [];
     grouped[key].push(item);
   });
+
   return grouped;
 };
 
 export default function ShowcaseScreen() {
   const { userData } = useUser();
+  const { expoPushToken } = usePushNotifications();
+
   const [loading, setLoading] = useState(true);
-  const [receivedView, setReceivedView] = useState(0); // 0 = Retirar, 1 = Entregar
+  const [receivedView, setReceivedView] = useState(0);
+
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [items, setItems] = useState<PackageItem[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
   const [modalRegisterVisible, setModalRegisterVisible] = useState(false);
   const [visibleModalConfirmationCode, setVisibleModalConfirmationCode] = useState(false);
   const [visibleModalInformCode, setVisibleModalInformCode] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
-  const { expoPushToken } = usePushNotifications();
 
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [items, setItems] = useState<any[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
+  const [groupModalVisible, setGroupModalVisible] = useState(false);
+  const [selectedGroupKey, setSelectedGroupKey] = useState<string | null>(null);
+  const [selectedGroupItems, setSelectedGroupItems] = useState<PackageItem[]>([]);
+
   const PAGE_SIZE = 10;
 
   const fetchPackageList = async (pageNumber = 1, replace = false) => {
@@ -60,9 +86,7 @@ export default function ShowcaseScreen() {
 
       const payload = res.data || {};
       const list =
-        receivedView === 0
-          ? payload.pickup || []
-          : payload.deliver || [];
+        receivedView === 0 ? payload.pickup || [] : payload.deliver || [];
 
       setItems((prev) => (replace ? list : [...prev, ...list]));
       setHasMore(payload.pagination?.hasMore ?? false);
@@ -92,13 +116,10 @@ export default function ShowcaseScreen() {
 
   useEffect(() => {
     if (!expoPushToken) return;
-    const registerTokenPush = async () => {
-      await api.post("/push-notification/register-token-notification", {
-        token: expoPushToken,
-        uuidUserProfile: userData.ps,
-      });
-    };
-    registerTokenPush();
+    api.post("/push-notification/register-token-notification", {
+      token: expoPushToken,
+      uuidUserProfile: userData.ps,
+    });
   }, [expoPushToken]);
 
   const handleRegisterModal = () => {
@@ -106,65 +127,110 @@ export default function ShowcaseScreen() {
     fetchPackageList(1, true);
   };
 
-  const groupedItems = groupByDate(items);
-  const dates = Object.keys(groupedItems).sort(
-    (a, b) =>
-      new Date(b.split("/").reverse().join("-")).getTime() -
-      new Date(a.split("/").reverse().join("-")).getTime()
-  );
+  const groupedItems = groupByDateBlockApt(items, receivedView);
 
-  const renderGroup = ({ item: date }: { item: string }) => (
-    <View
-      key={date}
-      style={{
-        marginBottom: 16,
-        backgroundColor: "#fafafa",
-        borderRadius: 8,
-        padding: 8,
-      }}
-    >
-      <Text
-        style={{
-          fontWeight: "700",
-          fontSize: 16,
-          color: colors.zinc3,
-          marginBottom: 8,
-        }}
+  const groupKeys = Object.keys(groupedItems).sort((a, b) => {
+    const dateA = a.split(" - ")[0].split("/").reverse().join("-");
+    const dateB = b.split(" - ")[0].split("/").reverse().join("-");
+    return new Date(dateB).getTime() - new Date(dateA).getTime();
+  });
+
+  const groupedByDate: Array<{ date: string; groups: string[] }> = [];
+  const dateMap: Record<string, string[]> = {};
+
+  groupKeys.forEach((fullKey) => {
+    const datePart = fullKey.split(" - ")[0];
+
+    if (!dateMap[datePart]) dateMap[datePart] = [];
+    dateMap[datePart].push(fullKey);
+  });
+
+  const todayStr = new Date().toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+
+  Object.keys(dateMap)
+    .sort((a, b) => {
+      const da = a.split("/").reverse().join("-");
+      const db = b.split("/").reverse().join("-");
+      return new Date(db).getTime() - new Date(da).getTime();
+    })
+    .forEach((dateStr) => {
+      groupedByDate.push({
+        date: dateStr === todayStr ? `${dateStr} — Hoje` : dateStr,
+        groups: dateMap[dateStr],
+      });
+    });
+
+  const openGroupModal = (groupKey: string) => {
+    setSelectedGroupKey(groupKey);
+    setSelectedGroupItems(groupedItems[groupKey] || []);
+    setGroupModalVisible(true);
+  };
+
+  const handlePressItemFromGroup = (item: PackageItem) => {
+    setGroupModalVisible(false);
+
+    if (receivedView === 0) {
+      setVisibleModalInformCode(true);
+      setSelectedItem(item.confirmation_code);
+    } else {
+      setVisibleModalConfirmationCode(true);
+      setSelectedItem(item.uuid_package);
+    }
+  };
+
+  const renderGroup = (groupKey: string) => {
+    const itemsInGroup = groupedItems[groupKey];
+    if (!itemsInGroup?.length) return null;
+
+    const first = itemsInGroup[0];
+    const [dateLabel, blocoPart, aptPart] = groupKey.split(" - ");
+
+    const isRetirar = receivedView === 0;
+    const labelQtd = `${itemsInGroup.length} encomenda${
+      itemsInGroup.length > 1 ? "s" : ""
+    } recebida${itemsInGroup.length > 1 ? "s" : ""}`;
+
+    return (
+      <TouchableOpacity
+        key={groupKey}
+        onPress={() => openGroupModal(groupKey)}
+        style={{ marginBottom: 16 }}
       >
-        {date}
-      </Text>
-
-      {groupedItems[date].map((item: any) => (
-        <TouchableOpacity
-          key={item.uuid_package}
-          onPress={() => {
-            if (receivedView === 0) {
-              setVisibleModalInformCode(true);
-              setSelectedItem(item.confirmation_code);
-            } else {
-              setVisibleModalConfirmationCode(true);
-              setSelectedItem(item.uuid_package);
-            }
+        <View
+          style={{
+            backgroundColor: "#fff",
+            borderRadius: 16,
+            elevation: 4,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.1,
+            shadowRadius: 16,
+            padding: 16,
           }}
-          disabled={item.status_package === "DELIVERED"}
         >
-          <InfoCardComponent
-            title={`Condomínio: ${item.condominium_name} ${
-              receivedView === 0 ? item.blockReceiver : item.blockOwner
-            } ${receivedView === 0 ? item.apartmentReceiver : item.apartmentOwner}`}
-            receivedBy={
-              receivedView === 0
-                ? `Recebido por: ${item.receiverName}`
-                : `Para: ${item.ownerName}`
-            }
-            receivedDate={`Data: ${formatDateTime(item.created_at)}`}
-            note={item.note}
-            status_package={item.status_package}
-          />
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
+          <Text style={{ fontWeight: "bold", fontSize: 16, marginBottom: 6 }}>
+            {first.condominium_name}
+          </Text>
+
+          <Text style={{ fontSize: 14, color: "#4a4a4a", marginBottom: 4 }}>
+            {blocoPart} - {aptPart}
+          </Text>
+
+          <Text style={{ fontSize: 13, color: colors.green, marginBottom: 6 }}>
+            {labelQtd}
+          </Text>
+
+          <Text style={{ fontSize: 12, color: "#555" }}>
+            Toque para ver os detalhes ({isRetirar ? "retirada" : "entrega"})
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={showcaseStyles.container}>
@@ -179,20 +245,11 @@ export default function ShowcaseScreen() {
               <TouchableOpacity
                 style={[
                   showcaseStyles.tabButton,
-                  {
-                    backgroundColor: receivedView === 0 ? colors.green : "#e0e0e0",
-                    marginRight: 2,
-                  },
+                  { backgroundColor: receivedView === 0 ? colors.green : "#e0e0e0" },
                 ]}
                 onPress={() => setReceivedView(0)}
               >
-                <Text
-                  style={{
-                    color: receivedView === 0 ? "#fff" : "#222",
-                    fontWeight: "500",
-                    fontSize: 16,
-                  }}
-                >
+                <Text style={{ color: receivedView === 0 ? "#fff" : "#222" }}>
                   Retirar
                 </Text>
               </TouchableOpacity>
@@ -200,65 +257,42 @@ export default function ShowcaseScreen() {
               <TouchableOpacity
                 style={[
                   showcaseStyles.tabButton,
-                  {
-                    backgroundColor: receivedView === 1 ? colors.green : "#e0e0e0",
-                    marginLeft: 2,
-                  },
+                  { backgroundColor: receivedView === 1 ? colors.green : "#e0e0e0" },
                 ]}
                 onPress={() => setReceivedView(1)}
               >
-                <Text
-                  style={{
-                    color: receivedView === 1 ? "#fff" : "#222",
-                    fontWeight: "500",
-                    fontSize: 16,
-                  }}
-                >
+                <Text style={{ color: receivedView === 1 ? "#fff" : "#222" }}>
                   Entregar
                 </Text>
               </TouchableOpacity>
             </View>
 
-            {/* Lista com paginação e agrupamento */}
             <FlatList
-              data={dates}
-              keyExtractor={(item) => item}
-              renderItem={renderGroup}
-              ListEmptyComponent={
-                !loading ? (
-                  <Text style={{ textAlign: "center", marginTop: 20 }}>
-                    Nenhuma encomenda encontrada
-                  </Text>
-                ) : null
-              }
-              onEndReached={() => {
-                if (hasMore && !loading) {
-                  const next = page + 1;
-                  setPage(next);
-                  fetchPackageList(next);
-                }
-              }}
-              onEndReachedThreshold={0.2}
-              refreshing={refreshing}
-              onRefresh={() => {
-                setRefreshing(true);
-                setPage(1);
-                fetchPackageList(1, true);
-              }}
-              ListFooterComponent={
-                loading && hasMore ? (
-                  <ActivityIndicator
-                    size="small"
-                    color={colors.green}
-                    style={{ marginVertical: 10 }}
-                  />
-                ) : null
-              }
+              data={groupedByDate}
+              keyExtractor={(item) => item.date}
               contentContainerStyle={{ paddingBottom: 100 }}
+              renderItem={({ item }) => (
+                <View style={{ marginBottom: 24 }}>
+                  
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "700",
+                      color: "#333",
+                      marginBottom: 10,
+                    }}
+                  >
+                    {item.date}
+                  </Text>
+
+                  {item.groups.map((groupKey) => (
+                    <View key={groupKey}>{renderGroup(groupKey)}</View>
+                  ))}
+                </View>
+              )}
             />
           </View>
 
-          {/* Botão flutuante */}
           <TouchableOpacity
             onPress={() => setModalRegisterVisible(true)}
             style={showcaseStyles.fab}
@@ -283,6 +317,15 @@ export default function ShowcaseScreen() {
             onClose={() => setVisibleModalConfirmationCode(false)}
             selected={selectedItem}
             onConfirmCode={handleRegisterModal}
+          />
+
+          <GroupDetailsModal
+            visible={groupModalVisible}
+            onClose={() => setGroupModalVisible(false)}
+            groupKey={selectedGroupKey}
+            items={selectedGroupItems}
+            receivedView={receivedView}
+            onPressItem={handlePressItemFromGroup}
           />
         </>
       )}
