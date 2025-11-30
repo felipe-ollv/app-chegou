@@ -129,3 +129,9 @@
 - melhoria usabilidade
 - ajuste input senha
 
+
+## Version 1.0.21
+2025-11-30T03:47:29.401Z
+
+- modal group recebimentos
+
