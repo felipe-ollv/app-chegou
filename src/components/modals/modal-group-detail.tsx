@@ -114,7 +114,7 @@ export default function GroupDetailsModal({
                     padding: 12,
                     marginBottom: 12,
                     backgroundColor: "#fff",
-                    opacity: isDelivered ? 0.4 : 1,
+                    opacity: isDelivered ? 0.8 : 1,
                   }}
                 >
                   <Text
@@ -128,13 +128,13 @@ export default function GroupDetailsModal({
                     {numbering} - {formatDateTime(item.created_at)}
                   </Text>
 
-                  <Text style={{ fontSize: 13, color: "#333", marginBottom: 2 }}>
+                  <Text style={{ fontSize: 14, color: "#333", marginBottom: 2 }}>
                     {receivedByText}
                   </Text>
 
                   <Text
                     style={{
-                      fontSize: 13,
+                      fontSize: 14,
                       color: "#333",
                       marginBottom: item.note ? 4 : 2,
                     }}
@@ -145,7 +145,7 @@ export default function GroupDetailsModal({
                   {item.note ? (
                     <Text
                       style={{
-                        fontSize: 12,
+                        fontSize: 14,
                         color: "#555",
                         marginBottom: 6,
                       }}
@@ -159,13 +159,13 @@ export default function GroupDetailsModal({
                       alignSelf: "flex-start",
                       paddingHorizontal: 10,
                       paddingVertical: 4,
-                      borderRadius: 999,
+                      borderRadius: 8,
                       backgroundColor: badgeBackground,
                     }}
                   >
                     <Text
                       style={{
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: "600",
                         color: badgeColor,
                       }}

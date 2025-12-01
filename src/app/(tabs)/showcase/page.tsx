@@ -26,7 +26,6 @@ import { PackageItem } from "../../../components/types/package-item";
 import GroupDetailsModal from "../../../components/modals/modal-group-detail";
 
 
-/* 🔥 AGRUPAR POR DATA → BLOCO + APTO */
 const groupByDateBlockApt = (
   list: PackageItem[],
   receivedView: number
@@ -85,8 +84,7 @@ export default function ShowcaseScreen() {
       );
 
       const payload = res.data || {};
-      const list =
-        receivedView === 0 ? payload.pickup || [] : payload.deliver || [];
+      const list = receivedView === 0 ? payload.pickup || [] : payload.deliver || [];
 
       setItems((prev) => (replace ? list : [...prev, ...list]));
       setHasMore(payload.pagination?.hasMore ?? false);
@@ -170,6 +168,20 @@ export default function ShowcaseScreen() {
     setGroupModalVisible(true);
   };
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setPage(1);
+    fetchPackageList(1, true);
+  };
+
+  const handleLoadMore = () => {
+    if (loading || refreshing || !hasMore) return;
+    const nextPage = page + 1;
+    setLoading(true);
+    setPage(nextPage);
+    fetchPackageList(nextPage);
+  };
+
   const handlePressItemFromGroup = (item: PackageItem) => {
     setGroupModalVisible(false);
 
@@ -220,11 +232,11 @@ export default function ShowcaseScreen() {
             {blocoPart} - {aptPart}
           </Text>
 
-          <Text style={{ fontSize: 13, color: colors.green, marginBottom: 6 }}>
+          <Text style={{ fontSize: 14, color: colors.green, marginBottom: 6 }}>
             {labelQtd}
           </Text>
 
-          <Text style={{ fontSize: 12, color: "#555" }}>
+          <Text style={{ fontSize: 13, color: "#555" }}>
             Toque para ver os detalhes ({isRetirar ? "retirada" : "entrega"})
           </Text>
         </View>
@@ -249,7 +261,7 @@ export default function ShowcaseScreen() {
                 ]}
                 onPress={() => setReceivedView(0)}
               >
-                <Text style={{ color: receivedView === 0 ? "#fff" : "#222" }}>
+                <Text style={{ color: receivedView === 0 ? "#fff" : "#222", fontSize: 16 }}>
                   Retirar
                 </Text>
               </TouchableOpacity>
@@ -261,7 +273,7 @@ export default function ShowcaseScreen() {
                 ]}
                 onPress={() => setReceivedView(1)}
               >
-                <Text style={{ color: receivedView === 1 ? "#fff" : "#222" }}>
+                <Text style={{ color: receivedView === 1 ? "#fff" : "#222", fontSize: 16 }}>
                   Entregar
                 </Text>
               </TouchableOpacity>
@@ -271,8 +283,12 @@ export default function ShowcaseScreen() {
               data={groupedByDate}
               keyExtractor={(item) => item.date}
               contentContainerStyle={{ paddingBottom: 100 }}
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              onEndReached={handleLoadMore}
+              onEndReachedThreshold={0.2}
               renderItem={({ item }) => (
-                <View style={{ marginBottom: 24 }}>
+                <View style={{ marginBottom: 10 }}>
                   
                   <Text
                     style={{
