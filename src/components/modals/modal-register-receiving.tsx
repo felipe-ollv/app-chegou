@@ -8,6 +8,9 @@ import {
   Text,
   TextInput,
   Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import ToastComponent from "../toast/component";
 import BasicLoading from "../loading/basic-loading";
@@ -105,244 +108,265 @@ export default function ModalRegisterReceiving({
           justifyContent: "flex-end",
         }}
       >
-        <Pressable
-          onPress={() => {}}
-          style={{
-            backgroundColor: "#fff",
-            borderTopLeftRadius: 16,
-            borderTopRightRadius: 16,
-            paddingHorizontal: 16,
-            paddingTop: 12,
-            paddingBottom: 24,
-            maxHeight: "85%",
-          }}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 24 : 0}
         >
-          <View style={{ alignItems: "center", marginBottom: 8 }}>
-            <View
-              style={{
-                width: 40,
-                height: 4,
-                borderRadius: 2,
-                backgroundColor: "#D0D5DD",
-              }}
-            />
-          </View>
-
-          <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 20 }}>
-            Registrar encomenda recebida
-          </Text>
-
-          <View style={{ gap: 12 }}>
-            {loading ? (
-              <View style={{ height: 100 }}>
-                <BasicLoading />
-              </View>
-            ) : (
-              <>
-                <View>
-                  <Text style={{ fontSize: 14, marginBottom: 6 }}>
-                    Destinatário
-                  </Text>
-                  <Controller
-                    control={control}
-                    name="recipient"
-                    rules={{ required: "Destinatário" }}
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        placeholder="Nome de quem fez a compra"
-                        placeholderTextColor={colors.blacklight}
-                        style={{
-                          borderWidth: 1,
-                          borderColor: errors.recipient
-                            ? "#ef4444"
-                            : "#E5E7EB",
-                          borderRadius: 8,
-                          paddingHorizontal: 12,
-                          height: 44,
-                        }}
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={() => {
-                          onBlur();
-                          Keyboard.dismiss();
-                        }}
-                        blurOnSubmit={true}
-                        returnKeyType="done"
-                        onSubmitEditing={Keyboard.dismiss}
-                        autoCapitalize="words"
-                      />
-                    )}
-                  />
-                  {errors.recipient && (
-                    <Text style={{ color: "red", marginTop: 6 }}>
-                      {errors.recipient.message}
-                    </Text>
-                  )}
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, marginBottom: 6 }}>
-                    Torre/Bloco
-                  </Text>
-                  <Controller
-                    control={control}
-                    name="block"
-                    rules={{ required: "Torre/Bloco" }}
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        placeholder="Torre/Bloco"
-                        placeholderTextColor={colors.blacklight}
-                        style={{
-                          borderWidth: 1,
-                          borderColor: errors.block ? "#ef4444" : "#E5E7EB",
-                          borderRadius: 8,
-                          paddingHorizontal: 12,
-                          height: 44,
-                        }}
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={() => {
-                          onBlur();
-                          Keyboard.dismiss();
-                        }}
-                        blurOnSubmit={true}
-                        returnKeyType="done"
-                        onSubmitEditing={Keyboard.dismiss}
-                        autoCapitalize="characters"
-                      />
-                    )}
-                  />
-                  {errors.block && (
-                    <Text style={{ color: "red", marginTop: 6 }}>
-                      {errors.block.message}
-                    </Text>
-                  )}
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, marginBottom: 6 }}>
-                    Apartamento
-                  </Text>
-                  <Controller
-                    control={control}
-                    name="apartment"
-                    rules={{
-                      required: "Apartamento",
-                      minLength: {
-                        value: 1,
-                        message: "Informe o apartamento",
-                      },
-                    }}
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        placeholder="Número do apartamento"
-                        placeholderTextColor={colors.blacklight}
-                        style={{
-                          borderWidth: 1,
-                          borderColor: errors.apartment
-                            ? "#ef4444"
-                            : "#E5E7EB",
-                          borderRadius: 8,
-                          paddingHorizontal: 12,
-                          height: 44,
-                        }}
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={() => {
-                          onBlur();
-                          Keyboard.dismiss();
-                        }}
-                        blurOnSubmit={true}
-                        returnKeyType="done"
-                        onSubmitEditing={Keyboard.dismiss}
-                        keyboardType="numeric"
-                      />
-                    )}
-                  />
-                  {errors.apartment && (
-                    <Text style={{ color: "red", marginTop: 6 }}>
-                      {errors.apartment.message}
-                    </Text>
-                  )}
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, marginBottom: 6 }}>
-                    Observações
-                  </Text>
-                  <Controller
-                    control={control}
-                    name="note"
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        placeholder="Ex: Retirar até as 21h"
-                        placeholderTextColor={colors.blacklight}
-                        multiline
-                        style={{
-                          borderWidth: 1,
-                          borderColor: "#E5E7EB",
-                          borderRadius: 8,
-                          paddingHorizontal: 12,
-                          paddingTop: 10,
-                          minHeight: 80,
-                          textAlignVertical: "top",
-                        }}
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={() => {
-                          onBlur();
-                          Keyboard.dismiss();
-                        }}
-                      />
-                    )}
-                  />
-                </View>
-              </>
-            )}
-          </View>
-
-          <View
+          <Pressable
+            onPress={() => {}}
             style={{
-              flexDirection: "column",
-              justifyContent: "flex-end",
-              gap: 12,
-              marginTop: 36,
+              backgroundColor: "#fff",
+              borderTopLeftRadius: 16,
+              borderTopRightRadius: 16,
+              paddingHorizontal: 16,
+              paddingTop: 12,
+              paddingBottom: 24,
+              maxHeight: "95%"
             }}
           >
-            <TouchableOpacity
-              onPress={onClose}
-              disabled={isSubmitting}
-              style={{
-                paddingHorizontal: 14,
-                height: 44,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: "#E5E7EB",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "#fff",
-                opacity: isSubmitting ? 0.6 : 1,
-              }}
-            >
-              <Text style={{ color: "#111" }}>Cancelar</Text>
-            </TouchableOpacity>
+            <View style={{ alignItems: "center", marginBottom: 8 }}>
+              <View
+                style={{
+                  width: 40,
+                  height: 4,
+                  borderRadius: 2,
+                  backgroundColor: "#D0D5DD",
+                }}
+              />
+            </View>
 
-            <TouchableOpacity
-              onPress={handleSubmit(onSubmit)}
+            <Text
               style={{
-                paddingHorizontal: 16,
-                height: 44,
-                borderRadius: 8,
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: colors.green,
-                opacity: isSubmitting ? 0.6 : 1,
+                fontSize: 18,
+                fontWeight: "600",
+                marginBottom: 20,
               }}
             >
-              <Text style={{ color: "#fff", fontWeight: "600" }}>Confirmar</Text>
-            </TouchableOpacity>
-          </View>
-        </Pressable>
+              Registrar encomenda recebida
+            </Text>
+
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 8 }}
+            >
+              <View style={{ gap: 12 }}>
+                {loading ? (
+                  <View style={{ height: 100 }}>
+                    <BasicLoading />
+                  </View>
+                ) : (
+                  <>
+                    <View>
+                      <Text style={{ fontSize: 14, marginBottom: 6 }}>
+                        Destinatário
+                      </Text>
+                      <Controller
+                        control={control}
+                        name="recipient"
+                        rules={{ required: "Destinatário" }}
+                        render={({ field: { onChange, value, onBlur } }) => (
+                          <TextInput
+                            placeholder="Nome de quem fez a compra"
+                            placeholderTextColor={colors.blacklight}
+                            style={{
+                              borderWidth: 1,
+                              borderColor: errors.recipient
+                                ? "#ef4444"
+                                : "#E5E7EB",
+                              borderRadius: 8,
+                              paddingHorizontal: 12,
+                              height: 44,
+                            }}
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={() => {
+                              onBlur();
+                              Keyboard.dismiss();
+                            }}
+                            blurOnSubmit={true}
+                            returnKeyType="done"
+                            onSubmitEditing={Keyboard.dismiss}
+                            autoCapitalize="words"
+                          />
+                        )}
+                      />
+                      {errors.recipient && (
+                        <Text style={{ color: "red", marginTop: 6 }}>
+                          {errors.recipient.message}
+                        </Text>
+                      )}
+                    </View>
+
+                    <View>
+                      <Text style={{ fontSize: 14, marginBottom: 6 }}>
+                        Torre/Bloco
+                      </Text>
+                      <Controller
+                        control={control}
+                        name="block"
+                        rules={{ required: "Torre/Bloco" }}
+                        render={({ field: { onChange, value, onBlur } }) => (
+                          <TextInput
+                            placeholder="Torre/Bloco"
+                            placeholderTextColor={colors.blacklight}
+                            style={{
+                              borderWidth: 1,
+                              borderColor: errors.block
+                                ? "#ef4444"
+                                : "#E5E7EB",
+                              borderRadius: 8,
+                              paddingHorizontal: 12,
+                              height: 44,
+                            }}
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={() => {
+                              onBlur();
+                              Keyboard.dismiss();
+                            }}
+                            blurOnSubmit={true}
+                            returnKeyType="done"
+                            onSubmitEditing={Keyboard.dismiss}
+                            autoCapitalize="characters"
+                          />
+                        )}
+                      />
+                      {errors.block && (
+                        <Text style={{ color: "red", marginTop: 6 }}>
+                          {errors.block.message}
+                        </Text>
+                      )}
+                    </View>
+
+                    <View>
+                      <Text style={{ fontSize: 14, marginBottom: 6 }}>
+                        Apartamento
+                      </Text>
+                      <Controller
+                        control={control}
+                        name="apartment"
+                        rules={{
+                          required: "Apartamento",
+                          minLength: {
+                            value: 1,
+                            message: "Informe o apartamento",
+                          },
+                        }}
+                        render={({ field: { onChange, value, onBlur } }) => (
+                          <TextInput
+                            placeholder="Número do apartamento"
+                            placeholderTextColor={colors.blacklight}
+                            style={{
+                              borderWidth: 1,
+                              borderColor: errors.apartment
+                                ? "#ef4444"
+                                : "#E5E7EB",
+                              borderRadius: 8,
+                              paddingHorizontal: 12,
+                              height: 44,
+                            }}
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={() => {
+                              onBlur();
+                              Keyboard.dismiss();
+                            }}
+                            blurOnSubmit={true}
+                            returnKeyType="done"
+                            onSubmitEditing={Keyboard.dismiss}
+                            keyboardType="numeric"
+                          />
+                        )}
+                      />
+                      {errors.apartment && (
+                        <Text style={{ color: "red", marginTop: 6 }}>
+                          {errors.apartment.message}
+                        </Text>
+                      )}
+                    </View>
+
+                    <View>
+                      <Text style={{ fontSize: 14, marginBottom: 6 }}>
+                        Observações
+                      </Text>
+                      <Controller
+                        control={control}
+                        name="note"
+                        render={({ field: { onChange, value, onBlur } }) => (
+                          <TextInput
+                            placeholder="Ex: Retirar até as 21h"
+                            placeholderTextColor={colors.blacklight}
+                            multiline
+                            style={{
+                              borderWidth: 1,
+                              borderColor: "#E5E7EB",
+                              borderRadius: 8,
+                              paddingHorizontal: 12,
+                              paddingTop: 10,
+                              minHeight: 80,
+                              textAlignVertical: "top",
+                            }}
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={() => {
+                              onBlur();
+                              Keyboard.dismiss();
+                            }}
+                          />
+                        )}
+                      />
+                    </View>
+                  </>
+                )}
+              </View>
+            </ScrollView>
+
+            <View
+              style={{
+                flexDirection: "column",
+                justifyContent: "flex-end",
+                gap: 12,
+                marginTop: 36,
+              }}
+            >
+              <TouchableOpacity
+                onPress={onClose}
+                disabled={isSubmitting}
+                style={{
+                  paddingHorizontal: 14,
+                  height: 44,
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: "#E5E7EB",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#fff",
+                  opacity: isSubmitting ? 0.6 : 1,
+                }}
+              >
+                <Text style={{ color: "#111" }}>Cancelar</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={handleSubmit(onSubmit)}
+                style={{
+                  paddingHorizontal: 16,
+                  height: 44,
+                  borderRadius: 8,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: colors.green,
+                  opacity: isSubmitting ? 0.6 : 1,
+                }}
+              >
+                <Text style={{ color: "#fff", fontWeight: "600" }}>
+                  Confirmar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Pressable>
+        </KeyboardAvoidingView>
       </Pressable>
     </Modal>
   );
