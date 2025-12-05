@@ -61,6 +61,12 @@
           "color": "#ffffff",
           "defaultChannel": "default"
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "O ChegouApp! precisa acessar sua câmera para leitura de QR Code."
+        }
       ]
     ],
     "experiments": {

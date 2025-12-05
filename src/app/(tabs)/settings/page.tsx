@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Pressable } from 'react-native';
 import HeaderComponent from '../../../components/header/component';
 import { settingsStyles } from '../../../styles/settings-styles';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -11,12 +11,18 @@ import ModalTermsAndPrivacy from '../../../components/modals/modal-terms-privacy
 import ModalSuport from '../../../components/modals/modal-suport';
 import ModalChangePassword from '../../../components/modals/modal-change-password';
 import ModalExcludeAccount from '../../../components/modals/modal-exclude-account';
+import ModalQrScanner from '../../../components/qrscanner/qr-scanner.modal';
+import api from '../../../interceptor/axios-config';
+import { useUser } from '../../../context/user.context';
+import ToastComponent from "../../../components/toast/component";
 
 export default function SettingsScreen() {
   const [modalTermsVisible, setModalTermsVisible] = useState(false);
   const [modalSuportVisible, setModalSuportVisible] = useState(false);
   const [modalChangePasswordVisible, setModalChangePasswordVisible] = useState(false);
   const [modalExcludeAccountVisible, setModalExcludeAccountVisible] = useState(false);
+  const [modalQrScannerVisible, setModalQrScannerVisible] = useState(false);
+  const { userData } = useUser();
 
   const renderOption = (icon, label, onPress) => (
     <TouchableOpacity onPress={onPress}>
@@ -29,6 +35,22 @@ export default function SettingsScreen() {
       </View>
     </TouchableOpacity>
   );
+
+  const validateAccessWeb = async (data?: string) => {
+    try {
+      const res: any = await api.post('/user-access/auth-web', {
+        key: data,
+        phone_number: userData.phone
+      });
+
+      if (res.data.code === 200) {
+        ToastComponent({type: 'success', text1: 'Sucesso', text2: res.data.message})
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <View style={settingsStyles.container}>
@@ -45,6 +67,22 @@ export default function SettingsScreen() {
           <View style={settingsStyles.separator} />
 
           {renderOption(<Ionicons name="exit-outline" size={22} color={colors.zinc} />, "Excluir cadastro", () => setModalExcludeAccountVisible(true))}
+          
+          {userData.ts === 'TRUSTEE' && (
+            <Pressable onPress={() => validateAccessWeb()}>
+              <View style={settingsStyles.separator} />
+              {renderOption(
+                <MaterialCommunityIcons
+                  name="qrcode-scan"
+                  size={22}
+                  color={colors.zinc}
+                />,
+                "Acessar painel web",
+                () => validateAccessWeb()
+              )}
+            </Pressable>
+          )}
+                    
         </View>
       </View>
 
@@ -52,6 +90,12 @@ export default function SettingsScreen() {
       <ModalSuport visible={modalSuportVisible} onClose={() => setModalSuportVisible(false)} />
       <ModalChangePassword visible={modalChangePasswordVisible} onClose={() => setModalChangePasswordVisible(false)} />
       <ModalExcludeAccount visible={modalExcludeAccountVisible} onClose={() => setModalExcludeAccountVisible(false)} />
+      <ModalQrScanner 
+        visible={modalQrScannerVisible} 
+        onClose={() => setModalQrScannerVisible(false)} 
+        onResult={(data) => 
+          validateAccessWeb(data)
+        }/>
     </View>
   );
 }
