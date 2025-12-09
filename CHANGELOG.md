@@ -135,3 +135,12 @@
 
 - modal group recebimentos
 
+
+## Version 1.0.22
+2025-12-09T21:45:07.105Z
+
+- ajuste modal recebimento
+- componente ler qrcode
+- componente login web qrcode
+- ajustes layout paginacao flatlist
+
