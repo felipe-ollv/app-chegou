@@ -69,7 +69,7 @@ export default function SettingsScreen() {
           {renderOption(<Ionicons name="exit-outline" size={22} color={colors.zinc} />, "Excluir cadastro", () => setModalExcludeAccountVisible(true))}
           
           {userData.ts === 'TRUSTEE' && (
-            <Pressable onPress={() => validateAccessWeb()}>
+            <Pressable onPress={() => setModalQrScannerVisible(true)}>
               <View style={settingsStyles.separator} />
               {renderOption(
                 <MaterialCommunityIcons
@@ -78,7 +78,7 @@ export default function SettingsScreen() {
                   color={colors.zinc}
                 />,
                 "Acessar painel web",
-                () => validateAccessWeb()
+                () => setModalQrScannerVisible(true)
               )}
             </Pressable>
           )}
