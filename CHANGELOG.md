@@ -144,3 +144,9 @@
 - componente login web qrcode
 - ajustes layout paginacao flatlist
 
+
+## Version 1.0.23
+2025-12-09T22:20:17.026Z
+
+- fix open modal leitura de qrcode
+
