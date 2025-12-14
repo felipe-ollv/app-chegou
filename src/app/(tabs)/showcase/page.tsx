@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
@@ -72,6 +71,7 @@ export default function ShowcaseScreen() {
   const [groupModalVisible, setGroupModalVisible] = useState(false);
   const [selectedGroupKey, setSelectedGroupKey] = useState<string | null>(null);
   const [selectedGroupItems, setSelectedGroupItems] = useState<PackageItem[]>([]);
+  const [residents, setResidents] = useState([]);
 
   const PAGE_SIZE = 10;
 
@@ -119,6 +119,21 @@ export default function ShowcaseScreen() {
       uuidUserProfile: userData.ps,
     });
   }, [expoPushToken]);
+
+  useEffect(() => {
+    chargeDataCondominium();
+  }, [])
+
+  const chargeDataCondominium = async () => {
+    try {
+      const dataCondominium: any = await api.get(`/user-profile/find-residents/${userData.cs}`);
+      setResidents(dataCondominium.data);
+      return dataCondominium.data;
+    } catch (error) {
+      console.log(error);
+      return [];
+    } 
+  }
 
   const handleRegisterModal = () => {
     setPage(1);
@@ -310,7 +325,20 @@ export default function ShowcaseScreen() {
           </View>
 
           <TouchableOpacity
-            onPress={() => setModalRegisterVisible(true)}
+            onPress={async () => {
+              if (residents.length === 0) {
+                const data = await chargeDataCondominium();
+                if (!data.length) {
+                  ToastComponent({
+                    type: "warning",
+                    text1: "Aguarde",
+                    text2: "Carregando moradores do condomínio",
+                  });
+                  return;
+                }
+              }
+              setModalRegisterVisible(true);
+            }}
             style={showcaseStyles.fab}
           >
             <AntDesign name="plus" size={24} color="#fff" />
@@ -320,6 +348,7 @@ export default function ShowcaseScreen() {
             visible={modalRegisterVisible}
             onClose={() => setModalRegisterVisible(false)}
             onSuccessRegister={handleRegisterModal}
+            residentsList={residents}
           />
 
           <ModalInformCode

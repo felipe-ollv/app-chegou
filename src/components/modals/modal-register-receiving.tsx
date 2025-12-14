@@ -14,9 +14,16 @@ import {
 } from "react-native";
 import ToastComponent from "../toast/component";
 import BasicLoading from "../loading/basic-loading";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useUser } from "../../context/user.context";
 import api from "../../interceptor/axios-config";
+import SelectDropdown from "react-native-select-dropdown";
+
+type Resident = {
+  name: string;
+  apartment_block: string;
+  apartment: number;
+};
 
 type RegisterForm = {
   recipient: string;
@@ -30,19 +37,24 @@ export default function ModalRegisterReceiving({
   visible,
   onClose,
   onSuccessRegister,
+  residentsList,
 }: {
   visible: boolean;
   onClose: () => void;
   onSuccessRegister: () => void;
+  residentsList: Resident[];
 }) {
   const { userData } = useUser();
   const [loading, setLoading] = useState(false);
+  const [selectedBlock, setSelectedBlock] = useState<string | null>(null);
+
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
     reset,
   } = useForm<RegisterForm>({
+    mode: "onChange",
     defaultValues: {
       recipient: "",
       block: "",
@@ -51,26 +63,44 @@ export default function ModalRegisterReceiving({
     },
   });
 
+  const blocks = useMemo(
+    () => Array.from(new Set(residentsList.map(r => r.apartment_block))),
+    [residentsList]
+  );
+
+  const residentsByBlock = useMemo(
+    () =>
+      selectedBlock
+        ? residentsList.filter(r => r.apartment_block === selectedBlock)
+        : [],
+    [selectedBlock, residentsList]
+  );
+
+  const apartmentsByBlock = useMemo(
+    () => Array.from(new Set(residentsByBlock.map(r => r.apartment))),
+    [residentsByBlock]
+  );
+
   const onSubmit = async (data: RegisterForm) => {
     try {
       setLoading(true);
       data.received = userData.ps;
 
-      const inform: any = await api.post(
+      const res: any = await api.post(
         "/received-package/create-received-package",
         data
       );
 
-      if (inform.data.error === 400) {
+      if (res.data?.error === 400) {
         ToastComponent({
           type: "warning",
           text1: "Falha!",
-          text2: inform.data.message,
+          text2: res.data.message,
         });
       } else {
         onClose();
         reset();
-        setLoading(false);
+        setSelectedBlock(null);
         onSuccessRegister();
         ToastComponent({
           type: "success",
@@ -78,29 +108,23 @@ export default function ModalRegisterReceiving({
           text2: "Recebimento registrado",
         });
       }
-    } catch (e) {
-      onClose();
-      reset();
-      setLoading(false);
+    } catch {
       ToastComponent({
         type: "error",
         text1: "Erro!",
         text2: "Erro interno, aguarde alguns instantes",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      transparent
-      onRequestClose={onClose}
-    >
+    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <Pressable
         onPress={() => {
-          onClose();
           Keyboard.dismiss();
+          onClose();
         }}
         style={{
           flex: 1,
@@ -121,7 +145,7 @@ export default function ModalRegisterReceiving({
               paddingHorizontal: 16,
               paddingTop: 12,
               paddingBottom: 24,
-              maxHeight: "95%"
+              maxHeight: "95%",
             }}
           >
             <View style={{ alignItems: "center", marginBottom: 8 }}>
@@ -135,13 +159,7 @@ export default function ModalRegisterReceiving({
               />
             </View>
 
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: "600",
-                marginBottom: 20,
-              }}
-            >
+            <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 20 }}>
               Registrar encomenda recebida
             </Text>
 
@@ -159,141 +177,163 @@ export default function ModalRegisterReceiving({
                   <>
                     <View>
                       <Text style={{ fontSize: 14, marginBottom: 6 }}>
-                        Destinatário
-                      </Text>
-                      <Controller
-                        control={control}
-                        name="recipient"
-                        rules={{ required: "Destinatário" }}
-                        render={({ field: { onChange, value, onBlur } }) => (
-                          <TextInput
-                            placeholder="Nome de quem fez a compra"
-                            placeholderTextColor={colors.blacklight}
-                            style={{
-                              borderWidth: 1,
-                              borderColor: errors.recipient
-                                ? "#ef4444"
-                                : "#E5E7EB",
-                              borderRadius: 8,
-                              paddingHorizontal: 12,
-                              height: 44,
-                            }}
-                            value={value}
-                            onChangeText={onChange}
-                            onBlur={() => {
-                              onBlur();
-                              Keyboard.dismiss();
-                            }}
-                            blurOnSubmit={true}
-                            returnKeyType="done"
-                            onSubmitEditing={Keyboard.dismiss}
-                            autoCapitalize="words"
-                          />
-                        )}
-                      />
-                      {errors.recipient && (
-                        <Text style={{ color: "red", marginTop: 6 }}>
-                          {errors.recipient.message}
-                        </Text>
-                      )}
-                    </View>
-
-                    <View>
-                      <Text style={{ fontSize: 14, marginBottom: 6 }}>
                         Torre/Bloco
                       </Text>
+
                       <Controller
                         control={control}
                         name="block"
-                        rules={{ required: "Torre/Bloco" }}
-                        render={({ field: { onChange, value, onBlur } }) => (
-                          <TextInput
-                            placeholder="Torre/Bloco"
-                            placeholderTextColor={colors.blacklight}
-                            style={{
-                              borderWidth: 1,
-                              borderColor: errors.block
-                                ? "#ef4444"
-                                : "#E5E7EB",
-                              borderRadius: 8,
-                              paddingHorizontal: 12,
-                              height: 44,
+                        rules={{ required: "Torre obrigatória" }}
+                        render={({ field: { onChange, value } }) => (
+                          <SelectDropdown
+                            data={blocks}
+                            onSelect={(item) => {
+                              setSelectedBlock(item);
+                              onChange(item);
+                              reset((prev) => ({
+                                ...prev,
+                                apartment: "",
+                                recipient: "",
+                              }));
                             }}
-                            value={value}
-                            onChangeText={onChange}
-                            onBlur={() => {
-                              onBlur();
-                              Keyboard.dismiss();
-                            }}
-                            blurOnSubmit={true}
-                            returnKeyType="done"
-                            onSubmitEditing={Keyboard.dismiss}
-                            autoCapitalize="characters"
+                            renderButton={(selectedItem) => (
+                              <View
+                                style={{
+                                  borderWidth: 1,
+                                  borderColor: errors.block ? "#ef4444" : "#E5E7EB",
+                                  borderRadius: 8,
+                                  height: 44,
+                                  paddingHorizontal: 12,
+                                  justifyContent: "center",
+                                  backgroundColor: "#fff",
+                                }}
+                              >
+                                <Text style={{ color: selectedItem ? "#000" : "#999" }}>
+                                  {value || "Selecione o Bloco/Torre"}
+                                </Text>
+                              </View>
+                            )}
+                            renderItem={(item, _, isSelected) => (
+                              <View
+                                style={{
+                                  padding: 12,
+                                  backgroundColor: isSelected ? "#edf4ff" : "#fff",
+                                }}
+                              >
+                                <Text style={{ color: "#333" }}>{item}</Text>
+                              </View>
+                            )}
+                            dropdownStyle={{ borderRadius: 8 }}
                           />
                         )}
                       />
-                      {errors.block && (
-                        <Text style={{ color: "red", marginTop: 6 }}>
-                          {errors.block.message}
-                        </Text>
-                      )}
                     </View>
 
                     <View>
                       <Text style={{ fontSize: 14, marginBottom: 6 }}>
                         Apartamento
                       </Text>
+
                       <Controller
                         control={control}
                         name="apartment"
-                        rules={{
-                          required: "Apartamento",
-                          minLength: {
-                            value: 1,
-                            message: "Informe o apartamento",
-                          },
-                        }}
-                        render={({ field: { onChange, value, onBlur } }) => (
-                          <TextInput
-                            placeholder="Número do apartamento"
-                            placeholderTextColor={colors.blacklight}
-                            style={{
-                              borderWidth: 1,
-                              borderColor: errors.apartment
-                                ? "#ef4444"
-                                : "#E5E7EB",
-                              borderRadius: 8,
-                              paddingHorizontal: 12,
-                              height: 44,
-                            }}
-                            value={value}
-                            onChangeText={onChange}
-                            onBlur={() => {
-                              onBlur();
-                              Keyboard.dismiss();
-                            }}
-                            blurOnSubmit={true}
-                            returnKeyType="done"
-                            onSubmitEditing={Keyboard.dismiss}
-                            keyboardType="numeric"
+                        rules={{ required: "Apartamento obrigatório" }}
+                        render={({ field: { onChange, value } }) => (
+                          <SelectDropdown
+                            data={apartmentsByBlock}
+                            disabled={!selectedBlock}
+                            onSelect={(item) => onChange(String(item))}
+                            renderButton={(selectedItem) => (
+                              <View
+                                style={{
+                                  borderWidth: 1,
+                                  borderColor: errors.apartment ? "#ef4444" : "#E5E7EB",
+                                  borderRadius: 8,
+                                  height: 44,
+                                  paddingHorizontal: 12,
+                                  justifyContent: "center",
+                                  backgroundColor: selectedBlock ? "#fff" : "#F3F4F6",
+                                }}
+                              >
+                                <Text style={{ color: value ? "#000" : "#999" }}>
+                                  {value || "Selecione o apartamento"}
+                                </Text>
+                              </View>
+                            )}
+                            renderItem={(item, _, isSelected) => (
+                              <View
+                                style={{
+                                  padding: 12,
+                                  backgroundColor: isSelected ? "#edf4ff" : "#fff",
+                                }}
+                              >
+                                <Text>{item}</Text>
+                              </View>
+                            )}
+                            dropdownStyle={{ borderRadius: 8 }}
                           />
                         )}
                       />
-                      {errors.apartment && (
-                        <Text style={{ color: "red", marginTop: 6 }}>
-                          {errors.apartment.message}
-                        </Text>
-                      )}
+                    </View>
+
+                    <View>
+                      <Text style={{ fontSize: 14, marginBottom: 6 }}>
+                        Destinatário
+                      </Text>
+
+                      <Controller
+                        control={control}
+                        name="recipient"
+                        rules={{ required: "Destinatário obrigatório" }}
+                        render={({ field: { onChange, value } }) => (
+                          <SelectDropdown
+                            data={residentsByBlock}
+                            disabled={!selectedBlock}
+                            onSelect={(item) => onChange(item.name)}
+                            renderButton={(selectedItem) => (
+                              <View
+                                style={{
+                                  borderWidth: 1,
+                                  borderColor: errors.recipient ? "#ef4444" : "#E5E7EB",
+                                  borderRadius: 8,
+                                  height: 44,
+                                  paddingHorizontal: 12,
+                                  justifyContent: "center",
+                                  backgroundColor: selectedBlock ? "#fff" : "#F3F4F6",
+                                }}
+                              >
+                                <Text style={{ color: value ? "#000" : "#999" }}>
+                                  {value || "Selecione o destinatário"}
+                                </Text>
+                              </View>
+                            )}
+                            renderItem={(item, _, isSelected) => (
+                              <View
+                                style={{
+                                  padding: 12,
+                                  backgroundColor: isSelected ? "#edf4ff" : "#fff",
+                                }}
+                              >
+                                <Text>
+                                  {item.name} — Apto {item.apartment}
+                                </Text>
+                              </View>
+                            )}
+                            dropdownStyle={{ borderRadius: 8 }}
+                          />
+                        )}
+                      />
                     </View>
 
                     <View>
                       <Text style={{ fontSize: 14, marginBottom: 6 }}>
                         Observações
                       </Text>
+
                       <Controller
                         control={control}
                         name="note"
-                        render={({ field: { onChange, value, onBlur } }) => (
+                        render={({ field: { onChange, value } }) => (
                           <TextInput
                             placeholder="Ex: Retirar até as 21h"
                             placeholderTextColor={colors.blacklight}
@@ -309,10 +349,6 @@ export default function ModalRegisterReceiving({
                             }}
                             value={value}
                             onChangeText={onChange}
-                            onBlur={() => {
-                              onBlur();
-                              Keyboard.dismiss();
-                            }}
                           />
                         )}
                       />
@@ -325,16 +361,18 @@ export default function ModalRegisterReceiving({
             <View
               style={{
                 flexDirection: "column",
-                justifyContent: "flex-end",
                 gap: 12,
                 marginTop: 36,
               }}
             >
               <TouchableOpacity
-                onPress={onClose}
+                onPress={() => {
+                  reset();
+                  setSelectedBlock(null);
+                  onClose();
+                }}
                 disabled={isSubmitting}
                 style={{
-                  paddingHorizontal: 14,
                   height: 44,
                   borderRadius: 8,
                   borderWidth: 1,
@@ -342,7 +380,6 @@ export default function ModalRegisterReceiving({
                   alignItems: "center",
                   justifyContent: "center",
                   backgroundColor: "#fff",
-                  opacity: isSubmitting ? 0.6 : 1,
                 }}
               >
                 <Text style={{ color: "#111" }}>Cancelar</Text>
@@ -350,14 +387,14 @@ export default function ModalRegisterReceiving({
 
               <TouchableOpacity
                 onPress={handleSubmit(onSubmit)}
+                disabled={!isValid || isSubmitting}
                 style={{
-                  paddingHorizontal: 16,
                   height: 44,
                   borderRadius: 8,
                   alignItems: "center",
                   justifyContent: "center",
-                  backgroundColor: colors.green,
-                  opacity: isSubmitting ? 0.6 : 1,
+                  backgroundColor: isValid ? colors.green : colors.gray2,
+                  opacity: !isValid || isSubmitting ? 0.5 : 1,
                 }}
               >
                 <Text style={{ color: "#fff", fontWeight: "600" }}>
