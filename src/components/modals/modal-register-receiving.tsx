@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import ToastComponent from "../toast/component";
 import BasicLoading from "../loading/basic-loading";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useUser } from "../../context/user.context";
 import api from "../../interceptor/axios-config";
 import SelectDropdown from "react-native-select-dropdown";
@@ -23,6 +23,7 @@ type Resident = {
   name: string;
   apartment_block: string;
   apartment: number;
+  blocks: [];
 };
 
 type RegisterForm = {
@@ -37,16 +38,16 @@ export default function ModalRegisterReceiving({
   visible,
   onClose,
   onSuccessRegister,
-  residentsList,
 }: {
   visible: boolean;
   onClose: () => void;
   onSuccessRegister: () => void;
-  residentsList: Resident[];
 }) {
   const { userData } = useUser();
   const [loading, setLoading] = useState(false);
   const [selectedBlock, setSelectedBlock] = useState<string | null>(null);
+  const [blockKey, setBlockKey] = useState(0);
+  const [residents, setResidents] = useState<Resident[]>([]);
 
   const {
     control,
@@ -63,22 +64,40 @@ export default function ModalRegisterReceiving({
     },
   });
 
-  const blocks = useMemo(
-    () => Array.from(new Set(residentsList.map(r => r.apartment_block))),
-    [residentsList]
-  );
+  useEffect(() => {
+    chargeDataCondominium();
+  }, []);
+
+  const chargeDataCondominium = async () => {
+    try {
+      const dataCondominium: any = await api.get(`/user-profile/find-residents/${userData.cs}`);
+      setResidents(dataCondominium.data);
+      return dataCondominium.data;
+    } catch (error) {
+      console.log(error);
+      return [];
+    } 
+  }
 
   const residentsByBlock = useMemo(
     () =>
       selectedBlock
-        ? residentsList.filter(r => r.apartment_block === selectedBlock)
+        ? residents.filter(r => r.apartment_block === selectedBlock)
         : [],
-    [selectedBlock, residentsList]
+    [selectedBlock, residents]
   );
 
   const apartmentsByBlock = useMemo(
     () => Array.from(new Set(residentsByBlock.map(r => r.apartment))),
     [residentsByBlock]
+  );
+
+  const blocks = useMemo(
+    () =>
+      Array.from(
+        new Set(residents.map(r => r.apartment_block))
+      ),
+    [residents]
   );
 
   const onSubmit = async (data: RegisterForm) => {
@@ -101,6 +120,7 @@ export default function ModalRegisterReceiving({
         onClose();
         reset();
         setSelectedBlock(null);
+        setBlockKey(prev => prev +1)
         onSuccessRegister();
         ToastComponent({
           type: "success",
@@ -186,7 +206,9 @@ export default function ModalRegisterReceiving({
                         rules={{ required: "Torre obrigatória" }}
                         render={({ field: { onChange, value } }) => (
                           <SelectDropdown
+                            key={blockKey}
                             data={blocks}
+                            disabled={blocks.length === 0}
                             onSelect={(item) => {
                               setSelectedBlock(item);
                               onChange(item);
@@ -369,6 +391,7 @@ export default function ModalRegisterReceiving({
                 onPress={() => {
                   reset();
                   setSelectedBlock(null);
+                  setBlockKey(prev => prev + 1)
                   onClose();
                 }}
                 disabled={isSubmitting}

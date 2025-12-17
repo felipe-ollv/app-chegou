@@ -36,8 +36,7 @@ type FormData = {
 };
 
 const profileList = [
-  "MORADOR(A)",
-  "FUNCIONARIO(A)"
+  "MORADOR(A)"
 ];
 
 export default function SignUpScreen() {
