@@ -150,3 +150,10 @@
 
 - fix open modal leitura de qrcode
 
+
+## Version 1.0.24
+2025-12-17T22:41:26.454Z
+
+- melhoria no fluxo de registro de recebimento
+- melhoria funcionalidade registrar recebimento
+
