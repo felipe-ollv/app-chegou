@@ -157,3 +157,9 @@
 - melhoria no fluxo de registro de recebimento
 - melhoria funcionalidade registrar recebimento
 
+
+## Version 1.0.25
+2025-12-24T03:02:53.325Z
+
+- No changes available
+
