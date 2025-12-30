@@ -48,6 +48,7 @@ export default function ModalRegisterReceiving({
   const [selectedBlock, setSelectedBlock] = useState<string | null>(null);
   const [blockKey, setBlockKey] = useState(0);
   const [residents, setResidents] = useState<Resident[]>([]);
+  const [selectedApartment, setSelectedApartment] = useState<number | null>(null);
 
   const {
     control,
@@ -99,6 +100,19 @@ export default function ModalRegisterReceiving({
       ),
     [residents]
   );
+
+  const residentsByBlockAndApartment = useMemo(
+    () =>
+      selectedBlock && selectedApartment !== null
+        ? residents.filter(
+            r =>
+              r.apartment_block === selectedBlock &&
+              r.apartment === selectedApartment
+          )
+        : [],
+    [selectedBlock, selectedApartment, residents]
+  );
+
 
   const onSubmit = async (data: RegisterForm) => {
     try {
@@ -264,7 +278,15 @@ export default function ModalRegisterReceiving({
                           <SelectDropdown
                             data={apartmentsByBlock}
                             disabled={!selectedBlock}
-                            onSelect={(item) => onChange(String(item))}
+                            onSelect={(item) => {
+                              setSelectedApartment(item);
+                              onChange(String(item))
+                              reset(prev => ({
+                                ...prev,
+                                recipient: "",
+                              }));
+                            }}
+                            
                             renderButton={(selectedItem) => (
                               <View
                                 style={{
@@ -309,8 +331,8 @@ export default function ModalRegisterReceiving({
                         rules={{ required: "Destinatário obrigatório" }}
                         render={({ field: { onChange, value } }) => (
                           <SelectDropdown
-                            data={residentsByBlock}
-                            disabled={!selectedBlock}
+                            data={residentsByBlockAndApartment}
+                            disabled={!selectedBlock || selectedApartment === null}
                             onSelect={(item) => onChange(item.name)}
                             renderButton={(selectedItem) => (
                               <View
