@@ -163,3 +163,9 @@
 
 - No changes available
 
+
+## Version 1.0.26
+2025-12-30T19:55:00.196Z
+
+- update versao de libs e ajuste filtro moradores
+
