@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Text,
   View,
@@ -47,6 +47,8 @@ export default function SignUpScreen() {
   const [loading, setLoading] = useState(false);
   const { condominiumId } = useLocalSearchParams();
   const [condominiumName, setCondominiumName] = useState('');
+  const [blockKey, setBlockKey] = useState(0);
+  const [condominiumData, setCondominiumData] = useState<any | null>(null);
 
   useEffect(() => {
     fetchCondominium();
@@ -57,6 +59,7 @@ export default function SignUpScreen() {
       setLoading(true);
       const resp: any = await api.get('/condominium/find-condominium', { params: { condominiumId }});
       if (resp.data && resp.data.condominium_name) {
+        setCondominiumData(resp.data)
         setCondominiumName(resp.data.condominium_name);
         setValue("condominium", condominiumId as string);
       } else {
@@ -68,6 +71,14 @@ export default function SignUpScreen() {
       setLoading(false);
     }
   };
+
+  const blocks = useMemo(() => {
+    if (!condominiumData?.blocks || !Array.isArray(condominiumData.blocks)) {
+      return [];
+    }
+
+    return Array.from(new Set(condominiumData.blocks));
+  }, [condominiumData]);
 
   const {
     control,
@@ -108,6 +119,7 @@ export default function SignUpScreen() {
       });
 
       if (data) {
+        setBlockKey(prev => prev +1)
         ToastComponent({ type: 'success', text1: 'Sucesso!', text2: 'Perfil registrado!'});
         router.push('/');
       }
@@ -207,28 +219,53 @@ export default function SignUpScreen() {
                 </View>
 
                 <View>
-                  <Text style={styles.label}>Bloco/Torre</Text>
+                  <Text style={{ fontSize: 14, marginBottom: 6, marginTop: 10 }}>
+                    Torre/Bloco
+                  </Text>
+
                   <Controller
                     control={control}
                     name="apartment_block"
-                    rules={{ required: "Bloco/Torre obrigatório" }}
-                    render={({ field: { onChange, value, onBlur } }) => (
-                      <TextInput
-                        style={styles.input}
-                        placeholder="Seu bloco/Torre..."
-                        placeholderTextColor={colors.blacklight}
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={() => { onBlur(); Keyboard.dismiss(); }}
-                        blurOnSubmit
-                        returnKeyType="done"
-                        onSubmitEditing={Keyboard.dismiss}
+                    rules={{ required: "Torre/Bloco obrigatório" }}
+                    render={({ field: { onChange, value } }) => (
+                      <SelectDropdown
+                        key={blockKey}
+                        data={blocks}
+                        disabled={blocks.length === 0}
+                        onSelect={(item) => {
+                          onChange(item);
+                        }}
+                        renderButton={(selectedItem) => (
+                          <View
+                            style={{
+                              borderWidth: 1,
+                              borderColor: errors.apartment_block ? "#ef4444" : "#E5E7EB",
+                              borderRadius: 8,
+                              height: 44,
+                              paddingHorizontal: 12,
+                              justifyContent: "center",
+                              backgroundColor: "#fff",
+                            }}
+                          >
+                            <Text style={{ color: selectedItem ? "#000" : "#999" }}>
+                              {selectedItem || value || "Selecione o Bloco/Torre"}
+                            </Text>
+                          </View>
+                        )}
+                        renderItem={(item, _, isSelected) => (
+                          <View
+                            style={{
+                              padding: 12,
+                              backgroundColor: isSelected ? "#edf4ff" : "#fff",
+                            }}
+                          >
+                            <Text style={{ color: "#333" }}>{item}</Text>
+                          </View>
+                        )}
+                        dropdownStyle={{ borderRadius: 8 }}
                       />
                     )}
                   />
-                  {errors.apartment_block && (
-                    <Text style={{ color: "red", marginBottom: 12 }}>{errors.apartment_block.message}</Text>
-                  )}
                 </View>
 
                 <View>
