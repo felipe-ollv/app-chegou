@@ -169,3 +169,10 @@
 
 - update versao de libs e ajuste filtro moradores
 
+
+## Version 1.0.27
+2026-01-05T22:25:06.131Z
+
+- alterando input para select no cadastro de usuario
+- carregar avisos com a page no foco
+
