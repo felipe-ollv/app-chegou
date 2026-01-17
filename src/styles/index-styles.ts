@@ -55,6 +55,16 @@ export const styles = StyleSheet.create({
     width: '100%',
     marginTop: 12
   },
+  buttonCode: {
+    backgroundColor: colors.zinc3,
+    paddingTop: 14,
+    paddingBottom: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginTop: 12
+  },
   buttonText: {
     color: colors.white,
     fontSize: 14,

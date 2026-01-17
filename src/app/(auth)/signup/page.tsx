@@ -45,32 +45,18 @@ export default function SignUpScreen() {
   const [showPicker, setShowPicker] = useState(false);
   const [modalInformVisible, setModalInformVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { condominiumId } = useLocalSearchParams();
   const [condominiumName, setCondominiumName] = useState('');
   const [blockKey, setBlockKey] = useState(0);
   const [condominiumData, setCondominiumData] = useState<any | null>(null);
 
-  useEffect(() => {
-    fetchCondominium();
-  }, [condominiumId]);
+  const params = useLocalSearchParams();
 
-  const fetchCondominium = async () => {
-    try {
-      setLoading(true);
-      const resp: any = await api.get('/condominium/find-condominium', { params: { condominiumId }});
-      if (resp.data && resp.data.condominium_name) {
-        setCondominiumData(resp.data)
-        setCondominiumName(resp.data.condominium_name);
-        setValue("condominium", condominiumId as string);
-      } else {
-        setModalInformVisible(true);
-      }
-    } catch (error) {
-      setModalInformVisible(true);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const parsed = JSON.parse(params.condominium as string);
+    setCondominiumData(parsed)
+    setCondominiumName(parsed.condominium_name);
+    setValue("condominium", parsed.uuid_condominium);
+  }, []);
 
   const blocks = useMemo(() => {
     if (!condominiumData?.blocks || !Array.isArray(condominiumData.blocks)) {
@@ -121,7 +107,10 @@ export default function SignUpScreen() {
       if (data) {
         setBlockKey(prev => prev +1)
         ToastComponent({ type: 'success', text1: 'Sucesso!', text2: 'Perfil registrado!'});
-        router.push('/');
+        router.replace({
+          pathname: '/',
+          params: {fromSignup: 'true'}      
+        });
       }
     } catch (err: any) {
       console.error(err.response?.data || err.message);
