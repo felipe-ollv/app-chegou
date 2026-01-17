@@ -176,3 +176,9 @@
 - alterando input para select no cadastro de usuario
 - carregar avisos com a page no foco
 
+
+## Version 1.0.28
+2026-01-17T22:06:12.734Z
+
+- melhoria na forma do cadastro para usuarios
+
