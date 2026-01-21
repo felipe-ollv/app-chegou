@@ -108,7 +108,7 @@ export default function SignUpScreen() {
         setBlockKey(prev => prev +1)
         ToastComponent({ type: 'success', text1: 'Sucesso!', text2: 'Perfil registrado!'});
         router.replace({
-          pathname: '/',
+          pathname: '/(auth)/signin/page',
           params: {fromSignup: 'true'}      
         });
       }

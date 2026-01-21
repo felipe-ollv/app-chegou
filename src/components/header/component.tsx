@@ -19,7 +19,10 @@ export default function HeaderComponent({ logoText, slogan }: HeaderComponentPro
 					pathName === '/signup/page' &&
 					<Pressable
 						// style={styles.backButton}
-						onPress={() => router.push('/')}
+						onPress={() => router.replace({
+							pathname: '/(auth)/signin/page',
+							params: {fromSignup: 'true'}      
+        		})}
 					>
 						<Ionicons name="arrow-back" size={24} color={colors.white} />
 					</Pressable>

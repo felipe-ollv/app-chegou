@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Text, View, TextInput, TouchableOpacity, Platform, Pressable } from "react-native";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Text, View, TextInput, TouchableOpacity, Pressable } from "react-native";
 import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
 import api, { setToken } from '../../../interceptor/axios-config';
 import { styles } from "../../../styles/index-styles";
@@ -24,7 +24,11 @@ export default function SigninScreen() {
   const [condominiumId, setValidateCode] = useState('');
   const params = useLocalSearchParams();
   const [showInput, setShowInput] = useState(false)
-  const fromSignup = params?.fromSignup === 'true';
+
+  const fromSignup = useMemo(
+    () => params?.fromSignup === 'true',
+    [params]
+  );
 
   const handleValidateCode = async () => {
     if (condominiumId.length < 8) return;
@@ -62,18 +66,20 @@ export default function SigninScreen() {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      if (fromSignup) {
-        setBlockAutoLogin(true);
+const hasHandledSignupRef = useRef(false);
 
-        setPhone('');
-        setPassword('');
+useFocusEffect(
+  useCallback(() => {
+    if (fromSignup && !hasHandledSignupRef.current) {
+      hasHandledSignupRef.current = true;
 
-        router.replace("/(auth)/signin/page");
-      }
-    }, [fromSignup])
-  );
+      setBlockAutoLogin(true);
+      setPhone('');
+      setPassword('');
+
+    }
+  }, [fromSignup])
+);
 
   const handleLogin = async () => {
 
@@ -148,61 +154,65 @@ export default function SigninScreen() {
           {/* <Text style={styles.link} onPress={handleNavigate}>
             Ainda não tem uma conta? Cadastre-se!
           </Text> */}
-          <View style={{ marginTop: 56}}>
-            <TouchableOpacity style={styles.buttonCode} onPress={() => setShowInput(!showInput)}>
-              <Text style={styles.buttonText}>Código do condomínio!</Text>
-            </TouchableOpacity>
-            {
-              showInput ?
-                <AnimatedField visible={showInput}>
-                  <View style={{ marginTop: 16}}>
-                  <TextInput
-                    textAlign="center"
-                    maxLength={8}
-                    placeholder={'Digite o código fornecido ...'}
-                    value={condominiumId}
-                    onChangeText={(v) => setValidateCode(v)}
-                    placeholderTextColor={colors.blacklight}
-                    autoCorrect={false}
-                    autoCapitalize="characters"
-                    
-                    style={{
-                      borderWidth: 1,
-                      borderColor: colors.gray,
-                      borderRadius: 8,
-                      paddingHorizontal: 12,
-                      paddingRight: 40,
-                      height: 44,
-                      fontSize: 16,
-                      color: "#000",
-                      marginBottom: 4
-                    }}
-                  >
-                  </TextInput>
-                  <Pressable 
-                    style={{
-                      marginTop: 14,
-                      paddingHorizontal: 16,
-                      height: 44,
-                      borderRadius: 8,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      backgroundColor: condominiumId.length < 8
-                        ? colors.gray
-                        : colors.green, 
-                    }}
-                    disabled={condominiumId.length < 8}
-                    onPress={handleValidateCode}
-                    
-                  >
-                    <Text style={styles.buttonText}>Confirmar</Text>
-                  </Pressable>
-                </View> 
-                </AnimatedField>
-                :
-                null
-            }
-          </View>
+
+          {
+            fromSignup ? null :
+            <View style={{ marginTop: 56}}>
+              <TouchableOpacity style={styles.buttonCode} onPress={() => setShowInput(!showInput)}>
+                <Text style={styles.buttonText}>Código do condomínio!</Text>
+              </TouchableOpacity>
+              {
+                showInput ?
+                  <AnimatedField visible={showInput}>
+                    <View style={{ marginTop: 16}}>
+                    <TextInput
+                      textAlign="center"
+                      maxLength={8}
+                      placeholder={'Digite o código fornecido ...'}
+                      value={condominiumId}
+                      onChangeText={(v) => setValidateCode(v)}
+                      placeholderTextColor={colors.blacklight}
+                      autoCorrect={false}
+                      autoCapitalize="characters"
+                      
+                      style={{
+                        borderWidth: 1,
+                        borderColor: colors.gray,
+                        borderRadius: 8,
+                        paddingHorizontal: 12,
+                        paddingRight: 40,
+                        height: 44,
+                        fontSize: 16,
+                        color: "#000",
+                        marginBottom: 4
+                      }}
+                    >
+                    </TextInput>
+                    <Pressable 
+                      style={{
+                        marginTop: 14,
+                        paddingHorizontal: 16,
+                        height: 44,
+                        borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: condominiumId.length < 8
+                          ? colors.gray
+                          : colors.green, 
+                      }}
+                      disabled={condominiumId.length < 8}
+                      onPress={handleValidateCode}
+                      
+                    >
+                      <Text style={styles.buttonText}>Confirmar</Text>
+                    </Pressable>
+                  </View> 
+                  </AnimatedField>
+                  :
+                  null
+                }
+            </View>
+          }
         </View>
       )}
     </View>
