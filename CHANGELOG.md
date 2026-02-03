@@ -189,3 +189,9 @@
 - ajuste teclado cobrindo campo codigo
 - ajuste logica e tratativa de exibicao botao
 
+
+## Version 1.0.30
+2026-02-03T22:25:54.253Z
+
+- No changes available
+
