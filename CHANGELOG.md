@@ -182,3 +182,10 @@
 
 - melhoria na forma do cadastro para usuarios
 
+
+## Version 1.0.29
+2026-02-03T22:24:36.681Z
+
+- ajuste teclado cobrindo campo codigo
+- ajuste logica e tratativa de exibicao botao
+
