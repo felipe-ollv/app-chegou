@@ -195,3 +195,9 @@
 
 - No changes available
 
+
+## Version 1.0.31
+2026-02-04T21:43:02.138Z
+
+- correcao de bug para login apos cadastro
+
