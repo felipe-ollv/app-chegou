@@ -72,7 +72,9 @@ export default function SigninScreen() {
   );
 
   const handleLogin = async () => {
-    if (blockAutoLogin) return;
+    if (blockAutoLogin && !hasHandledSignupRef) return;
+
+    hasHandledSignupRef.current = false;
 
     if (!phone || !password) {
       ToastComponent({ type: 'warning', text1: 'Atenção!', text2: 'Preencha telefone e senha' });
@@ -120,7 +122,10 @@ export default function SigninScreen() {
                   </View>
                 </View>
 
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                <TouchableOpacity style={styles.button} onPress={() => {
+                  hasHandledSignupRef.current = true;
+                  handleLogin();
+                }}>
                   <Text style={styles.buttonText}>Acessar</Text>
                 </TouchableOpacity>
 
