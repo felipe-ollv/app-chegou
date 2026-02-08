@@ -1,15 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  Platform,
-  KeyboardAvoidingView,
-  Keyboard,
-  TouchableWithoutFeedback
-} from "react-native";
+import { View, TouchableOpacity, ScrollView, Platform, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import api from '../../../interceptor/axios-config';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -24,6 +14,7 @@ import ModalInform from "../../../components/modals/modal-inform";
 import colors from "../../../../colors-app/colors";
 import PasswordInput from "../../../components/input/passwrod.input";
 
+import { Text, TextInput } from "@/src/components/ui/typography";
 type FormData = {
   name: string;
   condominium: string;

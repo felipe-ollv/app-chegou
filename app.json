@@ -3,7 +3,7 @@
     "name": "ChegouApp!",
     "slug": "chegou-app",
     "owner": "olvfelipe",
-    "version": "1.0.31",
+    "version": "1.0.33",
     "orientation": "portrait",
     "icon": "./assets/images/chegouapp_android_icon_512.png",
     "scheme": "chegouapp",
@@ -78,9 +78,7 @@
         "projectId": "e258b308-d015-4620-8429-1993b40f9241"
       }
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.0.31",
     "updates": {
       "url": "https://u.expo.dev/e258b308-d015-4620-8429-1993b40f9241"
     }

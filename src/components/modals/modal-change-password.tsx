@@ -1,20 +1,14 @@
 import colors from "@/colors-app/colors";
 import { Controller, useForm } from "react-hook-form";
 import {
-  Modal,
-  View,
-  TouchableOpacity,
-  Text,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from "react-native";
+  Modal, View, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import ToastComponent from "../toast/component";
 import { useState } from "react";
 import { useUser } from "../../context/user.context";
 import api from "../../interceptor/axios-config";
 import PasswordInput from "../input/passwrod.input";
 
+import { Text } from "@/src/components/ui/typography";
 type ChangePassword = {
   uuid_profile: string;
   password: string;

@@ -1,7 +1,8 @@
 import colors from "@/colors-app/colors";
-import { Modal, Pressable, View, TouchableOpacity, Text } from "react-native";
+import { Modal, Pressable, View, TouchableOpacity } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+import { Text } from "@/src/components/ui/typography";
 export default function ModalInformCode({
 	visible,
 	onClose,

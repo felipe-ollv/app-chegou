@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
-import { Text, View, TextInput, TouchableOpacity, Pressable, KeyboardAvoidingView, Platform, ScrollView, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, TouchableOpacity, Pressable, KeyboardAvoidingView, Platform, ScrollView, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import api, { setToken } from '../../../interceptor/axios-config';
 import { styles } from '../../../styles/index-styles';
@@ -14,6 +14,7 @@ import colors from '../../../../colors-app/colors';
 import PasswordInput from '../../../components/input/passwrod.input';
 import AnimatedField from '../../../components/animations/fade.component';
 
+import { Text, TextInput } from "@/src/components/ui/typography";
 export default function SigninScreen() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');

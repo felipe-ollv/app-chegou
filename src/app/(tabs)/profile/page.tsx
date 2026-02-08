@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, Pressable, ScrollView, TextInput } from 'react-native';
+import { View, TouchableOpacity, Modal, Pressable, ScrollView } from "react-native";
 import { profileStyles, modalStyles } from '../../../styles/profile-styles';
 import HeaderComponent from '../../../components/header/component';
 import BasicLoading from '../../../components/loading/basic-loading';
@@ -11,6 +11,7 @@ import ToastComponent from '../../../components/toast/component';
 import ProfileImageComponent from '../../../components/image/image-profile';
 import { useFocusEffect } from 'expo-router';
 
+import { Text, TextInput } from "@/src/components/ui/typography";
 type userProfileForm = {
   name: string;
   block: string;

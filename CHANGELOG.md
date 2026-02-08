@@ -201,3 +201,15 @@
 
 - correcao de bug para login apos cadastro
 
+
+## Version 1.0.32
+2026-02-08T19:03:38.494Z
+
+- update sdk e fonte
+
+
+## Version 1.0.33
+2026-02-08T19:15:58.046Z
+
+- No changes available
+

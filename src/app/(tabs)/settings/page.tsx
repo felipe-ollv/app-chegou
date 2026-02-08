@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Pressable } from 'react-native';
+import { View, TouchableOpacity, Pressable } from "react-native";
 import HeaderComponent from '../../../components/header/component';
 import { settingsStyles } from '../../../styles/settings-styles';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -16,6 +16,7 @@ import api from '../../../interceptor/axios-config';
 import { useUser } from '../../../context/user.context';
 import ToastComponent from "../../../components/toast/component";
 
+import { Text } from "@/src/components/ui/typography";
 export default function SettingsScreen() {
   const [modalTermsVisible, setModalTermsVisible] = useState(false);
   const [modalSuportVisible, setModalSuportVisible] = useState(false);
@@ -60,7 +61,7 @@ export default function SettingsScreen() {
           {renderOption(<MaterialIcons name="password" size={22} color={colors.zinc} />, "Alterar Senha", () => setModalChangePasswordVisible(true))}
           <View style={settingsStyles.separator} />
 
-          {renderOption(<AntDesign name="customerservice" size={22} color={colors.zinc} />, "Suporte/Atendimento", () => setModalSuportVisible(true))}
+          {renderOption(<MaterialIcons name="support-agent" size={22} color={colors.zinc} />, "Suporte/Atendimento", () => setModalSuportVisible(true))}
           <View style={settingsStyles.separator} />
 
           {renderOption(<MaterialCommunityIcons name="information-outline" size={22} color={colors.zinc} />, "Termos e Privacidade", () => setModalTermsVisible(true))}

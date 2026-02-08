@@ -3,21 +3,13 @@ import { useState, useRef, useEffect } from "react";
 import { Keyboard } from "react-native";
 import { useForm } from "react-hook-form";
 import {
-  Modal,
-  Pressable,
-  View,
-  TouchableOpacity,
-  Text,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from "react-native";
+  Modal, Pressable, View, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import ToastComponent from "../toast/component";
 import api from "../../interceptor/axios-config";
 import BasicLoading from "../loading/basic-loading";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+import { Text, TextInput } from "@/src/components/ui/typography";
 type ConfirmCodeReceiving = {
   code: string;
 };

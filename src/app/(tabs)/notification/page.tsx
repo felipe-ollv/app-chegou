@@ -1,6 +1,6 @@
 import HeaderComponent from "../../../components/header/component";
 import { Buffer } from "buffer";
-import { Pressable, Text, View, ScrollView } from "react-native";
+import { Pressable, View, ScrollView } from "react-native";
 import { notificationStyles } from "../../../styles/notification-styles";
 import UploadPdfComponent from "../../../components/pdf/pdf-document-note";
 import { useUser } from "../../../context/user.context";
@@ -10,12 +10,12 @@ import api from "../../../interceptor/axios-config";
 import ModalPdfView from "../../../components/modals/modal-view-pdf";
 import { useFocusEffect } from "expo-router";
 
+import { Text } from "@/src/components/ui/typography";
 export default function NotificationScreen() {
   const [visible, setVisible] = useState(false);
   const [notes, setNotes] = useState<any>([]);
   const [noteSelected, setNoteSelected] = useState("");
   const { userData } = useUser();
-
 
   useEffect(() => {
     fetchNoteCondominium();

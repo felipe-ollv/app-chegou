@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Modal,
-  Dimensions,
-} from "react-native";
+import { View, TouchableOpacity, StyleSheet, Modal, Dimensions } from "react-native";
 
 import { CameraView, useCameraPermissions } from "expo-camera";
 
+import { Text } from "@/src/components/ui/typography";
 const { width } = Dimensions.get("window");
 const scanBoxSize = width * 0.65;
 

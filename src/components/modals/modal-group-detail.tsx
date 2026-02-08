@@ -1,14 +1,9 @@
 import colors from "@/colors-app/colors";
 import formatDateTime from "../../utils/formatDateTime";
-import {
-  Modal,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { Modal, View, ScrollView, TouchableOpacity } from "react-native";
 import { PackageItem } from "../types/package-item";
 
+import { Text } from "@/src/components/ui/typography";
 export type GroupDetailsModalProps = {
   visible: boolean;
   onClose: () => void;

@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
+import { Text } from "@/src/components/ui/typography";
 import { styles } from './styles'
 
 type InfoCardProps = {
@@ -33,5 +34,4 @@ export default function InfoCardComponent({
     </View>
   );
 }
-
 

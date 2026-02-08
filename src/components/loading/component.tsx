@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
-import { ActivityIndicator, Animated, View, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, Animated, View, StyleSheet } from "react-native";
 import colors from "../../../colors-app/colors";
 
+import { Text } from "@/src/components/ui/typography";
 export default function LoadingComponent() {
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
