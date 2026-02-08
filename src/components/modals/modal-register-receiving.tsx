@@ -1,17 +1,7 @@
 import colors from "@/colors-app/colors";
 import { Controller, useForm } from "react-hook-form";
 import {
-  Modal,
-  Pressable,
-  View,
-  TouchableOpacity,
-  Text,
-  TextInput,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from "react-native";
+  Modal, Pressable, View, TouchableOpacity, Keyboard, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import ToastComponent from "../toast/component";
 import BasicLoading from "../loading/basic-loading";
 import { useEffect, useMemo, useState } from "react";
@@ -19,6 +9,7 @@ import { useUser } from "../../context/user.context";
 import api from "../../interceptor/axios-config";
 import SelectDropdown from "react-native-select-dropdown";
 
+import { Text, TextInput } from "@/src/components/ui/typography";
 type Resident = {
   name: string;
   apartment_block: string;
@@ -112,7 +103,6 @@ export default function ModalRegisterReceiving({
         : [],
     [selectedBlock, selectedApartment, residents]
   );
-
 
   const onSubmit = async (data: RegisterForm) => {
     try {

@@ -1,10 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import { View, TouchableOpacity, FlatList } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
 
@@ -24,7 +19,7 @@ import colors from "../../../../colors-app/colors";
 import { PackageItem } from "../../../components/types/package-item";
 import GroupDetailsModal from "../../../components/modals/modal-group-detail";
 
-
+import { Text } from "@/src/components/ui/typography";
 const groupByDateBlockApt = (
   list: PackageItem[],
   receivedView: number

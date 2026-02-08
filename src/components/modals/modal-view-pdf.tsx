@@ -1,15 +1,8 @@
 import React from "react";
-import {
-  Modal,
-  View,
-  TouchableOpacity,
-  Text,
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-} from "react-native";
+import { Modal, View, TouchableOpacity, ActivityIndicator, SafeAreaView, StyleSheet } from "react-native";
 import Pdf from "react-native-pdf";
 
+import { Text } from "@/src/components/ui/typography";
 export default function ModalPdfView({
   visible,
   onClose,

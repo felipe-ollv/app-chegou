@@ -1,5 +1,5 @@
 import colors from "@/colors-app/colors";
-import { Modal, Pressable, View, TouchableOpacity, Text } from "react-native";
+import { Modal, Pressable, View, TouchableOpacity } from "react-native";
 import ToastComponent from "../toast/component";
 import BasicLoading from '../loading/basic-loading';
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { useUser } from "../../context/user.context";
 import { useLogout } from '../../hooks/user-logout';
 import api from "../../interceptor/axios-config";
 
+import { Text } from "@/src/components/ui/typography";
 export default function ModalExcludeAccount({
 	visible,
 	onClose,

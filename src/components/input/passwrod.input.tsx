@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Platform, TextInput, View, TouchableOpacity } from "react-native";
+import { Platform, View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "@/colors-app/colors";
 
+import { TextInput } from "@/src/components/ui/typography";
 export default function PasswordInput({
   value,
   onChangeText,

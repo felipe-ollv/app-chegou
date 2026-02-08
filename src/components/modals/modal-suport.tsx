@@ -1,10 +1,11 @@
 import colors from "../../../colors-app/colors";
-import { Modal, View, Platform, TouchableOpacity, Pressable, Text, ScrollView } from "react-native";
+import { Modal, View, Platform, TouchableOpacity, Pressable, ScrollView } from "react-native";
 import { StyleSheet } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Linking from 'expo-linking';
 import ToastComponent from "../toast/component";
 
+import { Text } from "@/src/components/ui/typography";
 const phoneNumber = '+5511941076151';
 const email = 'falipe@app-chegou.com.br'
 

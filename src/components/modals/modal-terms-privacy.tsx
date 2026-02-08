@@ -1,16 +1,7 @@
 import React, { useRef, useEffect } from "react";
-import {
-	Modal,
-	ScrollView,
-	View,
-	Text,
-	StyleSheet,
-	Platform,
-	TouchableWithoutFeedback,
-	Animated,
-	PanResponder,
-} from "react-native";
+import { Modal, ScrollView, View, StyleSheet, Platform, TouchableWithoutFeedback, Animated, PanResponder } from "react-native";
 
+import { Text } from "@/src/components/ui/typography";
 export default function ModalTermsAndPrivacy({
 	visible,
 	onClose,

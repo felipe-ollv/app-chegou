@@ -1,10 +1,11 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Pressable } from "react-native";
 import colors from '../../../colors-app/colors';
 import styles from './styles';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { usePathname } from 'expo-router';
 
+import { Text } from "@/src/components/ui/typography";
 type HeaderComponentProps = {
 	logoText: string,
 	slogan: string
