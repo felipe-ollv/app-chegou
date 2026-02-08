@@ -213,3 +213,9 @@
 
 - No changes available
 
+
+## Version 1.0.34
+2026-02-08T19:53:36.255Z
+
+- Merge pull request #1 from felipe-ollv/feat/update-sdk
+
