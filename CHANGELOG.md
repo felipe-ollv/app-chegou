@@ -240,3 +240,15 @@
 - ajuste tabs para usar componente de texto
 - limpando arquivos gerando problema no build
 
+
+## Version 1.0.35
+2026-02-18T18:54:59.292Z
+
+- build: bump version to 1.0.34
+- build: bump version to 1.0.33
+- ajuste logica exibir botao validar condominio e texto
+- ajsutes exibir titulo e descricao de avisos, icones, e nova forma de envio do pdf
+- ajustes em icones e select input para blocos no perfil
+- ajuste tabs para usar componente de texto
+- limpando arquivos gerando problema no build
+
