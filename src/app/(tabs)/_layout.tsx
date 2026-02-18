@@ -1,6 +1,7 @@
 
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
+import { Text } from "@/src/components/ui/typography";
 import colors from "../../../colors-app/colors";
 
 export default function TabsLayout() {
@@ -12,27 +13,71 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen name="showcase/page" options={{
-        tabBarLabel: "Recebidos", headerShown: false,
+        tabBarLabel: ({ color, focused }) => {
+          return <Text
+            style={{
+              color: color,
+              fontSize: 11,
+              fontWeight: focused ? '600' : '400'
+            }}
+          >
+            Recebidos
+          </Text>;
+        }, 
+        headerShown: false,
         tabBarIcon: ({ color, size }) => (
-          <MaterialIcons name="call-received" size={size} color={color} />
+          <MaterialIcons name="call-received" size={24} color={color} />
         ),
       }} />
       <Tabs.Screen name="notification/page" options={{
-        tabBarLabel: "Notificações", headerShown: false,
+        tabBarLabel: ({ color, focused }) => {
+          return <Text
+            style={{
+              color: color,
+              fontSize: 11,
+              fontWeight: focused ? '600' : '400'
+            }}
+          >
+            Avisos
+          </Text>;
+        }, 
+        headerShown: false,
         tabBarIcon: ({ color, size }) => (
-          <Ionicons name="notifications-outline" color={color} size={size} />
+          <Ionicons name="notifications-outline" color={color} size={24} />
         ),
       }} />
       <Tabs.Screen name="profile/page" options={{
-        tabBarLabel: "Perfil", headerShown: false,
+        tabBarLabel: ({ color, focused }) => {
+          return <Text
+            style={{
+              color: color,
+              fontSize: 11,
+              fontWeight: focused ? '600' : '400'
+            }}
+          >
+            Perfil
+          </Text>;
+        },  
+        headerShown: false,
         tabBarIcon: ({ color, size }) => (
-          <AntDesign name="user" size={size} color={color} />
+          <AntDesign name="user" size={24} color={color} />
         ),
       }} />
       <Tabs.Screen name="settings/page" options={{
-        tabBarLabel: "Ajustes", headerShown: false,
+        tabBarLabel: ({ color, focused }) => {
+          return <Text
+            style={{
+              color: color,
+              fontSize: 11,
+              fontWeight: focused ? '600' : '400'
+            }}
+          >
+            Ajustes
+          </Text>;
+        }, 
+        headerShown: false,
         tabBarIcon: ({ color, size }) => (
-          <Ionicons name="settings-outline" color={color} size={size} />
+          <Ionicons name="settings-outline" color={color} size={24} />
         ),
       }} />
     </Tabs>
