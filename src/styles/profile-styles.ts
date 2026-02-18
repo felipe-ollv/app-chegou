@@ -161,6 +161,14 @@ export const modalStyles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: colors.green,
   },
+  confirmButtonDisabled: {
+    paddingHorizontal: 16,
+    height: 44,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.gray,
+  },
   cancelText: {
     color: "#111",
   },

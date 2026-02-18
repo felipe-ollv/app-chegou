@@ -11,6 +11,7 @@ import ProfileImageComponent from '../../../components/image/image-profile';
 import { useFocusEffect } from 'expo-router';
 
 import { Text, TextInput } from "@/src/components/ui/typography";
+import SelectDropdown from 'react-native-select-dropdown';
 type userProfileForm = {
   name: string;
   block: string;
@@ -30,6 +31,7 @@ export default function ProfileScreen() {
       "condominium_name": "",
       "name": "",
       "profile_image": "",
+      "blocks": [],
       "phone_number": "",
       "type_profile": "",
       "total_received": "",
@@ -52,6 +54,7 @@ export default function ProfileScreen() {
     setLoading(true);
     try {
       const res: any = await api.get(`/user-profile/find-user-profile/${userData.ps}`);
+      console.log(res.data)
       setUserProfile(res.data);
     } catch (error) {
       ToastComponent({ type: 'error', text1: "Erro!", text2: "Erro interno, aguarde alguns instantes" });
@@ -63,7 +66,7 @@ export default function ProfileScreen() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
     reset,
   } = useForm<userProfileForm>({
     defaultValues: {
@@ -182,22 +185,47 @@ export default function ProfileScreen() {
                     {/* Bloco */}
                     <View>
                       <Text style={modalStyles.label}>Torre/Bloco</Text>
-                      <Controller
-                        control={control}
-                        name="block"
-                        rules={{ required: "Torre/Bloco" }}
-                        render={({ field: { onChange, value, onBlur } }) => (
-                          <TextInput
-                            placeholder="Torre/Bloco"
-                            style={[modalStyles.input, errors.block && modalStyles.inputError]}
-                            value={value}
-                            onChangeText={onChange}
-                            onBlur={onBlur}
-                            autoCapitalize="characters"
+                        <Controller
+                            control={control}
+                            name="block"
+                            rules={{ required: "Torre/Bloco obrigatório" }}
+                            render={({ field: { onChange, value } }) => (
+                              <SelectDropdown
+                                data={userProfile[0].blocks}
+                                onSelect={(item) => {
+                                  onChange(item);
+                                }}
+                                renderButton={(selectedItem) => (
+                                  <View
+                                    style={{
+                                      borderWidth: 1,
+                                      borderColor: errors.block ? "#ef4444" : "#E5E7EB",
+                                      borderRadius: 8,
+                                      height: 44,
+                                      paddingHorizontal: 12,
+                                      justifyContent: "center",
+                                      backgroundColor: "#fff",
+                                    }}
+                                  >
+                                    <Text style={{ color: selectedItem ? "#000" : "#999" }}>
+                                      {selectedItem || value || "Selecione o Bloco/Torre"}
+                                    </Text>
+                                  </View>
+                                )}
+                                renderItem={(item, _, isSelected) => (
+                                  <View
+                                    style={{
+                                      padding: 12,
+                                      backgroundColor: isSelected ? "#edf4ff" : "#fff",
+                                    }}
+                                  >
+                                    <Text style={{ color: "#333" }}>{item}</Text>
+                                  </View>
+                                )}
+                                dropdownStyle={{ borderRadius: 8, paddingBottom: 60, backgroundColor: "#fff" }}
+                              />
+                            )}
                           />
-                        )}
-                      />
-                      {errors.block && <Text style={modalStyles.errorText}>{errors.block.message}</Text>}
                     </View>
 
                     {/* Apartamento */}
@@ -259,8 +287,11 @@ export default function ProfileScreen() {
 
                   <TouchableOpacity
                     onPress={handleSubmit(onSubmit)}
-                    disabled={isSubmitting}
-                    style={[modalStyles.confirmButton, isSubmitting && modalStyles.disabled]}
+                    disabled={isSubmitting || !isDirty}
+                    style={[
+                      modalStyles.confirmButton,
+                      (isSubmitting || !isDirty) && modalStyles.confirmButtonDisabled
+                    ]}
                   >
                     <Text style={modalStyles.confirmText}>Confirmar</Text>
                   </TouchableOpacity>

@@ -1,5 +1,5 @@
 
-import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { Text } from "@/src/components/ui/typography";
 import colors from "../../../colors-app/colors";
@@ -43,7 +43,7 @@ export default function TabsLayout() {
         }, 
         headerShown: false,
         tabBarIcon: ({ color, size }) => (
-          <Ionicons name="notifications-outline" color={color} size={24} />
+          <MaterialCommunityIcons name="book-alert-outline" size={24} color={color} />
         ),
       }} />
       <Tabs.Screen name="profile/page" options={{
@@ -60,7 +60,7 @@ export default function TabsLayout() {
         },  
         headerShown: false,
         tabBarIcon: ({ color, size }) => (
-          <AntDesign name="user" size={24} color={color} />
+          <Feather name="user" size={24} color={color}/>
         ),
       }} />
       <Tabs.Screen name="settings/page" options={{
