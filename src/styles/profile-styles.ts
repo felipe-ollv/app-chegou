@@ -160,6 +160,7 @@ export const modalStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: colors.green,
+    marginBottom: 26,
   },
   confirmButtonDisabled: {
     paddingHorizontal: 16,

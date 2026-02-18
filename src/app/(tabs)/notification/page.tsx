@@ -94,7 +94,7 @@ export default function NotificationScreen() {
                     marginBottom: 2,
                   }}
                 >
-                  {note.title || "Novo aviso!"}
+                  {note.category || "Novo aviso!"}
                 </Text>
                 <Text numberOfLines={2}>
                   {note.description || "Clique para abrir"}
