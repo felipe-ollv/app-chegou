@@ -219,3 +219,13 @@
 
 - Merge pull request #1 from felipe-ollv/feat/update-sdk
 
+
+## Version 1.0.33
+2026-02-18T18:54:31.385Z
+
+- ajuste logica exibir botao validar condominio e texto
+- ajsutes exibir titulo e descricao de avisos, icones, e nova forma de envio do pdf
+- ajustes em icones e select input para blocos no perfil
+- ajuste tabs para usar componente de texto
+- limpando arquivos gerando problema no build
+
