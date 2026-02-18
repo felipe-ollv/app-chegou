@@ -201,7 +201,7 @@ export default function ModalRegisterReceiving({
                   <>
                     <View>
                       <Text style={{ fontSize: 14, marginBottom: 6 }}>
-                        Torre/Bloco
+                        Bloco/Torre
                       </Text>
 
                       <Controller

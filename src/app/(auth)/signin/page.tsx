@@ -13,6 +13,7 @@ import { useUser } from '../../../context/user.context';
 import colors from '../../../../colors-app/colors';
 import PasswordInput from '../../../components/input/passwrod.input';
 import AnimatedField from '../../../components/animations/fade.component';
+import { getItem } from "expo-secure-store";
 
 import { Text, TextInput } from "@/src/components/ui/typography";
 export default function SigninScreen() {
@@ -28,6 +29,7 @@ export default function SigninScreen() {
   const scrollRef = useRef<ScrollView>(null);
 
   const fromSignup = useMemo(() => params?.fromSignup === 'true', [params]);
+  const token = getItem('secret');
 
   useEffect(() => {
     if (showInput) {
@@ -130,7 +132,7 @@ export default function SigninScreen() {
                   <Text style={styles.buttonText}>Acessar</Text>
                 </TouchableOpacity>
 
-                {fromSignup ? null : (
+                {(!fromSignup && token) ? null : (
                   <View style={{ marginTop: 56 }}>
                     <TouchableOpacity style={styles.buttonCode} onPress={() => setShowInput(!showInput)}>
                       <Text style={styles.buttonText}>Código do condomínio!</Text>
